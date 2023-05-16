@@ -1,6 +1,6 @@
 # Maktab-89-Django-Final-Project
 
-> this project is about an online shop that has a weblog for sharing new product from suppliers you can have just one submitted shop and manage that shop .
+> this project is about an online shop.
 <!-- > Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
 
 ## Table of Contents
