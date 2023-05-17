@@ -28,8 +28,7 @@ class User(AbstractUser):
     gender = models.CharField(choices=genders, max_length=1, null=True, blank=True)
     profile_pic = models.ImageField(null=True, upload_to='media/user_profile_pic', blank=True)
     phone_verified = models.BooleanField('Phone Verified', default=False)
-    address = models.ManyToManyField(Address, null=True, blank=True)
-    is_staff = None
+    address = models.ManyToManyField(Address)
 
     def get_full_name(self):
         """
