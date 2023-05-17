@@ -1,23 +1,28 @@
 from django.db import models
 from core.models import BaseModel
+from user.models import User
+from product.models import Discount
 
 
 # Create your models here.
 class Cart(BaseModel):
-    pass
-    # customer
-    # item
-    # shipping_price
+    customer = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='Anonymous')
+    item = models.JSONField()
+    shipping_price = models.IntegerField()
 
 
 class Order(BaseModel):
-    pass
-    # cart
-    # status
+    statuses = [
+        ('r', 'registered'),
+        ('p', 'processing'),
+        ('s', 'sent'),
+        ('d', 'delivered')
+    ]
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    status = models.CharField(choices=statuses, max_length=1)
 
 
 class DiscountCoupon(BaseModel):
-    pass
-    # code
-    # discount
-    # owner
+    code = models.CharField(max_length=10)
+    discount = models.ForeignKey(Discount, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
