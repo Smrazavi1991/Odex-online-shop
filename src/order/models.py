@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from core.models import BaseModel
 from user.models import User
@@ -8,7 +9,7 @@ from product.models import Discount
 class Cart(BaseModel):
     customer = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='Anonymous')
     item = models.JSONField()
-    shipping_price = models.IntegerField()
+    shipping_price = models.IntegerField(validators=[MinValueValidator(0)])
 
 
 class Order(BaseModel):
