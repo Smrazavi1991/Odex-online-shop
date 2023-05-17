@@ -21,3 +21,24 @@ class JDateTimeField(models.DateTimeField):
         elif value is None:
             return value
         return super().get_prep_value(value)
+
+
+class JDateField(models.DateField):
+    def from_db_value(self, value, expression, connection):
+        if value is None:
+            return value
+        return jdatetime.date.fromgregorian(datetime=value)
+
+    def to_python(self, value):
+        if isinstance(value, jdatetime.date):
+            return value
+        elif value is None:
+            return value
+        return jdatetime.date.fromgregorian(datetime=value)
+
+    def get_prep_value(self, value):
+        if isinstance(value, jdatetime.date):
+            return value.togregorian()
+        elif value is None:
+            return value
+        return super().get_prep_value(value)
