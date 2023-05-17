@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from core.models import BaseModel
 from django.db import models
 
 
@@ -12,3 +13,10 @@ class User(AbstractUser):
     #phone_verified
     #address
     #is_staff = none
+
+class Address(BaseModel):
+    pass
+    #province
+    #city
+    #address
+    #postal code
