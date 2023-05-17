@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from core.models import BaseModel
 from django.db import models
 from core.fields import JDateField
+from django.core.validators import RegexValidator
 
 
 # Create your models here.
@@ -18,14 +19,16 @@ class User(AbstractUser):
         ('f', 'female')
     ]
 
+    phone_regex = RegexValidator(regex=r'^(09)\d{9}$', message="Phone number must be entered in the format: "
+                                                               "'09123456789'.")
+
     email = models.EmailField('email address', unique=True)
-    phone = models.CharField(max_length=11, unique=True)
-    # must have validator
-    birthday = JDateField('Birth Date', null=True)
-    gender = models.CharField(choices=genders, max_length=1)
+    phone = models.CharField(max_length=11, unique=True, validators=[phone_regex])
+    birthday = JDateField('Birth Date', null=True, blank=True)
+    gender = models.CharField(choices=genders, max_length=1, null=True, blank=True)
     profile_pic = models.ImageField(null=True, upload_to='media/user_profile_pic', blank=True)
     phone_verified = models.BooleanField('Phone Verified', default=False)
-    address = models.ManyToManyField(Address, null=True)
+    address = models.ManyToManyField(Address, null=True, blank=True)
     is_staff = None
 
     def get_full_name(self):
