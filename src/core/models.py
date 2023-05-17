@@ -8,6 +8,6 @@ class BaseModel(models.Model):
         abstract = True
 
     is_deleted = models.BooleanField('Is Deleted', default=False, null=False, blank=False)
-    last_change = JDateTimeField(auto_now=True)
-    create_date = JDateTimeField(auto_created=True)
-    delete_datetime = JDateTimeField(default=None, null=True, blank=True)
+    last_change = JDateTimeField('Last Change', auto_now=True)
+    create_date = JDateTimeField('Create Date', auto_created=True)
+    delete_datetime = JDateTimeField('Delete Datetime', default=None, null=True, blank=True)
