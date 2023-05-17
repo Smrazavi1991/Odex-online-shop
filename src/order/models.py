@@ -7,7 +7,7 @@ from product.models import Discount
 
 # Create your models here.
 class Cart(BaseModel):
-    customer = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='Anonymous')
+    customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     item = models.JSONField()
     shipping_price = models.IntegerField(validators=[MinValueValidator(0)])
 
