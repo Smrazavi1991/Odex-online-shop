@@ -1,11 +1,19 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from core.models import BaseModel
 from core.fields import JDateTimeField
 from user.models import User
 
+
+def max_discount_percentage(value, discount_type):
+    if discount_type == '%' and value > 80:
+        raise ValidationError(f"maximum percentage of discount is set to 80")
+
+
 # Create your models here.
 class InformationItem(BaseModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
 
 class Discount(BaseModel):
@@ -13,18 +21,19 @@ class Discount(BaseModel):
         ('%', 'percentage'),
         ('$', 'non-percentage')
     ]
-    type = models.CharField(choices=types, max_length=1)
-    amount = models.IntegerField()
-    # must have validator
+
+    discount_type = models.CharField(choices=types, max_length=1)
+    amount = models.IntegerField(validators=[max_discount_percentage])
+
 
 class Category(BaseModel):
-    name = models.CharField(max_length=100)
-    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=100, unique=True)
+    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField('Category Is Active', default=True)
-    info_item = models.ManyToManyField(InformationItem, null=True)
-    sub = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
-    discount_activate_at = JDateTimeField('Activate at')
-    discount_deactivate_at = JDateTimeField('Deactivate at')
+    info_item = models.ManyToManyField(InformationItem, null=True, blank=True)
+    sub = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    discount_activate_at = JDateTimeField('Activate at', null=True, blank=True)
+    discount_deactivate_at = JDateTimeField('Deactivate at', null=True, blank=True)
     discount_is_active = models.BooleanField('Active discount', default=False)
 
 
@@ -32,12 +41,12 @@ class Product(BaseModel):
     name = models.CharField(max_length=100)
     category = models.ManyToManyField(Category)
     brand = models.CharField(max_length=100)
-    count = models.IntegerField()
-    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True)
+    count = models.IntegerField(validators=[MinValueValidator(0)])
+    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
     product_info = models.JSONField()
-    price = models.IntegerField()
-    discount_activate_at = JDateTimeField('Activate at')
-    discount_deactivate_at = JDateTimeField('Deactivate at')
+    price = models.IntegerField(validators=[MinValueValidator(0)])
+    discount_activate_at = JDateTimeField('Activate at', null=True, blank=True)
+    discount_deactivate_at = JDateTimeField('Deactivate at', null=True, blank=True)
     discount_is_active = models.BooleanField('Active discount', default=False)
 
 
