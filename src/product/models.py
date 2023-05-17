@@ -30,7 +30,7 @@ class Category(BaseModel):
     name = models.CharField(max_length=100, unique=True)
     discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField('Category Is Active', default=True)
-    info_item = models.ManyToManyField(InformationItem, null=True, blank=True)
+    info_item = models.ManyToManyField(InformationItem)
     sub = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     discount_activate_at = JDateTimeField('Activate at', null=True, blank=True)
     discount_deactivate_at = JDateTimeField('Deactivate at', null=True, blank=True)
@@ -54,7 +54,7 @@ class ProductComment(BaseModel):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default="Anonymous")
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
     is_approved = models.BooleanField('Comment Approved', default=False)
 
