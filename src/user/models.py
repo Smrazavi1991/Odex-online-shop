@@ -1,9 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from core.models import BaseModel
 from django.db import models
-from core.fields import JDateField
 from django.core.validators import RegexValidator
-
+from django_jalali.db import models as jmodels
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class Address(BaseModel):
@@ -24,11 +24,12 @@ class User(AbstractUser):
 
     email = models.EmailField('email address', unique=True)
     phone = models.CharField(max_length=11, unique=True, validators=[phone_regex])
-    birthday = JDateField('Birth Date', null=True, blank=True)
+    birthday = jmodels.jDateField('Birth Date', null=True, blank=True)
     gender = models.CharField(choices=genders, max_length=1, null=True, blank=True)
     profile_pic = models.ImageField(null=True, upload_to='media/user_profile_pic', blank=True)
     phone_verified = models.BooleanField('Phone Verified', default=False)
-    address = models.ManyToManyField(Address)
+    address = models.ManyToManyField(Address, null=True, blank=True)
+    date_joined = jmodels.jDateTimeField(_("date joined"), auto_now_add=True)
 
     def get_full_name(self):
         """
