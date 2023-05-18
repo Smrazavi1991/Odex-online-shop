@@ -8,8 +8,8 @@ from product.models import Discount
 # Create your models here.
 class Cart(BaseModel):
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    item = models.JSONField()
-    shipping_price = models.IntegerField(validators=[MinValueValidator(0)])
+    item = models.JSONField("Item in cart")
+    shipping_price = models.IntegerField("Shipping Price", validators=[MinValueValidator(0)])
 
 
 class Order(BaseModel):
@@ -20,7 +20,7 @@ class Order(BaseModel):
         ('d', 'delivered')
     ]
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    status = models.CharField(choices=statuses, max_length=1)
+    status = models.CharField('Status', choices=statuses, max_length=1)
 
 
 class DiscountCoupon(BaseModel):
