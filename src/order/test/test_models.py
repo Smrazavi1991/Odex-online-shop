@@ -56,7 +56,7 @@ class OrderModelTest(TestCase):
 
     def test_cart_foreign_key(self):
         order = Order.objects.get(id=1)
-        self.assertEqual(order.cart.shipping_price, '10000')
+        self.assertEqual(order.cart.shipping_price, 10000)
 
     def test_customer_foreign_key_on_delete_cascade(self):
         cart = Cart.objects.get(shipping_price=10000)
@@ -67,3 +67,30 @@ class OrderModelTest(TestCase):
         order = Order.objects.get(id=1)
         field_label = order._meta.get_field('status').verbose_name
         self.assertEqual(field_label, 'Status')
+
+    def test_status_max_length(self):
+        order = Order.objects.get(id=1)
+        max_length = order._meta.get_field('status').max_length
+        self.assertEqual(max_length, 1)
+
+    def test_choices_field(self):
+        order = Order.objects.get(id=1)
+        self.assertEqual(order.status, 'r')
+
+        order.status = 'p'
+        order.save()
+
+        updated_order = Order.objects.get(id=1)
+        self.assertEqual(updated_order.status, 'p')
+
+        order.status = 's'
+        order.save()
+
+        updated_order = Order.objects.get(id=1)
+        self.assertEqual(updated_order.status, 's')
+
+        order.status = 'd'
+        order.save()
+
+        updated_order = Order.objects.get(id=1)
+        self.assertEqual(updated_order.status, 'd')
