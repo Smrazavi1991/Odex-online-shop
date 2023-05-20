@@ -15,8 +15,8 @@ class InformationItem(BaseModel):
 
 
 class Discount(BaseModel):
-    amount_of_percentage_discount = models.IntegerField(validators=[MaxValueValidator(80)], null=True, blank=True)
-    amount_of_non_percentage_discount = models.IntegerField(null=True, blank=True)
+    amount_of_percentage_discount = models.PositiveIntegerField(validators=[MaxValueValidator(80)], null=True, blank=True)
+    amount_of_non_percentage_discount = models.PositiveIntegerField(null=True, blank=True)
 
 
 class Category(BaseModel):
@@ -36,10 +36,10 @@ class Product(BaseModel):
     name = models.CharField(max_length=100)
     category = models.ManyToManyField(Category)
     brand = models.CharField(max_length=100)
-    count = models.IntegerField(validators=[MinValueValidator(0)])
+    count = models.PositiveIntegerField()
     discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
     product_info = models.JSONField()
-    price = models.IntegerField(validators=[MinValueValidator(0)])
+    price = models.PositiveIntegerField()
     discount_activate_at = jmodels.jDateTimeField('Discount Activate at', null=True, blank=True)
     discount_deactivate_at = jmodels.jDateTimeField('Discount Deactivate at', null=True, blank=True)
     discount_is_active = models.BooleanField('Active discount', default=False)
