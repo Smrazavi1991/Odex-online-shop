@@ -9,7 +9,7 @@ from product.models import Discount
 class Cart(BaseModel):
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     item = models.JSONField("Item in cart")
-    shipping_price = models.IntegerField("Shipping Price", validators=[MinValueValidator(0)])
+    shipping_price = models.PositiveIntegerField("Shipping Price")
 
 
 class Order(BaseModel):
