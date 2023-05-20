@@ -5,6 +5,7 @@ from django.core.validators import RegexValidator
 from django_jalali.db import models as jmodels
 from django.utils.translation import gettext_lazy as _
 
+
 # Create your models here.
 class Address(BaseModel):
     province = models.CharField(max_length=100)
