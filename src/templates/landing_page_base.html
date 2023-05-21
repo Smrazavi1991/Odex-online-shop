@@ -1,15 +1,15 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" href="/src/static/assets/img/favicon.png" type="image/gif" sizes="16x16">
+		<link rel="icon" href="{% static "assets/img/favicon.png" %}" type="image/gif" sizes="16x16">
 
         <title>اودکس - قالب فروشگاهی HTML</title>
 
         <!-- Custom CSS -->
-        <link href="/src/static/assets/css/styles.css" rel="stylesheet">
+        <link href="{% static "assets/css/styles.css" %}" rel="stylesheet">
 
     </head>
 
@@ -37,7 +37,7 @@
 						<div class="row align-items-center">
 							<div class="col-lg-2 col-md-2 col-sm-3 col-4">
 								<a class="nav-brand" href="#">
-									<img src="/src/static/assets/img/fashion-logo.png" class="logo" alt="" />
+									<img src="{% static "assets/img/fashion-logo.png" %}" class="logo" alt="" />
 								</a>
 							</div>
 							<div class="col-lg-7 col-md-7 col-sm-4 col-3">
@@ -392,7 +392,7 @@
 							<!-- Single Item -->
 							<div class="cart_selected_single">
 								<div class="cart_selected_single_thumb">
-									<a href="#"><img src="/src/static/assets/img/product.jpg" class="img-fluid" alt="" /></a>
+									<a href="#"><img src="{% static "assets/img/product.jpg"  %}" class="img-fluid" alt="" /></a>
 								</div>
 								<div class="cart_selected_single_caption">
 									<h4 class="product_title">قورباغه‌ات را قورت بده</h4>
@@ -403,7 +403,7 @@
 							<!-- Single Item -->
 							<div class="cart_selected_single">
 								<div class="cart_selected_single_thumb">
-									<a href="#"><img src="/src/static/assets/img/product.jpg" class="img-fluid" alt="" /></a>
+									<a href="#"><img src="{% static "assets/img/product.jpg" %}" class="img-fluid" alt="" /></a>
 								</div>
 								<div class="cart_selected_single_caption">
 									<h4 class="product_title">قورباغه‌ات را قورت بده</h4>
@@ -414,7 +414,7 @@
 							<!-- Single Item -->
 							<div class="cart_selected_single">
 								<div class="cart_selected_single_thumb">
-									<a href="#"><img src="/src/static/assets/img/product.jpg" class="img-fluid" alt="" /></a>
+									<a href="#"><img src="{% static "assets/img/product.jpg" %}"class="img-fluid" alt="" /></a>
 								</div>
 								<div class="cart_selected_single_caption">
 									<h4 class="product_title">قورباغه‌ات را قورت بده</h4>
@@ -452,16 +452,16 @@
 		<!-- ============================================================== -->
 		<!-- All Jquery -->
 		<!-- ============================================================== -->
-		<script src="/src/static/assets/js/jquery.min.js"></script>
-		<script src="/src/static/assets/js/popper.min.js"></script>
-		<script src="/src/static/assets/js/bootstrap.min.js"></script>
-		<script src="/src/static/assets/js/metisMenu.min.js"></script>
-		<script src="/src/static/assets/js/owl-carousel.js"></script>
-		<script src="/src/static/assets/js/ion.rangeSlider.min.js"></script>
-		<script src="/src/static/assets/js/smoothproducts.js"></script>
-		<script src="/src/static/assets/js/jquery-rating.js"></script>
-		<script src="/src/static/assets/js/jQuery.style.switcher.js"></script>
-		<script src="/src/static/assets/js/custom.js"></script>
+		<script src="{% static "assets/js/jquery.min.js" %}"></script>
+		<script src="{% static "assets/js/popper.min.js" %}"></script>
+		<script src="{% static "assets/js/bootstrap.min.js" %}"></script>
+		<script src="{% static "assets/js/metisMenu.min.js" %}"></script>
+		<script src="{% static "assets/js/owl-carousel.js" %}"></script>
+		<script src="{% static "assets/js/ion.rangeSlider.min.js" %}"></script>
+		<script src="{% static "assets/js/smoothproducts.js" %}"></script>
+		<script src="{% static "assets/js/jquery-rating.js" %}"></script>
+		<script src="{% static "assets/js/jQuery.style.switcher.js" %}"></script>
+		<script src="{% static "assets/js/custom.js" %}"></script>
 
 		<script>
 			function openRightMenu() {

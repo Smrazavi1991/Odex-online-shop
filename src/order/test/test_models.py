@@ -378,7 +378,7 @@ class DiscountCouponModelTest(TestCase):
 
     def test_code_discount_owner_non_uniqueness(self):
         """
-        Test that "code, discount and owner" fields can common.
+        Test that "code, discount , owner, discount_deactivate_at and discount_is_active" fields can common.
         """
         user = User.objects.get(username='alireza')
         discount = Discount.objects.get(id=1)
@@ -451,3 +451,40 @@ class DiscountCouponModelTest(TestCase):
         with self.assertRaises(ValueError):
             discount_coupon.owner = ''
             discount_coupon.save()
+
+    def test_discount_activate_at_label(self):
+        """
+        Test that label of "discount_activate_at" field is set right.
+        """
+        discount_coupon = DiscountCoupon.objects.get(id=1)
+        field_label = discount_coupon._meta.get_field('discount_activate_at').verbose_name
+        self.assertEqual(field_label, 'Discount Activate at')
+
+    def test_discount_activate_at_not_nullable(self):
+        """
+        Test that value of "discount_activate_at" field "null" attribute is set to "False".
+        """
+        discount_coupon = DiscountCoupon.objects.get(id=1)
+        with self.assertRaises(IntegrityError):
+            discount_coupon.discount_activate_at = None
+            discount_coupon.save()
+
+    def test_discount_activate_at_blank(self):
+        """
+        Test that value of "discount_activate_at" field "Blank" attribute is set to "False".
+        """
+        discount_coupon = DiscountCoupon.objects.get(id=1)
+        with self.assertRaises(IntegrityError):
+            discount_coupon.discount_activate_at = ''
+            discount_coupon.save()
+
+    def test_discount_activate_at_non_uniqueness(self):
+        """
+        Test that "discount_activate_at" fields can common.
+        """
+        user = User.objects.get(username='alireza')
+        discount = Discount.objects.get(id=1)
+        x = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+        discountcoupon2 = DiscountCoupon(code="abcdefg", discount=discount, owner=user, discount_activate_at=x)
+        discountcoupon2.save()
+        self.assertTrue(DiscountCoupon.objects.filter(id=2).exists())
