@@ -342,7 +342,6 @@ class DiscountCouponModelTest(TestCase):
         x = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
         DiscountCoupon.objects.create(code="abcd", discount=discount, owner=user, discount_activate_at=x)
 
-
     def test_code_label(self):
         """
         Test that label of "code" field is set right.
@@ -377,9 +376,9 @@ class DiscountCouponModelTest(TestCase):
             discount_coupon.code = ''
             discount_coupon.full_clean()
 
-    def test_code_non_uniqueness(self):
+    def test_code_discount_owner_non_uniqueness(self):
         """
-        Test that "code" field can common.
+        Test that "code, discount and owner" fields can common.
         """
         user = User.objects.get(username='alireza')
         discount = Discount.objects.get(id=1)
@@ -402,6 +401,24 @@ class DiscountCouponModelTest(TestCase):
         discount.delete()
         self.assertFalse(DiscountCoupon.objects.filter(id=1).exists())
 
+    def test_discount_not_nullable(self):
+        """
+        Test that value of "discount" field "null" attribute is set to "False".
+        """
+        discount_coupon = DiscountCoupon.objects.get(id=1)
+        with self.assertRaises(IntegrityError):
+            discount_coupon.discount = None
+            discount_coupon.save()
+
+    def test_discount_blank(self):
+        """
+        Test that value of "discount" field "Blank" attribute is set to "False".
+        """
+        discount_coupon = DiscountCoupon.objects.get(id=1)
+        with self.assertRaises(ValueError):
+            discount_coupon.discount = ''
+            discount_coupon.save()
+
     def test_owner_foreign_key(self):
         """
         Test that owner that is a foreign key field work correctly.
@@ -417,3 +434,20 @@ class DiscountCouponModelTest(TestCase):
         user.delete()
         self.assertFalse(DiscountCoupon.objects.filter(id=1).exists())
 
+    def test_owner_not_nullable(self):
+        """
+        Test that value of "owner" field "null" attribute is set to "False".
+        """
+        discount_coupon = DiscountCoupon.objects.get(id=1)
+        with self.assertRaises(IntegrityError):
+            discount_coupon.owner = None
+            discount_coupon.save()
+
+    def test_owner_blank(self):
+        """
+        Test that value of "owner" field "Blank" attribute is set to "False".
+        """
+        discount_coupon = DiscountCoupon.objects.get(id=1)
+        with self.assertRaises(ValueError):
+            discount_coupon.owner = ''
+            discount_coupon.save()
