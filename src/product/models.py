@@ -19,6 +19,12 @@ class Discount(BaseModel):
     amount_of_percentage_discount = models.PositiveIntegerField('Amount Of Percentage Discount', validators=[MaxValueValidator(80)], null=True, blank=True, unique=True)
     amount_of_non_percentage_discount = models.PositiveIntegerField('Amount Of NON-Percentage Discount', null=True, blank=True, unique=True)
 
+    def __str__(self):
+        if self.amount_of_percentage_discount is None:
+            return f"{self.amount_of_non_percentage_discount} Rials"
+        if self.amount_of_non_percentage_discount is None:
+            return f"{self.amount_of_percentage_discount} %"
+
 
 class Category(BaseModel):
     name = models.CharField(max_length=100, unique=True)
@@ -41,6 +47,7 @@ class Category(BaseModel):
     def __str__(self):
         return self.name
 
+
 class Product(BaseModel):
     name = models.CharField(max_length=100)
     category = models.ManyToManyField(Category)
@@ -61,6 +68,10 @@ class Product(BaseModel):
                 self.discount_deactivate_at = jdatetime.datetime.fromgregorian(year=2111, month=3, day=21)
         return super().save()
 
+    def __str__(self):
+        return self.name
+
+
 class ProductComment(BaseModel):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
@@ -73,3 +84,6 @@ class ProductComment(BaseModel):
 class ProductImage(BaseModel):
     image = models.ImageField(upload_to='media/product_images')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.product.name} picture"
