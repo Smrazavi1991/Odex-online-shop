@@ -17,10 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from product.views import *
+from user.views import *
 from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("Category/<int:pk>/", CategoryProducts.as_view(), name="Category page"),
-    path("", Home.as_view(), name="Home page")
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path("", Home.as_view(), name="Home-page"),
+    path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page"),
+    path("register/", RegisterOrLogin.as_view(), name="Register-or-login"),
+    path("profile/", RegisterOrLogin.as_view(), name="Profile")
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
