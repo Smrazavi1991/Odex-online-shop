@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" href="{% static "assets/img/favicon.png" %}" type="image/gif" sizes="16x16">
 
-        <title>اودکس - قالب فروشگاهی HTML</title>
+        <title>{% block title %}اودکس شاپ{% endblock %}</title>
 
         <!-- Custom CSS -->
         <link href="{% static "assets/css/styles.css" %}" rel="stylesheet">
@@ -36,7 +36,7 @@
 					<div class="container">
 						<div class="row align-items-center">
 							<div class="col-lg-2 col-md-2 col-sm-3 col-4">
-								<a class="nav-brand" href="#">
+								<a class="nav-brand" href="{% url 'Home page' %}">
 									<img src="{% static "assets/img/fashion-logo.png" %}" class="logo" alt="" />
 								</a>
 							</div>
@@ -48,111 +48,35 @@
 									<div class="nav-menus-wrapper" style="transition-property: none;">
 										<ul class="nav-menu">
 
-											<li class="active"><a href="#">خانه<span class="submenu-indicator"></span></a>
-												<ul class="nav-dropdown nav-submenu">
-													<li><a href="#">مواد غذایی<span class="submenu-indicator"></span></a>
+											<li class="active"><a href="{% url 'Home page' %}">خانه<span class="submenu-indicator"></span></a></li>
+
+											<li><a href="#">دسته بندی کالاها<span class="submenu-indicator"></span></a>
+												{% for category in categories %}
+                                                <ul class="nav-dropdown nav-submenu">
+													<li><a href="{% url 'Category page' %}?id={{ category.pk }}">{{ category.name }}<span class="submenu-indicator"></span></a>
+                                                        {% for c in categories %}
+                                                        {%  if c.sub.id is not None and c.sub.id == category.pk %}
 														<ul class="nav-dropdown nav-submenu">
-															<li><a href="grocery.html">مواد غذایی 1</a></li>
-															<li><a href="grocery-2.html">مواد غذایی 2</a></li>
-															<li><a href="grocery-3.html">مواد غذایی 3</a></li>
+															<li><a href="{% url 'Category page' %}?id={{ c.pk }}">{{ c.name }}<span class="submenu-indicator"></span></a>
+                                                                {% for cat in categories %}
+                                                                {%  if cat.sub.id is not None and cat.sub.id == c.pk %}
+                                                                <ul class="nav-dropdown nav-submenu">
+                                                                    <li><a href="{% url 'Category page' %}?id={{ cat.pk }}">{{ cat.name }}</a></li>
+                                                                </ul>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                            </li>
+
 														</ul>
+                                                        {% endif %}
+                                                        {% endfor %}
 													</li>
-													<li><a href="#">فروشگاه<span class="submenu-indicator"></span></a>
-														<ul class="nav-dropdown nav-submenu">
-															<li><a href="woocommerce.html">فروشگاه 1</a></li>
-															<li><a href="woocommerce-2.html">فروشگاه 2</a></li>
-															<li><a href="beauty.html">لوازم آرایشی</a></li>
-														</ul>
-													</li>
-													<li><a href="organic.html">ارگانیک</a></li>
-													<li><a href="electronics.html">الکترونیکی</a></li>
-													<li><a href="digital.html">دیجیتالی</a></li>
-													<li><a href="furniture.html">مبلمان</a></li>
+
 												</ul>
+                                                {% endfor %}
 											</li>
 
-											<li><a href="#">دسته بندی<span class="submenu-indicator"></span></a>
-												<ul class="nav-dropdown nav-submenu">
-													<li><a href="#">دسته بندی 1<span class="submenu-indicator"></span></a>
-														<ul class="nav-dropdown nav-submenu">
-															<li><a href="search-full-width.html">بنر تمام عرض</a></li>
-															<li><a href="search-list-layout.html">چیدمان لیستی</a></li>
-															<li><a href="4-column.html">محصول 4 ستونی</a></li>
-															<li><a href="5-column.html">محصول 5 ستونی</a></li>
-															<li><a href="6-column.html">محصول 6 ستونی</a></li>
-														</ul>
-													</li>
-													<li><a href="#">دسته بندی 2<span class="submenu-indicator"></span></a>
-														<ul class="nav-dropdown nav-submenu">
-															<li><a href="grocery.html">سبک هدر 1</a></li>
-															<li><a href="grocery-2.html">سبک هدر 2</a></li>
-															<li><a href="grocery-3.html">سبک هدر 3</a></li>
-															<li><a href="#">محصول 7 ستونی</a></li>
-															<li><a href="#">محصول 9 ستونی</a></li>
-															<li><a href="#">محصول 10 ستونی</a></li>
-														</ul>
-													</li>
-												</ul>
-											</li>
-
-											<li><a href="#">محصولات<span class="submenu-indicator"></span></a>
-												<ul class="nav-dropdown nav-submenu">
-													<li><a href="#">محصولات 1<span class="submenu-indicator"></span></a>
-														<ul class="nav-dropdown nav-submenu">
-															<li><a href="search-sidebar.html">با نوار کناری 1</a></li>
-															<li><a href="search-sidebar-2.html">با نوار کناری 2</a></li>
-															<li><a href="search-sidebar-3.html">با نوار کناری 3</a></li>
-															<li><a href="search-sidebar-4.html">با نوار کناری 4</a></li>
-															<li><a href="search-sidebar-5.html">با نوار کناری 5</a></li>
-															<li><a href="search-sidebar-6.html">با نوار کناری 6</a></li>
-															<li><a href="search-sidebar-7.html">با نوار کناری 7</a></li>
-															<li><a href="search-sidebar-8.html">با نوار کناری 8</a></li>
-														</ul>
-													</li>
-													<li><a href="#">محصولات 2<span class="submenu-indicator"></span></a>
-														<ul class="nav-dropdown nav-submenu">
-															<li><a href="detail-1.html">محصول پیش فرض 1</a></li>
-															<li><a href="detail-2.html">محصول پیش فرض 2</a></li>
-															<li><a href="detail-3.html">محصولات گروهی</a></li>
-															<li><a href="detail-4.html">محصول ساده</a></li>
-															<li><a href="detail-5.html">محصولات گروهی</a></li>
-															<li><a href="detail-6.html">محصول دیجیتالی</a></li>
-															<li><a href="vendor.html">جزئیات فروشنده</a></li>
-														</ul>
-													</li>
-												</ul>
-											</li>
-
-											<li><a href="#">صفحات فروشگاه<span class="submenu-indicator"></span></a>
-												<ul class="nav-dropdown nav-submenu">
-													<li><a href="#">داشبورد کاربری<span class="submenu-indicator"></span></a>
-														<ul class="nav-dropdown nav-submenu">
-															<li><a href="order.html">سفارشات من</a></li>
-															<li><a href="order-history.html">تاریخچه سفارشات</a></li>
-															<li><a href="order-tracking.html">رهگیری سفارش</a></li>
-															<li><a href="wishlist.html">محصولات مورد علاقه</a></li>
-															<li><a href="account-info.html">تنظیمات حساب</a></li>
-															<li><a href="payment-methode.html">روش های پرداخت</a></li>
-														</ul>
-													</li>
-													<li><a href="add-to-cart.html">افزودن به سبد خرید</a></li>
-													<li><a href="billing.html">صفحه صورتحساب</a></li>
-													<li><a href="checkout-complete.html">تأیید تسویه حساب</a></li>
-													<li><a href="admin-login.html">ورود ادمین</a></li>
-												</ul>
-											</li>
-
-											<li><a href="#">صفحات<span class="submenu-indicator"></span></a>
-												<ul class="nav-dropdown nav-submenu">
-													<li><a href="blog.html">صفحه وبلاگ</a></li>
-													<li><a href="blog-detail.html">جزئیات وبلاگ</a></li>
-													<li><a href="about.html">درباره ما</a></li>
-													<li><a href="contact.html">تماس</a></li>
-													<li><a href="login-signup.html">ورود / ثبت نام</a></li>
-													<li><a href="faq.html">سوالات متداول</a></li>
-													<li><a href="404.html">404</a></li>
-												</ul>
-											</li>
+											<li><a href="#">فروش ویژه<span class="submenu-indicator"></span></a></li>
 
 										</ul>
 
@@ -171,7 +95,7 @@
 								<div class="collapse" id="mySearch">
 									<div class="blocks search_blocks">
 										<div class="input-group">
-											<input type="text" class="form-control" placeholder="جستجو در فروشگاه ...">
+											<input type="text" class="form-control" placeholder="جستجو در فروشگاه (غیرفعال)">
 											<div class="input-group-append">
 											<button class="btn search_btn" type="button"><i class="ti-search"></i></button>
 											</div>
@@ -187,6 +111,7 @@
 			</div>
 			<!-- End Navigation -->
 			<div class="clearfix"></div>
+        {% block body %}
 			<!-- ============================================================== -->
 			<!-- Top header  -->
 			<!-- ============================================================== -->
@@ -211,7 +136,7 @@
 			<!-- ======================== Women Accessiries Start ==================== -->
 
 			<!-- ======================== Women Accessiries End ==================== -->
-
+        {% endblock %}
 			<!-- ============================ Call To Action ================================== -->
 			<section class="theme-bg call_action_wrap-wrap">
 				<div class="container">
@@ -221,7 +146,7 @@
 							<div class="call_action_wrap">
 								<div class="call_action_wrap-head">
 									<h3>اشتراک در خبر نامه</h3>
-									<span>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</span>
+									<span> در حال حاضر این ویژگی فعال نمی باشد. اما به زودی قادر خواهید بود عضو خبرنامه ما شوید.</span>
 								</div>
 								<div class="newsletter_box">
 									<div class="input-group">
@@ -252,7 +177,7 @@
 									</div>
 									<div class="facts_caption">
 										<h4>ارسال رایگان</h4>
-										<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</p>
+										<p>برای سفارشات بالای ۱ میلیون تومان</p>
 									</div>
 								</div>
 							</div>
@@ -264,7 +189,7 @@
 									</div>
 									<div class="facts_caption">
 										<h4>تضمین بازگشت هزینه</h4>
-										<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</p>
+										<p>تا ۴۵ روز، در صورت عدم رضایت از محصول</p>
 									</div>
 								</div>
 							</div>
@@ -276,7 +201,7 @@
 									</div>
 									<div class="facts_caption">
 										<h4>پشتیبانی آنلاین 24 ساعته</h4>
-										<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</p>
+										<p>در شبکه های اجتماعی در خدمتتان هستیم</p>
 									</div>
 								</div>
 							</div>
@@ -292,7 +217,7 @@
 							<div class="col-lg-4 col-md-4">
 								<div class="footer_widget">
 									<h4 class="extream">تماس با ما</h4>
-									<p>لورم ایپسوم متن <a href="#" class="theme-cl">دریافت کنید</a></p>
+
 
 									<div class="address_infos">
 										<ul>
@@ -308,22 +233,22 @@
 								<div class="footer_widget">
 									<h4 class="widget_title">دسته بندی ها</h4>
 									<ul class="footer-menu">
-										<li><a href="#">ارگانیک</a></li>
-										<li><a href="#">مواد غذایی</a></li>
-										<li><a href="#">دیجیتالی</a></li>
-										<li><a href="#">مبلمان</a></li>
+										<li><a href="#">مردانه</a></li>
+										<li><a href="#">زنانه</a></li>
+										<li><a href="#">بچگانه</a></li>
+										<li><a href="#">فروش ویژه</a></li>
 									</ul>
 								</div>
 							</div>
 
 							<div class="col-lg-2 col-md-2">
 								<div class="footer_widget">
-									<h4 class="widget_title">کارخانه ی ما</h4>
+									<h4 class="widget_title">اودکس شاپ</h4>
 									<ul class="footer-menu">
 										<li><a href="#">درباره ما</a></li>
-										<li><a href="#">شرکت ما</a></li>
-										<li><a href="#">استودیوی ما</a></li>
-										<li><a href="#">فروشگاه</a></li>
+										<li><a href="#">ارتباط با ما</a></li>
+										<li><a href="#">اعتماد الکترونیکی</a></li>
+										<li><a href="#">چرا اودکس شاپ</a></li>
 									</ul>
 								</div>
 							</div>
@@ -334,8 +259,7 @@
 									<ul class="footer-menu">
 										<li><a href="#">پیشنهادات ویژه</a></li>
 										<li><a href="#">حساب من</a></li>
-										<li><a href="#">محصولات من</a></li>
-										<li><a href="#">موارد دلخواه</a></li>
+										<li><a href="#">خریدهای من</a></li>
 									</ul>
 								</div>
 							</div>
@@ -431,7 +355,6 @@
 						<div class="cart_action">
 							<ul>
 								<li><a href="#" class="btn btn-go-cart btn-theme">مشاهده / ویرایش سبد خرید</a></li>
-								<li><a href="#" class="btn btn-checkout">اکنون پرداخت کنید</a></li>
 							</ul>
 						</div>
 
