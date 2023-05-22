@@ -1,18 +1,28 @@
 from django.shortcuts import render
-from django.views import View
+from core.views import BasicViewMixin
 from django.views.generic import ListView
-from .models import Category
+from .models import ProductImage, Product
+from django.views import View
 
 
 # Create your views here.
-class Home(View):
+class Home(View, BasicViewMixin):
+    list_of_product_image = []
+    discount_products = Product.objects.filter(discount_is_active=True)
+    for product in discount_products:
+        product_image = ProductImage.objects.filter(product_id=product.id).first()
+        list_of_product_image.append(product_image)
+
     def get(self, request):
-        categories = Category.objects.all()
-        return render(request, "landing_page_base.html", {"categories": categories})
+        self.template_name = "product/home_page.html"
+        self.queryset.setdefault("discount_products", self.discount_products)
+        self.queryset.setdefault("product_pictures", self.list_of_product_image)
+        return super().get(request)
 
 
 class CategoryProducts(ListView):
-    def get(self, request, pk):
-        # model =
-        return render(request, "landing_page_base.html")
+    def get_queryset(self):
+        return Product.objects.filter(category=self.kwargs['pk'])
+    template_name = "landing_page_base.html"
+
 
