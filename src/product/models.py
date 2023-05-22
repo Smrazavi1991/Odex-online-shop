@@ -82,7 +82,7 @@ class ProductComment(BaseModel):
 
 
 class ProductImage(BaseModel):
-    image = models.ImageField(upload_to='media/product_images')
+    image = models.ImageField(upload_to='media/product_images/')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
