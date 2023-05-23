@@ -13,6 +13,9 @@ class Address(BaseModel):
     address = models.CharField(max_length=2000)
     postal_code = models.CharField(max_length=10)
 
+    class Meta:
+        verbose_name_plural = 'Addresses'
+
 
 class User(AbstractUser):
     genders = [
@@ -29,7 +32,7 @@ class User(AbstractUser):
     gender = models.CharField(choices=genders, max_length=1, null=True, blank=True)
     profile_pic = models.ImageField(null=True, upload_to='media/user_profile_pic', blank=True)
     phone_verified = models.BooleanField('Phone Verified', default=False)
-    address = models.ManyToManyField(Address, null=True, blank=True)
+    address = models.ManyToManyField(Address, blank=True)
     date_joined = jmodels.jDateTimeField(_("date joined"), auto_now_add=True)
 
     def get_full_name(self):
