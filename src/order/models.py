@@ -15,6 +15,9 @@ class Cart(BaseModel):
     item = models.JSONField("Item in cart")
     shipping_price = models.PositiveIntegerField("Shipping Price")
 
+    def customer_name(self):
+        return self.customer.get_full_name()
+
 
 class Order(BaseModel):
     statuses = [
@@ -39,3 +42,6 @@ class DiscountCoupon(BaseModel):
         constraints = [
             models.UniqueConstraint(fields=['code', 'discount', 'owner', 'discount_activate_at'], name='unique_Coupon')
         ]
+
+    def customer_name(self):
+        return self.owner.get_full_name()
