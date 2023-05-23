@@ -94,6 +94,9 @@ class ProductImage(BaseModel):
     image = models.ImageField(upload_to='product_images')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
+    def img_preview(self):
+        return mark_safe(f'<img src = "{self.image.url}" width = "300"/>')
+
     def __str__(self):
         return f"{self.product.name} picture"
 
