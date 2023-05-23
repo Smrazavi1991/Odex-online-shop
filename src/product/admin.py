@@ -6,19 +6,22 @@ from .models import *
 class ProductAdmin(admin.ModelAdmin):
     readonly_fields = ['img_preview']
     list_display = ('id', 'name', 'brand', 'count', 'price', 'discount_is_active', 'img_preview', 'is_deleted')
+    search_fields = ("name", "brand")
 
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'is_active', 'discount_is_active', 'last_change', 'is_deleted')
+    search_fields = ("name",)
 
 
 class ProductCommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'is_approved', 'owner_id', 'product_id', 'last_change', 'is_deleted')
+    search_fields = ("title", "description")
 
 
 class ProductImageAdmin(admin.ModelAdmin):
     readonly_fields = ['img_preview']
-    list_display = ('id', 'product_id', 'last_change', 'img_preview', 'is_deleted')
+    list_display = ('id', 'product_name', 'last_change', 'img_preview', 'is_deleted')
 
 
 class DiscountAdmin(admin.ModelAdmin):
@@ -27,6 +30,7 @@ class DiscountAdmin(admin.ModelAdmin):
 
 class InformationItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'last_change', 'is_deleted')
+    search_fields = ("name",)
 
 
 admin.site.register(Category, CategoryAdmin)
