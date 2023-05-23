@@ -30,7 +30,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=11, unique=True, validators=[phone_regex])
     birthday = jmodels.jDateField('Birth Date', null=True, blank=True)
     gender = models.CharField(choices=genders, max_length=1, null=True, blank=True)
-    profile_pic = models.ImageField(null=True, upload_to='media/user_profile_pic', blank=True)
+    profile_pic = models.ImageField(null=True, upload_to='user_profile_pic', blank=True)
     phone_verified = models.BooleanField('Phone Verified', default=False)
     address = models.ManyToManyField(Address, blank=True)
     date_joined = jmodels.jDateTimeField(_("date joined"), auto_now_add=True)
