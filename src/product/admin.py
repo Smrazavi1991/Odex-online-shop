@@ -22,16 +22,16 @@ class ProductImageAdmin(admin.ModelAdmin):
 
 
 class DiscountAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'brand', 'count', 'price', 'discount_is_active', 'img_preview', 'is_deleted')
-
-
-class InformationItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'amount_of_percentage_discount', 'amount_of_non_percentage_discount', 'last_change', 'is_deleted')
 
 
-admin.site.register(Category)
+class InformationItemAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'last_change', 'is_deleted')
+
+
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(ProductComment)
-admin.site.register(ProductImage)
-admin.site.register(Discount)
-admin.site.register(InformationItem)
+admin.site.register(ProductComment, ProductCommentAdmin)
+admin.site.register(ProductImage, ProductImageAdmin)
+admin.site.register(Discount, DiscountAdmin)
+admin.site.register(InformationItem, InformationItemAdmin)
