@@ -252,7 +252,6 @@ class OrderModelTest(TestCase):
             order2 = Order.objects.create(cart=cart, status='d')
             order2.save()
 
-
     def test_status_label(self):
         """
         Test that label of "status" field is set right.
@@ -382,7 +381,11 @@ class DiscountCouponModelTest(TestCase):
         """
         user = User.objects.get(username='alireza')
         discount = Discount.objects.get(id=1)
-        discountcoupon2 = DiscountCoupon(code="abcd", discount=discount, owner=user, discount_activate_at=jdatetime.datetime.fromgregorian(year=2024, month=3, day=20, hour=20, minute=30).replace(tzinfo=datetime.timezone.utc))
+        discountcoupon2 = DiscountCoupon(code="abcd", discount=discount, owner=user,
+                                         discount_activate_at=jdatetime.datetime.fromgregorian(year=2024, month=3,
+                                                                                               day=20, hour=20,
+                                                                                               minute=30).replace(
+                                             tzinfo=datetime.timezone.utc))
         discountcoupon2.save()
         self.assertTrue(DiscountCoupon.objects.filter(id=2).exists())
 
@@ -488,3 +491,6 @@ class DiscountCouponModelTest(TestCase):
         discountcoupon2 = DiscountCoupon(code="abcdefg", discount=discount, owner=user, discount_activate_at=x)
         discountcoupon2.save()
         self.assertTrue(DiscountCoupon.objects.filter(id=2).exists())
+
+    # A test that shows the unique constraint of fields=['code', 'discount', 'owner', 'discount_activate_at'] must be
+    # implemented
