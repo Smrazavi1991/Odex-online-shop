@@ -97,6 +97,9 @@ class ProductImage(BaseModel):
     def img_preview(self):
         return mark_safe(f'<img src = "{self.image.url}" width = "300"/>')
 
+    def product_name(self):
+        return self.product.name
+
     def __str__(self):
         return f"{self.product.name} picture"
 
