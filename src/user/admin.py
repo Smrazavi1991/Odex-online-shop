@@ -13,10 +13,12 @@ class UserAdmin(admin.ModelAdmin):
 class UsersAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'first_name', 'last_name', 'gender', 'email', 'phone', 'birthday',
                     'phone_verified', 'date_joined', 'is_active', 'is_superuser', 'last_login')
+    search_fields = ('username', 'first_name', 'last_name', 'email', 'phone')
 
 
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('id', 'province', 'city', 'address', 'postal_code', 'last_change', 'is_deleted')
+    search_fields = ('city', 'address', 'postal_code')
 
 
 admin.site.register(User, UsersAdmin)
