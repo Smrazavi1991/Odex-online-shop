@@ -30,11 +30,14 @@ class Category(BaseModel):
     name = models.CharField(max_length=100, unique=True)
     discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField('Category Is Active', default=True)
-    info_item = models.ManyToManyField(InformationItem, null=True, blank=True)
+    info_item = models.ManyToManyField(InformationItem, blank=True)
     sub = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     discount_activate_at = jmodels.jDateTimeField('Discount Activate at', null=True, blank=True)
     discount_deactivate_at = jmodels.jDateTimeField('Discount Deactivate at', null=True, blank=True)
     discount_is_active = models.BooleanField('Active discount', default=False)
+
+    class Meta:
+        verbose_name_plural = 'Categories'
 
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
