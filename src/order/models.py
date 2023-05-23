@@ -34,3 +34,8 @@ class DiscountCoupon(BaseModel):
     discount_activate_at = jmodels.jDateTimeField('Discount Activate at')
     discount_deactivate_at = jmodels.jDateTimeField('Discount Deactivate at', default=jdatetime.datetime.fromgregorian(year=2111, month=3, day=20, hour=20, minute=30).replace(tzinfo=datetime.timezone.utc))
     discount_is_active = models.BooleanField('Active discount', default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['code', 'discount', 'owner', 'discount_activate_at'], name='unique_Coupon')
+        ]
