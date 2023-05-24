@@ -40,7 +40,7 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class VerificationForm(forms.Form):
-    verification_code = forms.CharField(max_length=10, error_messages={
+    verification_code = forms.CharField(max_length=6, error_messages={
         'required': ',وارد کردن کد الزامی است.',
-        'max_value': 'طول کد وارد شده بیش از حد مجاز(۱۰ کاراکتر) میباشد'
+        'max_length': 'طول کد وارد شده بیش از حد مجاز(6 کاراکتر) میباشد'
     })
