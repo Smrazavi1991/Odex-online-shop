@@ -16,14 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
+from django.conf import settings
 from product.views import *
 from user.views import *
-from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", Home.as_view(), name="Home-page"),
-    path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page"),
-    path("register/", RegisterOrLogin.as_view(), name="Register-or-login"),
-    path("profile/", RegisterOrLogin.as_view(), name="Profile")
+    path("register/", Register.as_view(), name="Register"),
+    path("login/", Login.as_view(), name="Login"),
+    path("profile/", Profile.as_view(), name="Profile"),
+    path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page")
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
