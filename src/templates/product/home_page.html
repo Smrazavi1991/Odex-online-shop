@@ -1,0 +1,142 @@
+{% extends "landing_page_base.html" %}
+{% load static %}
+{% load percentage_discount %}
+{% load non_percentage_discount %}
+
+{% block content %}
+    <!-- ======================== Top category ==================== -->
+			<section>
+				<div class="container">
+					<div class="row justify-content-center">
+
+						<div class="col-lg-4 col-md-4 col-sm-12">
+							<div class="card card_big">
+								<div class="card-bg">
+									<div class="card-bg-img bg-cover" style="background:#fde9ed url({% static "assets/img/women-2.png" %});"></div>
+								</div>
+								<div class="card-body my-auto">
+									<!-- Heading -->
+									<h3 class="mb-0 text-danger">محصولات زنانه</h3>
+									<p>3000+ محصول</p>
+									<!-- Link -->
+                                    {% for category in categories %}
+                                    {% if category.name == "زنانه" %}
+									<a class="btn btn-link" href="category/{{ category.pk }}/">
+									  خرید <i class="ti-arrow-left mr-2"></i>
+									</a>
+                                    {% endif %}
+                                    {% endfor %}
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-4 col-sm-12">
+							<div class="card card_big">
+								<div class="card-bg">
+									<div class="card-bg-img bg-cover" style="background:#e9f6f4 url({% static "assets/img/men-2.png" %});"></div>
+								</div>
+								<div class="card-body my-auto">
+									<!-- Heading -->
+									<h3 class="mb-0 text-info">محصولات مردانه</h3>
+									<p>4000+ محصول</p>
+									<!-- Link -->
+                                    {% for category in categories %}
+                                    {% if category.name == "مردانه" %}
+									<a class="btn btn-link" href="category/{{ category.pk }}/">
+									  خرید جدید <i class="ti-arrow-left mr-2"></i>
+                                    {% endif %}
+                                    {% endfor %}
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-4 col-sm-12">
+							<div class="card card_big">
+								<div class="card-bg">
+									<div class="card-bg-img bg-cover" style="background:#f9f0ea url({% static "assets/img/kids-2.png"  %});"></div>
+								</div>
+								<div class="card-body my-auto">
+									<!-- Heading -->
+									<h3 class="mb-0 text-warning">محصولات کودکان</h3>
+									<p>302+ محصول</p>
+									<!-- Link -->
+                                    {% for category in categories %}
+                                    {% if category.name == "بچگانه" %}
+									<a class="btn btn-link" href="category/{{ category.pk }}/">
+									  خرید جدید <i class="ti-arrow-left mr-2"></i>
+									{% endif %}
+                                    {% endfor %}
+                                    </a>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+			<!-- ======================== Top category End ==================== -->
+
+            <!-- ======================= Hot Deal Start ============================== -->
+			<section class="pt-0">
+				<div class="container">
+					<div class="row align-item-center">
+
+						<div class="col-lg-5 col-md-12">
+							<div class="d-flex flex-column overflow-hidden rounded-lg">
+								<img src={% static "assets/img/fashion.png" %} class="img-fluid" alt="" />
+							</div>
+						</div>
+
+						<div class="col-lg-7 col-md-12">
+							<div class="side_titles">
+								<h4>پیشنهادات ویژه</h4>
+							</div>
+							<div class="owl-carousel side-products-slider owl-theme">
+
+								<!-- Single Item -->
+								<div class="item">
+									<div class="row">
+                                        {% for discount_product in discount_products %}
+										<div class="col-lg-4 col-md-4 col-sm-6 col-12">
+											<div class="woo_product_grid">
+                                                <div class="woo_product_thumb">
+                                                {% for product_picture in product_pictures %}
+                                                {% if product_picture.product_id == discount_product.id %}
+
+													<img src={{ product_picture.image }} class="img-fluid" alt="" />
+
+                                                {% endif %}
+                                                {% endfor %}
+												</div>
+												<div class="woo_product_caption center">
+													<div class="woo_title">
+														<h4 class="woo_pro_title">{{ discount_product.name }}</h4>
+													</div>
+													<div class="woo_price">
+														<h6>{{ discount_product.price|calc_discount:{{ discount_product.discount.amount_of_non_percentage_discount }}تومان}}<span class="less_price">{{ discount_product.price }}تومان</span></h6>
+													</div>
+												</div>
+												<div class="woo_product_cart hover">
+													<ul>
+														<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
+														<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
+														<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+
+
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+            <!-- ======================= Hot Deals End =============================== -->
+{% endblock %}
