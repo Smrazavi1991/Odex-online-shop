@@ -24,6 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", Home.as_view(), name="Home-page"),
     path("register/", Register.as_view(), name="Register"),
+    path("verification/", Verification.as_view(), name="Verification"),
     path("login/", Login.as_view(), name="Login"),
     path("profile/", Profile.as_view(), name="Profile"),
     path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page")
