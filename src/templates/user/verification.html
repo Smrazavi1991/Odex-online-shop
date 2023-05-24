@@ -1,6 +1,6 @@
 {% extends "landing_page_base.html" %}
 
-{% block title %}ثبت نام{% endblock %}
+{% block title %}اعتبار سنجی اطلاعات{% endblock %}
 
 {%  block content %}
     <!-- =========================== Breadcrumbs =================================== -->
@@ -10,12 +10,12 @@
 
 						<div class="col-lg-12 col-md-12 col-sm-12">
 							<div class="text-center">
-								<h2 class="breadcrumbs_title">ثبت نام</h2>
+								<h2 class="breadcrumbs_title">اعتبار سنجی اطلاعات</h2>
 								<nav aria-label="breadcrumb">
 								  <ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="#"><i class="ti-home"></i></a></li>
 									<li class="breadcrumb-item"><a href="#">حساب کاربری</a></li>
-									<li class="breadcrumb-item active" aria-current="page">ثبت نام</li>
+									<li class="breadcrumb-item active" aria-current="page">اعتبار سنجی اطلاعات</li>
 								  </ol>
 								</nav>
 							</div>
@@ -37,42 +37,22 @@
 
 						<div class="col-lg-6 col-md-12 col-sm-12">
 							<div class="login_signup">
-								<h3 class="login_sec_title" style="color: #2d3954">ایجاد حساب کاربری</h3>
+								<h3 class="login_sec_title" style="color: #2d3954">لطفا کد ارسالی را وارد نمایید.</h3>
 								<form action="", method="post">
                                     {% csrf_token %}
 									<div class="row">
-										<div class="col-lg-6 col-md-6">
+
+                                        <div class="col-lg-3"></div>
+
+										<div class="col-lg-6 col-md-12">
 											<div class="form-group">
                                                 {{ form.subject.errors }}
-												<label for="id_username"> نام کاربری*</label>
-                                                <input id="id_username" type="text" name="username" class="form-control">
+												<label for="id_verification_code"></label>
+												<input id="id_verification_code" type="text" name="verification_code" class="form-control">
 											</div>
 										</div>
 
-										<div class="col-lg-6 col-md-6">
-											<div class="form-group">
-                                                {{ form.subject.errors }}
-												<label for="id_phone">شماره همراه*</label>
-												<input id="id_phone" type="text" name="phone" class="form-control">
-											</div>
-										</div>
-
-										<div class="col-lg-12 col-md-12">
-											<div class="form-group">
-                                                {{ form.subject.errors }}
-												<label for="id_email">آدرس ایمیل*</label>
-												<input id="id_email" type="text" name="email" class="form-control">
-											</div>
-										</div>
-
-										<div class="col-lg-12 col-md-6">
-											<div class="form-group">
-                                                {{ form.subject.errors }}
-												<label for="id_password">کلمه عبور*</label>
-												<input id="id_password" type="password" name="password" class="form-control">
-											</div>
-										</div>
-
+                                        <div class="col-lg-3"></div>
 
 
                                         {% if form.errors %}
@@ -85,18 +65,12 @@
                                              </div>
                                         {% endif %}
 
-										<div class="col-lg-12 col-md-12">
-											<div class="login_flex">
-												<div class="login_flex_1">
-                                                    <a href="#" class="text-bold">حساب کاربری دارید؟ وارد شوید</a>
-												</div>
-												<div class="login_flex_2">
-													<div class="form-group mb-0">
-														<button type="submit" class="btn btn-md btn-theme">ثبت نام</button>
-													</div>
-												</div>
-											</div>
-										</div>
+
+                                            <div class="col-lg-5"></div>
+                                            <div class="col-lg-5">
+                                            <button type="submit" class="btn btn-md btn-theme">تایید</button>
+                                            </div>
+                                            <div class="col-lg-2"></div>
 
 									</div>
 
