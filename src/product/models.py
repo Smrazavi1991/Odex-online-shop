@@ -67,7 +67,7 @@ class Product(BaseModel):
     # @staticmethod
     def img_preview(self):
         thumbnail_image = ProductImage.objects.filter(product_id=self.id).first()
-        return mark_safe(f'<img src = "{thumbnail_image.image.url}" width = "300"/>')
+        return mark_safe(f'<img src = "{thumbnail_image.image.url}" width = "100"/>')
 
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -95,7 +95,7 @@ class ProductImage(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def img_preview(self):
-        return mark_safe(f'<img src = "{self.image.url}" width = "300"/>')
+        return mark_safe(f'<img src = "{self.image.url}" width = "100"/>')
 
     def product_name(self):
         return self.product.name
