@@ -16,6 +16,8 @@ class Address(BaseModel):
     class Meta:
         verbose_name_plural = 'Addresses'
 
+    def __str__(self):
+        return f'{self.province}, {self.city}, {self.address}'
 
 class User(AbstractUser):
     genders = [
