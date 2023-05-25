@@ -1,4 +1,4 @@
-from random import random
+from random import randint
 
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ValidationError
@@ -13,7 +13,6 @@ from core.utils import identify_user_role, create_jwt_token
 
 
 class Register(View, BasicViewMixin):
-    otp_code = 0
 
     def get(self, request):
         registeration_form = RegisterUserForm()
@@ -27,8 +26,8 @@ class Register(View, BasicViewMixin):
             form.save()
             #######################################
             # just for example. must change
-            self.otp_code = random.randint(100000, 999999)
-            print(self.otp_code)
+            Register.otp_code = randint(100000, 999999)
+            print(Register.otp_code)
             ##########################################
             request.session['username'] = form.cleaned_data['username']
             return redirect('Verification')
@@ -45,7 +44,8 @@ class Verification(View, BasicViewMixin):
     def post(self, request):
         form = VerificationForm(request.POST)
         if form.is_valid():
-            if form.cleaned_data['verification_code'] == Register.otp_code:
+            input_verification = int(form.cleaned_data['verification_code'])
+            if input_verification == Register.otp_code:
                 username = request.session.get('username', None)
                 user = User.objects.get(username=username)
                 auth_user = authenticate(username=user.username, password=user.password)
@@ -56,6 +56,7 @@ class Verification(View, BasicViewMixin):
                     create_jwt_token(payload)
                     return redirect('Home_page')
                 return JsonResponse({'message': 'Invalid credentials'}, status=401)
+        print(form.is_valid())
         return render(request, 'user/verification.html', {'form': form})
 
 
