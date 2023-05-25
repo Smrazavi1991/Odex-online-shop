@@ -19,6 +19,7 @@ class Address(BaseModel):
     def __str__(self):
         return f'{self.province}, {self.city}, {self.address}'
 
+
 class User(AbstractUser):
     genders = [
         ('m', 'male'),
