@@ -51,6 +51,24 @@ class InformationItemModelTest(TestCase):
         expected_object_name = information_item.name
         self.assertEqual(str(information_item), expected_object_name)
 
+    def test_name_not_nullable(self):
+        """
+        Test that value of "name" field "null" attribute is set to "False".
+        """
+        information_item = InformationItem.objects.get(id=1)
+        with self.assertRaises(IntegrityError):
+            information_item.name = None
+            information_item.save()
+
+    def test_name_blank(self):
+        """
+        Test that value of "name" field "Blank" attribute is set to "False".
+        """
+        information_item = InformationItem.objects.get(id=1)
+        with self.assertRaises(ValidationError):
+            information_item.name = ''
+            information_item.full_clean()
+
 
 ########################
 # Discount MODEL TESTS #
@@ -75,24 +93,40 @@ class DiscountModelTest(TestCase):
         """
         Test that validator of "amount_of_percentage_discount" field work properly.
         """
+        discount = Discount.objects.get(id=1)
+        discount.amount_of_percentage_discount = 80
+        discount.save()
+        self.assertEqual(discount.amount_of_percentage_discount, 80)
         with self.assertRaises(ValidationError):
-            discount = Discount.objects.create(amount_of_percentage_discount=90)
+            discount = Discount.objects.create(amount_of_percentage_discount=81)
             discount.full_clean()
 
-    def test_amount_of_percentage_discount_not_nullable(self):
+    def test_amount_of_percentage_discount_null(self):
         """
-        Test that value of "amount_of_percentage_discount" field "null"attribute is set to "False".
+        Test that value of "amount_of_percentage_discount" field "null"attribute is set to "True".
         """
         discount = Discount.objects.get(id=1)
-        with self.assertRaises(IntegrityError):
-            discount.is_deleted = None
+        discount.amount_of_percentage_discount = None
+        discount.save()
+        self.assertIsNone(discount.amount_of_percentage_discount)
+
+    def test_amount_of_percentage_discount_integer(self):
+        """
+        Test that value of "amount_of_percentage_discount" field  is just integer.
+        """
+        discount = Discount.objects.get(id=1)
+        discount.amount_of_percentage_discount = 50
+        discount.save()
+        self.assertEqual(discount.amount_of_percentage_discount, 50)
+        with self.assertRaises(ValueError):
+            discount.amount_of_percentage_discount = "test"
             discount.save()
 
-    # def test_is_deleted_blank(self):
-    #     """
-    #     Test that value of "is_deleted" field "Blank" is set to "False".
-    #     """
-    #     cart = Cart.objects.get(id=1)
-    #     with self.assertRaises(ValidationError):
-    #         cart.is_deleted = ''
-    #         cart.save()
+    def test_amount_of_percentage_discount_uniqueness(self):
+        """
+        Test that "amount_of_percentage_discount" field uniqueness.
+        """
+        with self.assertRaises(IntegrityError):
+            discount2 = Discount.objects.create(amount_of_percentage_discount=60)
+            discount2.save()
+
