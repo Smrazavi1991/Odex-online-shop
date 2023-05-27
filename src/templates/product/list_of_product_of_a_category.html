@@ -281,289 +281,50 @@
 							<div class="row">
 
 								<!-- Single Item -->
+                                {% for product in object_list %}
 								<div class="col-lg-4 col-md-4 col-sm-6">
 									<div class="woo_product_grid">
+                                        {% if category.discount_is_active == True and category.discount == True %}
 										<span class="woo_pr_tag hot">ویژه</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/women/1.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/2.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
-										<span class="woo_pr_tag new">جدید</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/3.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
-										<span class="woo_offer_sell">20% تخفیف</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/women/4.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
+                                            {% if category.discount.amount_of_non_percentage_discount %}
+                                        <span class="woo_offer_sell">{{ category.discount.amount_of_non_percentage_discount }} ریال تخفیف</span>
+                                            {% else %}
+                                        <span class="woo_offer_sell">{{ category.discount.amount_of_percentage_discount }}% تخفیف</span>
+                                            {% endif %}
+                                        {% elif product.discount_is_active == True and product.discount == True %}
 										<span class="woo_pr_tag hot">ویژه</span>
+                                            {% if product.discount.amount_of_non_percentage_discount %}
+                                        <span class="woo_offer_sell">{{ product.discount.amount_of_non_percentage_discount }} ریال تخفیف</span>
+                                            {% else %}
+                                        <span class="woo_offer_sell">{{ product.discount.amount_of_percentage_discount }}% تخفیف</span>
+                                            {% endif %}
+                                        {% endif %}
 										<div class="woo_product_thumb">
-											<img src="assets/img/men/5.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
+                                            {% for product_picture in product_pictures %}
+                                            {% if product_picture.product_id == product.id %}
 
-								<!-- Single Item -->
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/6.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
+											<img src={{ product_picture.image.url }} class="img-fluid" alt="" />
 
-								<!-- Single Item -->
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
-										<span class="woo_pr_tag hot">ویژه</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/women/7.png" class="img-fluid" alt="" />
+                                            {% endif %}
+                                            {% endfor %}
 										</div>
 										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
 											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
+												<h4 class="woo_pro_title">{{ product.name }}</h4>
 											</div>
 											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
+												<h6>{% for discount in discounted_price %}{% if discount.id == product.id %}{{ discount.price }}تومان  {% endif %}{% endfor %}<span class="less_price">{{ product.price }}تومان</span></h6>
 											</div>
 										</div>
 										<div class="woo_product_cart hover">
 											<ul>
 												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
 												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
 											</ul>
 										</div>
 									</div>
 								</div>
-
-								<!-- Single Item -->
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
-										<span class="woo_pr_tag new">جدید</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/8.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
-										<div class="woo_product_thumb">
-											<img src="assets/img/women/1.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصول</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200 تومان<span class="less_price">11200 تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
+                                {% endfor %}
 
 							</div>
 							<!-- Row -->
