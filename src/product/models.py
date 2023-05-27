@@ -67,7 +67,10 @@ class Product(BaseModel):
     # @staticmethod
     def img_preview(self):
         thumbnail_image = ProductImage.objects.filter(product_id=self.id).first()
-        return mark_safe(f'<img src = "{thumbnail_image.image.url}" width = "100"/>')
+        if thumbnail_image:
+            return mark_safe(f'<img src = "{thumbnail_image.image.url}" width = "100"/>')
+        else:
+            return mark_safe(f'<img src = "/media/No_Image_Available.jpg" width = "100"/>')
 
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
