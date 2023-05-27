@@ -23,6 +23,8 @@ class Home(ListView, BasicViewMixin, ProductsViewMixin):
 
 
 class CategoryProducts(ListView, BasicViewMixin, ProductsViewMixin):
+    paginate_by = 9
+
     def get_queryset(self):
         return Product.objects.filter(category=self.kwargs['pk'])
     template_name = "product/list_of_product_of_a_category.html"
@@ -32,12 +34,9 @@ class CategoryProducts(ListView, BasicViewMixin, ProductsViewMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = BasicViewMixin.queryset['categories']
-        for product in self.get_queryset():
-            if product in self.discount_products:
-                product
-        context['product_pictures'] = self.list_of_product_image
-        context['discounted_price'] = self.price_after_discount
+        context["categories"] = self.category['categories']
+        context['product_pictures'] = self.get_pics_from_a_product_queryset(queryset=self.get_queryset())
+        context['discounted_price'] = self.get_discount_price_from_a_product_queryset(queryset=self.get_queryset())
         context['category'] = self.get_category()
         print(context)
         return context
