@@ -70,7 +70,7 @@ class Product(BaseModel):
         if thumbnail_image:
             return mark_safe(f'<img src = "{thumbnail_image.image.url}" width = "100"/>')
         else:
-            return mark_safe(f'<img src = "/media/No_Image_Available.jpg" width = "100"/>')
+            return mark_safe(f'<img src = "/static/No_Image_Available.jpg" width = "100"/>')
 
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
