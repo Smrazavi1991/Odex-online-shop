@@ -54,15 +54,15 @@
                                                 <ul class="nav-dropdown nav-submenu">
                                                 {% for category in categories %}
                                                 {% if category.name != "فروش ویژه" and category.sub == None %}
-													<li><a href="category/{{ category.pk }}/">{{ category.name }}<span class="submenu-indicator"></span></a>
+													<li><a href="/category/{{ category.pk }}/">{{ category.name }}<span class="submenu-indicator"></span></a>
                                                         <ul class="nav-dropdown nav-submenu">
                                                         {% for c in categories %}
                                                         {%  if c.sub.id is not None and c.sub.id == category.pk %}
-															<li><a href="category/{{ c.pk }}/">{{ c.name }}<span class="submenu-indicator"></span></a>
+															<li><a href="/category/{{ c.pk }}/">{{ c.name }}<span class="submenu-indicator"></span></a>
                                                                 {% for cat in categories %}
                                                                 {%  if cat.sub.id is not None and cat.sub.id == c.pk %}
                                                                 <ul class="nav-dropdown nav-submenu">
-                                                                    <li><a href="category/{{ cat.pk }}/">{{ cat.name }}</a></li>
+                                                                    <li><a href="/category/{{ cat.pk }}/">{{ cat.name }}</a></li>
                                                                 </ul>
                                                                 {% endif %}
                                                                 {% endfor %}
@@ -77,7 +77,7 @@
                                             </li>
                                             {% for category in categories %}
                                             {% if category.name == "فروش ویژه" %}
-											<li><a href="category/{{ category.pk }}">{{ category.name }}<span class="submenu-indicator"></span></a></li>
+											<li><a href="/category/{{ category.pk }}">{{ category.name }}<span class="submenu-indicator"></span></a></li>
                                             {% endif %}
                                             {% endfor %}
 										</ul>
@@ -237,13 +237,13 @@
 									<ul class="footer-menu">
                                         {% for category in categories %}
                                         {% if category.name == "مردانه" %}
-										<li><a href="category/{{ category.pk }}/">{{ category.name }}</a></li>
+										<li><a href="/category/{{ category.pk }}/">{{ category.name }}</a></li>
                                         {% elif category.name == "زنانه" %}
-										<li><a href="category/{{ category.pk }}/">{{ category.name }}</a></li>
+										<li><a href="/category/{{ category.pk }}/">{{ category.name }}</a></li>
                                         {% elif category.name == "بچگانه" %}
-										<li><a href="category/{{ category.pk }}/">{{ category.name }}</a></li>
+										<li><a href="/category/{{ category.pk }}/">{{ category.name }}</a></li>
                                         {% elif category.name == "فروش ویژه" %}
-										<li><a href="category/{{ category.pk }}/">{{ category.name }}</a></li>
+										<li><a href="/category/{{ category.pk }}/">{{ category.name }}</a></li>
                                         {% endif %}
                                         {% endfor %}
 									</ul>
