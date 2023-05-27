@@ -15,7 +15,7 @@ class BasicViewMixin:
 class ProductsViewMixin:
 
     @staticmethod
-    def get_pics_from_a_product_queryset(queryset: list):
+    def get_pics_from_a_product_queryset(queryset):
         list_of_product_image = []
         for product in queryset:
             product_image = ProductImage.objects.filter(product_id=product.id).first()
@@ -23,24 +23,26 @@ class ProductsViewMixin:
         return list_of_product_image
 
     @staticmethod
-    def get_discount_price_from_a_product_queryset(queryset: list):
+    def get_discount_price_from_a_product_queryset(queryset):
         price_after_discount = []
+        _ = 0
         for product in queryset:
             temp_dict = {}
 
-            if product.discount.amount_of_percentage_discount:
-                _ = product.price * (1 - product.discount.amount_of_percentage_discount / 100)
-            else:
-                _ = product.price - product.discount.amount_of_non_percentage_discount
+            if product.discount:
+                if product.discount.amount_of_percentage_discount:
+                    _ = product.price * (product.discount.amount_of_percentage_discount / 100)
+                else:
+                    _ = product.discount.amount_of_non_percentage_discount
 
             categories = Category.objects.filter(product__id=product.id)
             for category in categories:
                 if category.discount_is_active:
                     if category.discount.amount_of_percentage_discount:
-                        _ = product.price_after_discount * (1 - category.discount.amount_of_percentage_discount / 100)
+                        _ += product.price_after_discount * (category.discount.amount_of_percentage_discount / 100)
                     else:
-                        _ = product.price_after_discount - product.discount.amount_of_non_percentage_discount
+                        _ += product.discount.amount_of_non_percentage_discount
             temp_dict.setdefault("id", product.id)
-            temp_dict.setdefault("price", _)
+            temp_dict.setdefault("price", product.price - _)
             price_after_discount.append(temp_dict)
         return price_after_discount
