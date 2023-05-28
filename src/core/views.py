@@ -15,11 +15,20 @@ class BasicViewMixin:
 class ProductsViewMixin:
 
     @staticmethod
-    def get_pics_from_a_product_queryset(queryset):
+    def get_pics_from_a_product_queryset(queryset, is_primary=True):
         list_of_product_image = []
         for product in queryset:
-            product_image = ProductImage.objects.filter(product_id=product.id).first()
-            list_of_product_image.append(product_image)
+            temp_dict = {}
+            condition1 = Q(product_id=product.id)
+            condition2 = Q(is_primary=is_primary)
+            product_image = ProductImage.objects.filter(condition1 & condition2).first()
+            if product_image:
+                temp_dict.setdefault("id", product.id)
+                temp_dict.setdefault("image", product_image.image)
+            else:
+                temp_dict.setdefault("id", product.id)
+                temp_dict.setdefault("image", None)
+            list_of_product_image.append(temp_dict)
         return list_of_product_image
 
     @staticmethod
@@ -43,6 +52,9 @@ class ProductsViewMixin:
                     else:
                         _ += product.discount.amount_of_non_percentage_discount
             temp_dict.setdefault("id", product.id)
-            temp_dict.setdefault("price", product.price - _)
+            if _ == 0:
+                temp_dict.setdefault("price", None)
+            else:
+                temp_dict.setdefault("price", product.price - _)
             price_after_discount.append(temp_dict)
         return price_after_discount
