@@ -1,6 +1,6 @@
 from django.db.models import Q
 from core.views import BasicViewMixin, ProductsViewMixin
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Product, Category
 
 
@@ -35,6 +35,18 @@ class CategoryProducts(ListView, BasicViewMixin, ProductsViewMixin):
         context['product_pictures'] = self.get_pics_from_a_product_queryset(queryset=self.get_queryset())
         context['discounted_price'] = self.get_discount_price_from_a_product_queryset(queryset=self.get_queryset())
         context['category'] = self.get_category()
-        print(context)
         return context
 
+
+class ProductDetails(DetailView, BasicViewMixin, ProductsViewMixin):
+    def get_queryset(self):
+        return Product.objects.filter(id=self.kwargs['pk'])
+    template_name = "product/product_details.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.category['categories']
+        context['product_pictures'] = self.get_pics_from_a_product_queryset(queryset=self.get_queryset(), is_primary=False)
+        context['discounted_price'] = self.get_discount_price_from_a_product_queryset(queryset=self.get_queryset())
+        print(context)
+        return context
