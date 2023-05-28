@@ -15,13 +15,26 @@ class BasicViewMixin:
 class ProductsViewMixin:
 
     @staticmethod
-    def get_pics_from_a_product_queryset(queryset, is_primary=True):
+    def get_pics_from_a_product_queryset(queryset, is_primary=None):
         list_of_product_image = []
         for product in queryset:
             temp_dict = {}
-            condition1 = Q(product_id=product.id)
-            condition2 = Q(is_primary=is_primary)
-            product_image = ProductImage.objects.filter(condition1 & condition2).first()
+            temp_list = []
+            if not is_primary:
+                product_image = ProductImage.objects.filter(product_id=product.id)
+            else:
+                condition1 = Q(product_id=product.id)
+                condition2 = Q(is_primary=is_primary)
+                product_image = ProductImage.objects.filter(condition1 & condition2).first()
+
+            if product_image and not isinstance(product_image, ProductImage):
+                temp_dict.setdefault("id", product.id)
+                for obj in product_image:
+                    temp_list.append(obj)
+                temp_dict.setdefault("image", temp_list)
+                list_of_product_image.append(temp_dict)
+                continue
+
             if product_image:
                 temp_dict.setdefault("id", product.id)
                 temp_dict.setdefault("image", product_image.image)
