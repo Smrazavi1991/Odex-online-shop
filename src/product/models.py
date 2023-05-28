@@ -96,6 +96,7 @@ class ProductComment(BaseModel):
 class ProductImage(BaseModel):
     image = models.ImageField(upload_to='product_images')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    is_primary = models.BooleanField('Is Primary', default=False)
 
     def img_preview(self):
         return mark_safe(f'<img src = "{self.image.url}" width = "100"/>')
