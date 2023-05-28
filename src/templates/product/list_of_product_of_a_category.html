@@ -47,323 +47,110 @@
 						</div>
 					</div>
 
-					<div class="row">
+                    <!-- Single Product -->
 
-						<!-- Single Product -->
-						<div class="col-lg-4 col-md-12">
-							<div class="search-sidebar sm-sidebar" id="filter_search"  style="right:0;">
-								<div class="search-sidebar_header">
-									<h4 class="ssh_heading">بستن فیلتر</h4>
-									<button onclick="closeFilterSearch()" class="w3-bar-item w3-button w3-large"><i class="ti-close"></i></button>
-								</div>
-								<div class="search-sidebar-body">
+                    <div class="col-lg-12 col-md-12">
 
-									<!-- Single Option -->
-									<div class="single_search_boxed">
-										<div class="widget-boxed-header">
-											<h4 class="mr-4 mt-4">دسته بندی ها</h4>
-										</div>
-										<div class="widget-boxed-body">
-											<div class="side-list no-border">
-												<div class="filter-card" id="shop-categories">
+                        <!-- Banner -->
+                        {% if category.name == "زنانه" %}
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="min_banner mb-5">
+                                    <img src="{% static "assets/img/min/banner-5.png" %}" class="img-fluid rounded" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
 
-													<!-- Single Filter Card -->
-													<div class="single_filter_card">
-														<h5><a href="#shoes" data-toggle="collapse" class="collapsed" aria-expanded="false" role="button">کفش<i class="accordion-indicator ti-angle-down"></i></a></h5>
+                        <!-- Row -->
+                        <div class="row">
 
-														<div class="collapse" id="shoes" data-parent="#shop-categories">
-															<div class="card-body">
-																<div class="inner_widget_link">
-																	<ul>
-																		<li><a href="#">کفش پاشنه بلند<span>112</span></a></li>
-																		<li><a href="#">شنل<span>82</span></a></li>
-																		<li><a href="#">ورزشی<span>56</span></a></li>
-																		<li><a href="#">چکمه<span>101</span></a></li>
-																		<li><a href="#">کفش پیاده روی<span>212</span></a></li>
-																		<li><a href="#">صندل<span>92</span></a></li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
+                            <!-- Single Item -->
+                            {% for product in object_list %}
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="woo_product_grid">
+                                    {% if category.discount_is_active == True and category.discount == True %}
+                                    <span class="woo_pr_tag hot">ویژه</span>
+                                    {% elif product.discount_is_active == True and product.discount == True %}
+                                    <span class="woo_pr_tag hot">ویژه</span>
+                                    {% endif %}
+                                    <div class="woo_product_thumb">
+                                        {% for product_picture in product_pictures %}
+                                        {% if product_picture.id == product.id %}
+                                        {% if product_picture.image != None %}
 
-													<!-- Single Filter Card -->
-													<div class="single_filter_card">
-														<h5><a href="#clothing" data-toggle="collapse" class="" aria-expanded="false" role="button">پوشاک<i class="accordion-indicator ti-angle-down"></i></a></h5>
+                                        <img src={{ product_picture.image.url }} class="img-fluid" alt="" />
 
-														<div class="collapse show" id="clothing" data-parent="#shop-categories">
-															<div class="card-body">
-																<div class="inner_widget_link">
-																	<ul>
-																		<li><a href="#">بلوز<span>82</span></a></li>
-																		<li><a href="#">کت و شلوار<span>110</span></a></li>
-																		<li><a href="#">بلوز<span>103</span></a></li>
-																		<li><a href="#">شلوار کت<span>72</span></a></li>
-																		<li><a href="#">تی شرت<span>36</span></a></li>
-																		<li><a href="#">پیراهن مردانه<span>122</span></a></li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
+                                        {% else %}
+                                        <img src="{% static "No_Image_Available.jpg" %}" class="img-fluid" alt="" />
 
-													<!-- Single Filter Card -->
-													<div class="single_filter_card">
-														<h5><a href="#watches" data-toggle="collapse" class="collapsed" aria-expanded="false" role="button">ساعت<i class="accordion-indicator ti-angle-down"></i></a></h5>
-
-														<div class="collapse" id="watches" data-parent="#shop-categories">
-															<div class="card-body">
-																<div class="inner_widget_link">
-																	<ul>
-																		<li><a href="#">ساعت ورزشی<span>112</span></a></li>
-																		<li><a href="#">ساعت<span>112</span></a></li>
-																		<li><a href="#">ساعت مد<span>112</span></a></li>
-																		<li><a href="#">ساعت دخترانه<span>112</span></a></li>
-																		<li><a href="#">ساعت هوشمند<span>112</span></a></li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
-
-													<!-- Single Filter Card -->
-													<div class="single_filter_card">
-														<h5><a href="#bags" data-toggle="collapse" class="collapsed" aria-expanded="false" role="button">کیف<i class="accordion-indicator ti-angle-down"></i></a></h5>
-
-														<div class="collapse" id="bags" data-parent="#shop-categories">
-															<div class="card-body">
-																<div class="inner_widget_link">
-																	<ul>
-																		<li><a href="#">کیف معمولی<span>212</span></a></li>
-																		<li><a href="#">کیف اسپورت<span>212</span></a></li>
-																		<li><a href="#">چمدان<span>82</span></a></li>
-																		<li><a href="#">کیف مد<span>212</span></a></li>
-																		<li><a href="#">کیف کوچک<span>113</span></a></li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
-
-													<!-- Single Filter Card -->
-													<div class="single_filter_card">
-														<h5><a href="#accessories" data-toggle="collapse" class="collapsed" aria-expanded="false" role="button">تجهیزات جانبی<i class="accordion-indicator ti-angle-down"></i></a></h5>
-
-														<div class="collapse" id="accessories" data-parent="#shop-categories">
-															<div class="card-body">
-																<div class="inner_widget_link">
-																	<ul>
-																		<li><a href="#">کیف پول مردانه<span>432</span></a></li>
-																		<li><a href="#">کمربند مردانه<span>82</span></a></li>
-																		<li><a href="#">کلاه<span>541</span></a></li>
-																		<li><a href="#">جواهرات<span>312</span></a></li>
-																		<li><a href="#">زیبایی<span>65</span></a></li>
-																		<li><a href="#">لوازم آرایشی<span>242</span></a></li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
-
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<!-- Single Option -->
-									<div class="single_search_boxed">
-										<div class="widget-boxed-header">
-											<h4><a href="#pricing" data-toggle="collapse" aria-expanded="false" role="button">قیمت</a></h4>
-										</div>
-										<div class="widget-boxed-body collapse show" id="pricing" data-parent="#pricing">
-											<div class="side-list no-border mb-4">
-												<div class="rg-slider">
-													 <input type="text" class="js-range-slider" name="my_range" value="" />
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<!-- Single Option -->
-									<div class="single_search_boxed">
-										<div class="widget-boxed-header">
-											<h4><a href="#brands" data-toggle="collapse" aria-expanded="false" role="button">برند</a></h4>
-										</div>
-										<div class="widget-boxed-body collapse show" id="brands" data-parent="#brands">
-											<div class="side-list no-border">
-												<!-- Single Filter Card -->
-												<div class="single_filter_card">
-													<div class="card-body pt-0">
-														<div class="inner_widget_link">
-															<ul class="no-ul-list">
-																<li>
-																	<input id="b1" class="checkbox-custom" name="b1" type="checkbox">
-																	<label for="b1" class="checkbox-custom-label">سامسونگ<span>142</span></label>
-																</li>
-																<li>
-																	<input id="b2" class="checkbox-custom" name="b2" type="checkbox">
-																	<label for="b2" class="checkbox-custom-label">اپل<span>652</span></label>
-																</li>
-																<li>
-																	<input id="b3" class="checkbox-custom" name="b3" type="checkbox">
-																	<label for="b3" class="checkbox-custom-label">نیکی<span>232</span></label>
-																</li>
-																<li>
-																	<input id="b4" class="checkbox-custom" name="b4" type="checkbox">
-																	<label for="b4" class="checkbox-custom-label">ریبوک<span>192</span></label>
-																</li>
-																<li>
-																	<input id="b5" class="checkbox-custom" name="b5" type="checkbox">
-																	<label for="b5" class="checkbox-custom-label">هاوایی<span>265</span></label>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<!-- Single Option -->
-									<div class="single_search_boxed">
-										<div class="widget-boxed-header">
-											<h4><a href="#discount" data-toggle="collapse" class="collapsed" aria-expanded="false" role="button">تخفیف</a></h4>
-										</div>
-										<div class="widget-boxed-body collapse" id="discount" data-parent="#discount">
-											<div class="side-list no-border">
-												<!-- Single Filter Card -->
-												<div class="single_filter_card">
-													<div class="card-body pt-0">
-														<div class="inner_widget_link">
-															<ul class="no-ul-list">
-																<li>
-																	<input id="d1" class="checkbox-custom" name="d1" type="checkbox">
-																	<label for="d1" class="checkbox-custom-label">80% تخفیف<span>22</span></label>
-																</li>
-																<li>
-																	<input id="d2" class="checkbox-custom" name="d2" type="checkbox">
-																	<label for="d2" class="checkbox-custom-label">60% تخفیف<span>472</span></label>
-																</li>
-																<li>
-																	<input id="d3" class="checkbox-custom" name="d3" type="checkbox">
-																	<label for="d3" class="checkbox-custom-label">50% تخفیف<span>170</span></label>
-																</li>
-																<li>
-																	<input id="d4" class="checkbox-custom" name="d4" type="checkbox">
-																	<label for="d4" class="checkbox-custom-label">40% تخفیف<span>170</span></label>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-8 col-md-12">
-
-							<!-- Banner -->
-                            {% if category.name == "زنانه" %}
-							<div class="row">
-								<div class="col-lg-12 col-md-12">
-									<div class="min_banner mb-5">
-										<img src="{% static "assets/img/min/banner-5.png" %}" class="img-fluid rounded" alt="" />
-									</div>
-								</div>
-							</div>
-                            {% endif %}
-
-							<!-- Row -->
-							<div class="row">
-
-								<!-- Single Item -->
-                                {% for product in object_list %}
-								<div class="col-lg-4 col-md-4 col-sm-6">
-									<div class="woo_product_grid">
-                                        {% if category.discount_is_active == True and category.discount == True %}
-										<span class="woo_pr_tag hot">ویژه</span>
-                                            {% if category.discount.amount_of_non_percentage_discount %}
-                                        <span class="woo_offer_sell">{{ category.discount.amount_of_non_percentage_discount }} ریال تخفیف</span>
-                                            {% else %}
-                                        <span class="woo_offer_sell">{{ category.discount.amount_of_percentage_discount }}% تخفیف</span>
-                                            {% endif %}
-                                        {% elif product.discount_is_active == True and product.discount == True %}
-										<span class="woo_pr_tag hot">ویژه</span>
-                                            {% if product.discount.amount_of_non_percentage_discount %}
-                                        <span class="woo_offer_sell">{{ product.discount.amount_of_non_percentage_discount }} ریال تخفیف</span>
-                                            {% else %}
-                                        <span class="woo_offer_sell">{{ product.discount.amount_of_percentage_discount }}% تخفیف</span>
-                                            {% endif %}
                                         {% endif %}
-										<div class="woo_product_thumb">
-                                            {% for product_picture in product_pictures %}
-                                            {% if product_picture.product_id == product.id %}
-
-											<img src={{ product_picture.image.url }} class="img-fluid" alt="" />
-
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="woo_product_caption center">
+                                        <div class="woo_title">
+                                            <h4 class="woo_pro_title">{{ product.name }}</h4>
+                                        </div>
+                                        <div class="woo_price">
+                                            {%  for discount in discounted_price %}
+                                            {% if discount.id == product.id %}
+                                            {% if discount.price == None %}
+                                            <h6>{{ product.price }} ریال</h6>
+                                            {% else %}
+                                            <h6>{{ discount.price }}تومان  <span class="less_price">{{ product.price }}تومان</span></h6>
+                                            {% endif %}
                                             {% endif %}
                                             {% endfor %}
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_title">
-												<h4 class="woo_pro_title">{{ product.name }}</h4>
-											</div>
-											<div class="woo_price">
-												<h6>{% for discount in discounted_price %}{% if discount.id == product.id %}{{ discount.price }}تومان  {% endif %}{% endfor %}<span class="less_price">{{ product.price }}تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-                                {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="woo_product_cart hover">
+                                        <ul>
+                                            <li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
+                                            <li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
 
-							</div>
-							<!-- Row -->
+                        </div>
+                        <!-- Row -->
 
-                            {% if object_list|length > 9 %}
-							<div class="row">
-								<div class="col-lg-12">
-									<nav aria-label="Page navigation example">
-									  <ul class="pagination">
-                                        {% if page_obj.has_previous %}
-										<li class="page-item right">
-										  <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-											<span aria-hidden="true"><i class="ti-arrow-right ml-1"></i>قبلی</span>
-										  </a>
-										</li>
-                                        {% endif %}
-										<li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-                                        {% if object_list|length > 9 and object_list|length <= 18 %}
-										<li class="page-item active"><a class="page-link" href="?page=2">2</a></li>
-                                        {% endif %}
-                                        {% if object_list|length > 18 and object_list|length <= 27 %}
-										<li class="page-item"><a class="page-link" href="?page=3">3</a></li>
-                                        {% endif %}
-                                        {% if page_obj.has_next %}
-										<li class="page-item left">
-										  <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-											<span aria-hidden="true"><i class="ti-arrow-left ml-1"></i>بعدی</span>
-										  </a>
-										</li>
-                                        {% endif %}
-									  </ul>
-									</nav>
-								</div>
-							</div>
-                            {% endif %}
+                        {% if object_list|length > 9 %}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <nav aria-label="Page navigation example">
+                                  <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item right">
+                                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true"><i class="ti-arrow-right ml-1"></i>قبلی</span>
+                                      </a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                                    {% if object_list|length > 9 and object_list|length <= 18 %}
+                                    <li class="page-item active"><a class="page-link" href="?page=2">2</a></li>
+                                    {% endif %}
+                                    {% if object_list|length > 18 and object_list|length <= 27 %}
+                                    <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
+                                    {% endif %}
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item left">
+                                      <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true"><i class="ti-arrow-left ml-1"></i>بعدی</span>
+                                      </a>
+                                    </li>
+                                    {% endif %}
+                                  </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        {% endif %}
 
-						</div>
+                    </div>
 
-					</div>
 				</div>
 			</section>
 			<!-- =========================== Search Products =================================== -->
