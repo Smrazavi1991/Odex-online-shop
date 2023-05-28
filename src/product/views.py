@@ -1,9 +1,7 @@
 from django.db.models import Q
-from django.shortcuts import render
 from core.views import BasicViewMixin, ProductsViewMixin
 from django.views.generic import ListView
-from .models import ProductImage, Product, Category
-from django.views import View
+from .models import Product, Category
 
 
 # Create your views here.
@@ -16,9 +14,8 @@ class Home(ListView, BasicViewMixin, ProductsViewMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.category['categories']
-        context["product_pictures"] = ProductsViewMixin.get_pics_from_a_product_queryset(queryset=self.queryset)
-        context["discounted_price"] = ProductsViewMixin.get_discount_price_from_a_product_queryset(queryset=self.queryset)
-        print(context)
+        context["product_pictures"] = self.get_pics_from_a_product_queryset(queryset=self.queryset)
+        context["discounted_price"] = self.get_discount_price_from_a_product_queryset(queryset=self.queryset)
         return context
 
 
