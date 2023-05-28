@@ -13,7 +13,7 @@
 								<h2 class="breadcrumbs_title">{{ category.name }}</h2>
 								<nav aria-label="breadcrumb">
 								  <ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="#"><i class="ti-home"></i></a></li>
+									<li class="breadcrumb-item"><a href="{% url 'Home-page' %}"><i class="ti-home"></i></a></li>
                                     {% if category.sub == None %}
 									<li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
                                     {% elif category.sub.sub == None %}
@@ -106,7 +106,7 @@
                                     </div>
                                     <div class="woo_product_cart hover">
                                         <ul>
-                                            <li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
+                                            <li><a href="/product/{{ product.pk }}/" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
                                             <li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
                                         </ul>
                                     </div>
