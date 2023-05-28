@@ -23,22 +23,24 @@
 					<div class="row">
 
 						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="sp-loading"><img src="assets/img/detail/detail-12.png" alt=""><br>بارگیری تصاویر</div>
 							<div class="sp-wrap">
-								<a href="assets/img/detail/detail-12.png"><img src="assets/img/detail/detail-12.png" alt=""></a>
-								<a href="assets/img/detail/detail-13.png"><img src="assets/img/detail/detail-13.png" alt=""></a>
-								<a href="assets/img/detail/detail-14.png"><img src="assets/img/detail/detail-14.png" alt=""></a>
-								<a href="assets/img/detail/detail-15.png"><img src="assets/img/detail/detail-15.png" alt=""></a>
-								<a href="assets/img/detail/detail-16.png"><img src="assets/img/detail/detail-16.png" alt=""></a>
-								<a href="assets/img/detail/detail-17.png"><img src="assets/img/detail/detail-17.png" alt=""></a>
-							</div>
+                            {% for picture in product_pictures %}
+                            {% for img in picture.image %}
+								<a href="{{ img.image.url }}"><img src="{{ img.image.url }}" alt=""></a>
+                            {% endfor %}
+                            {% endfor %}
+                            </div>
 						</div>
 
 						<div class="col-lg-6 col-md-12 col-sm-12">
 							<div class="woo_pr_detail">
 
 								<div class="woo_cats_wrps">
+                                    {% for discount in discounted_price %}
+                                    {% if discount.price != None %}
 									<span class="woo_pr_trending">ویژه</span>
+                                    {% endif %}
+                                    {% endfor %}
 								</div>
 								<h2 class="woo_pr_title">{{ object.name }}</h2>
 
@@ -48,7 +50,15 @@
 
 								<div class="woo_pr_price">
 									<div class="woo_pr_offer_price">
-										<h3>149 تومان<span class="org_price">199 تومان</span></h3>
+										{%  for discount in discounted_price %}
+                                            {% if discount.id == product.id %}
+                                            {% if discount.price == None %}
+                                            <h3>{{ product.price }} تومان</h3>
+                                            {% else %}
+                                            <h3>{{ discount.price }}تومان  <span class="org_price">{{ product.price }}تومان</span></h3>
+                                            {% endif %}
+                                            {% endif %}
+                                            {% endfor %}
 									</div>
 								</div>
 
@@ -64,16 +74,11 @@
 												<!-- Single Filter Card -->
 												<div class="single_filter_card">
 													<div class="card-body pt-0">
-														<h6 class="font-size-sm mb-2">ترکیب بندی</h6>
-														<ul class="lists-2 min-space">
-														  <li>دنده الاستیک: پنبه 95٪ ، الاستان 5٪</li>
-														  <li>پوشش: پنبه 100%</li>
-														  <li>پنبه 80٪ ، پلی استر 20٪</li>
-														</ul>
-														<h6 class="font-size-sm mb-2">طرح شماره</h6>
-														<ul class="lists-2 min-space mb-0">
-														  <li>183260098</li>
-														</ul>
+                                                        {% for info in object.product_info %}
+                                                        {% for i in info.num %}
+														<h6 class="font-size-sm mb-2">{{ i.item }}</h6>
+                                                        {% endfor %}
+                                                        {% endfor %}
 													</div>
 												</div>
 											</div>
@@ -131,32 +136,6 @@
 										</div>
 									</div>
 
-									<!-- Single Option -->
-									<div class="single_search_boxed">
-										<div class="widget-boxed-header">
-											<h4><a href="#localstore" data-toggle="collapse" class="collapsed" aria-expanded="false" role="button"><i class="ti-location-pin ml-2"></i>در فروشگاه محلی پیدا کنید</a></h4>
-										</div>
-										<div class="widget-boxed-body collapse" id="localstore" data-parent="#localstore">
-											<div class="side-list no-border">
-												<!-- Single Filter Card -->
-												<div class="single_filter_card">
-													<div class="card-body pt-0">
-														<select class="form-control">
-															<option value="">شهر خود را انتخاب کنید</option>
-															<option value="Argentina">	تهران</option>
-															<option value="Belgium">	کرج</option>
-															<option value="France">	اصفهان</option>
-															<option value="Germany">رشت</option>
-															<option value="Spain">	همدان</option>
-															<option value="UK">شهریار</option>
-															<option value="USA">	سنندج</option>
-														</select>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
 								</div>
 
 								<div class="woo_btn_action">
@@ -165,9 +144,6 @@
 									</div>
 									<div class="col-12 col-lg-auto">
 										<button type="submit" class="btn btn-block btn-dark mb-2">افزودن به سبد خرید <i class="ti-shopping-cart-full mr-2"></i></button>
-									</div>
-									<div class="col-12 col-lg-auto">
-										<button class="btn btn-gray btn-block mb-2" data-toggle="button">مورد علاقه <i class="ti-heart mr-2"></i></button>
 									</div>
 								</div>
 
@@ -188,7 +164,7 @@
 										<a class="nav-link" id="information-tab" data-toggle="tab" href="#information" role="tab" aria-controls="information" aria-selected="false" aria-expanded="false">اطلاعات تکمیلی</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false" aria-expanded="false">بررسی ها</a>
+										<a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false" aria-expanded="false">نظرات</a>
 									</li>
 								</ul>
 								<div class="tab-content" id="myTabContent">
@@ -198,150 +174,53 @@
 									<div class="tab-pane fade" id="information" role="tabpanel" aria-labelledby="information-tab" aria-expanded="false">
 										<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
 										<div class="product_meta">
-											<span class="sku_wrapper">شماره محصول: <span class="sku">1001</span></span>
-											<span class="posted_in">دسته بندی:
-												<a href="#" rel="tag">صندلی</a>,
-												<a href="#" rel="tag">چوب</a>
-											</span>
-											<span class="tagged_as">برچسب ها:
-												<a href="#" rel="tag">صندلی</a>,
-												<a href="#" rel="tag">مبلمان</a>
-											</span>
+											<span class="sku_wrapper">شماره محصول: <span class="sku">{{ object.id }}</span></span>
 										</div>
 									</div>
 									<div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab" aria-expanded="false">
 										<div class="review-wrapper">
 											<div class="review-wrapper-header">
-												<h4>24 نظرات</h4>
+												<h4>{{ product_comments|length }} نظر</h4>
 											</div>
 											<div class="review-wrapper-body">
 												<ul class="review-list">
+                                                    {% for product_comment in product_comments %}
 													<li>
 														<div class="reviews-box">
 															<div class="review-body">
 																<div class="review-avatar">
-																	<img alt="" src="assets/img/user-3.jpg" class="avatar avatar-140 photo">
+																	<img alt="" src={{ product_comment.owner.profile_pic.url }} class="avatar avatar-140 photo">
 																</div>
 																<div class="review-content">
 																	<div class="review-info">
 																		<div class="review-comment">
 																			<div class="review-author">
-																				کول هریس
-																			</div>
-																			<div class="review-comment-stars">
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star empty"></i>
-																			</div>
-																		</div>
-																		<div class="review-comment-date">
-																			<div class="review-date">
-																				<span>4 هفته پیش</span>
+                                                                                {{ product_comment.owner }} در پاسخ به {{ product_comment.reply.owner }}
 																			</div>
 																		</div>
 																	</div>
-																	<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز.</p>
+																	<p>{{ product_comment.description }}</p>
 																</div>
 															</div>
 														</div>
 													</li>
-
-													<li>
-														<div class="reviews-box">
-															<div class="review-body">
-																<div class="review-avatar">
-																	<img alt="" src="assets/img/user-4.jpg" class="avatar avatar-140 photo">
-																</div>
-																<div class="review-content">
-																	<div class="review-info">
-																		<div class="review-comment">
-																			<div class="review-author">
-																				ماریا مبارک
-																			</div>
-																			<div class="review-comment-stars">
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star empty"></i>
-																			</div>
-																		</div>
-																		<div class="review-comment-date">
-																			<div class="review-date">
-																				<span>3 هفته پیش</span>
-																			</div>
-																		</div>
-																	</div>
-																	<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز.</p>
-																</div>
-															</div>
-														</div>
-													</li>
-
-													<li>
-														<div class="reviews-box">
-															<div class="review-body">
-																<div class="review-avatar">
-																	<img alt="" src="assets/img/user-5.jpg" class="avatar avatar-140 photo">
-																</div>
-																<div class="review-content">
-																	<div class="review-info">
-																		<div class="review-comment">
-																			<div class="review-author">
-																				وادن ویل
-																			</div>
-																			<div class="review-comment-stars">
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star"></i>
-																				<i class="fa fa-star empty"></i>
-																			</div>
-																		</div>
-																		<div class="review-comment-date">
-																			<div class="review-date">
-																				<span>5 هفته پیش</span>
-																			</div>
-																		</div>
-																	</div>
-																	<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز.</p>
-																</div>
-															</div>
-														</div>
-													</li>
-												</ul>
-											</div>
-										</div>
+                                                    {% endfor %}
 
 										<div class="review-wrapper">
 											<div class="review-wrapper-header">
-												<h4>ارزیابی و نوشتن نظرات</h4>
+												<br>
+                                                <h4>ارزیابی و نوشتن نظرات</h4>
 											</div>
 											<div class="review-wrapper-body">
 
 												<div class="row mb-3">
 													<div class="col-md-12">
-														<div class="rating-opt">
-															<div class="jr-ratenode jr-nomal"></div>
-															<div class="jr-ratenode jr-nomal "></div>
-															<div class="jr-ratenode jr-nomal "></div>
-															<div class="jr-ratenode jr-nomal "></div>
-															<div class="jr-ratenode jr-nomal "></div>
-														</div>
 													</div>
 												</div>
 
 												<div class="row">
-													<div class="col-sm-6 form-group">
-														<input type="text" class="form-control" placeholder="نام*">
-													</div>
-													<div class="col-sm-6 form-group">
-														<input type="email" class="form-control" placeholder="ایمیل*">
-													</div>
 													<div class="col-sm-12 form-group">
-														<textarea class="form-control height-110" placeholder="تجربه خود را برای ما بگویید..."></textarea>
+														<textarea class="form-control height-110" placeholder="تجربه خود را برای ما بگویید... (این بخش در حال حاضر فعال نیست.)"></textarea>
 													</div>
 													<div class="col-sm-12">
 														<button type="button" class="btn btn-primary">ارسال نظرات</button>
@@ -359,281 +238,4 @@
 			</section>
 			<!-- =========================== Product Detail =================================== -->
 
-			<!-- =========================== Related Products =================================== -->
-			<section class="gray">
-				<div class="container">
-
-					<div class="row">
-						<div class="col-lg-12 col-md-12 mb-2">
-							<h4 class="mb-0">محصولات مرتبط</h4>
-						</div>
-					</div>
-
-					<div class="row">
-
-						<div class="col-lg-12 col-md-12">
-							<div class="owl-carousel products-slider owl-theme">
-
-								<!-- Single Item -->
-								<div class="item">
-									<div class="woo_product_grid">
-										<span class="woo_pr_tag hot">ویژه</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/women/1.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصولات</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200تومان<span class="less_price">11200تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="item">
-									<div class="woo_product_grid">
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/2.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصولات</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200تومان<span class="less_price">11200تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="item">
-									<div class="woo_product_grid">
-										<span class="woo_pr_tag new">جدید</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/3.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصولات</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200تومان<span class="less_price">11200تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="item">
-									<div class="woo_product_grid">
-										<span class="woo_offer_sell">20% تخفیف</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/women/4.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصولات</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200تومان<span class="less_price">11200تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="item">
-									<div class="woo_product_grid">
-										<span class="woo_pr_tag hot">ویژه</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/5.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصولات</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200تومان<span class="less_price">11200تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="item">
-									<div class="woo_product_grid">
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/6.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصولات</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200تومان<span class="less_price">11200تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="item">
-									<div class="woo_product_grid">
-										<span class="woo_pr_tag hot">ویژه</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/women/7.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصولات</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200تومان<span class="less_price">11200تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								<!-- Single Item -->
-								<div class="item">
-									<div class="woo_product_grid">
-										<span class="woo_pr_tag new">جدید</span>
-										<div class="woo_product_thumb">
-											<img src="assets/img/men/8.png" class="img-fluid" alt="" />
-										</div>
-										<div class="woo_product_caption center">
-											<div class="woo_rate">
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star filled"></i>
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="woo_title">
-												<h4 class="woo_pro_title"><a href="detail-1.html">عنوان محصولات</a></h4>
-											</div>
-											<div class="woo_price">
-												<h6>7200تومان<span class="less_price">11200تومان</span></h6>
-											</div>
-										</div>
-										<div class="woo_product_cart hover">
-											<ul>
-												<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
-												<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-												<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-							</div>
-						</div>
-
-					</div>
-
-				</div>
-			</section>
-			<!-- =========================== Related Products =================================== -->
 {% endblock %}
