@@ -44,3 +44,6 @@ class User(AbstractUser):
         """
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
+
+    def __str__(self):
+        return self.get_full_name()
