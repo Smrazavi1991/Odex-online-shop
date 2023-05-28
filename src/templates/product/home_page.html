@@ -100,7 +100,7 @@
 											<div class="woo_product_grid">
                                                 <div class="woo_product_thumb">
                                                 {% for product_picture in product_pictures %}
-                                                {% if product_picture.product_id == discount_product.id %}
+                                                {% if product_picture.id == discount_product.id %}
 
 													<img src={{ product_picture.image.url }} class="img-fluid" alt="" />
 
