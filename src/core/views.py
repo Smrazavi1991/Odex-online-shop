@@ -8,7 +8,6 @@ class BasicViewMixin:
     criterion1 = Q(is_deleted=False)
     criterion2 = Q(is_active=True)
     categories = Category.objects.filter(criterion1 & criterion2)
-    category = {"categories": categories}
     template_name = "landing_page_base.html"
 
 
