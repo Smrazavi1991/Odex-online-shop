@@ -44,3 +44,10 @@ class VerificationForm(forms.Form):
         'required': ',وارد کردن کد الزامی است.',
         'max_length': 'طول کد وارد شده بیش از حد مجاز(6 کاراکتر) میباشد'
     })
+
+
+class SendOTPForm(forms.Form):
+    mail_phone = forms.CharField(error_messages={
+        'required': 'وارد کردن این فیلد الزامی است.',
+        'invalid': 'شماره همراه یا ایمیل معتبر نمی باشد'
+    })

@@ -1,11 +1,13 @@
 from random import randint
+import re
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.views import View
 from core.views import BasicViewMixin
-from .forms import RegisterUserForm, VerificationForm
-from django.http import HttpResponse, JsonResponse
+from .forms import RegisterUserForm, VerificationForm, SendOTPForm
+from django.http import JsonResponse
+from core.tasks import send_opt_email, send_opt_sms
 
 from .models import User
 from core.utils import identify_user_role, create_jwt_token
@@ -57,7 +59,26 @@ class Verification(View, BasicViewMixin):
 
 class Login(View, BasicViewMixin):
     def get(self, request):
-        return render(request, 'user/login.html', {'categories': self.categories})
+        form = SendOTPForm()
+        return render(request, 'user/login.html', {'categories': self.categories, 'form':form})
+
+    def post(self, request):
+        form = SendOTPForm(request.POST)
+        if form.is_valid():
+            if re.match(r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}', form.cleaned_data['mail_phone']):
+                #########################################
+                otp_code = randint(100000, 999999)
+                ##########################################
+                send_opt_email(otp_code, form.cleaned_data['mail_phone'])
+                return redirect('Verification')
+            elif re.match(r'^(09)\d{9}$', form.cleaned_data['mail_phone']):
+                #########################################
+                otp_code = randint(100000, 999999)
+                ##########################################
+                send_opt_sms(otp_code)
+                return redirect('Verification')
+        return render(request, 'user/login.html', {'form': form})
+
 
 
 class Profile(View):
