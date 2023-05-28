@@ -5,7 +5,7 @@ from django_jalali.db import models as jmodels
 from user.models import User
 import jdatetime
 from django.utils.html import mark_safe
-
+from django.db.models import Q
 # Create your models here.
 
 
@@ -64,9 +64,10 @@ class Product(BaseModel):
     discount_deactivate_at = jmodels.jDateTimeField('Discount Deactivate at', null=True, blank=True)
     discount_is_active = models.BooleanField('Active discount', default=False)
 
-    # @staticmethod
     def img_preview(self):
-        thumbnail_image = ProductImage.objects.filter(product_id=self.id).first()
+        condition1 = Q(product_id=self.id)
+        condition2 = Q(is_primary=True)
+        thumbnail_image = ProductImage.objects.filter(condition1 & condition2).first()
         if thumbnail_image:
             return mark_safe(f'<img src = "{thumbnail_image.image.url}" width = "100"/>')
         else:
