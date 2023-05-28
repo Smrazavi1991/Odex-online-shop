@@ -27,5 +27,6 @@ urlpatterns = [
     path("verification/", Verification.as_view(), name="Verification"),
     path("login/", Login.as_view(), name="Login"),
     path("profile/", Profile.as_view(), name="Profile"),
-    path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page")
+    path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page"),
+    path("product/<int:pk>/", ProductDetails.as_view(), name="Product-page")
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
