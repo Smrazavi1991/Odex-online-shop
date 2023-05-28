@@ -1,7 +1,6 @@
 from random import randint
 
 from django.contrib.auth import authenticate, login
-from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.views import View
 from core.views import BasicViewMixin
@@ -16,9 +15,7 @@ class Register(View, BasicViewMixin):
 
     def get(self, request):
         registeration_form = RegisterUserForm()
-        self.queryset.setdefault('form', registeration_form)
-        self.template_name = "user/register.html"
-        return super().get(request)
+        return render(request, "user/register.html", {"categories": self.categories, "form": registeration_form})
 
     def post(self, request):
         form = RegisterUserForm(request.POST)
@@ -37,9 +34,7 @@ class Register(View, BasicViewMixin):
 class Verification(View, BasicViewMixin):
     def get(self, request):
         form = VerificationForm()
-        self.queryset.setdefault('form', form)
-        self.template_name = "user/verification.html"
-        return super().get(request)
+        return render(request, "user/verification.html", {"categories": self.categories, "form": form})
 
     def post(self, request):
         form = VerificationForm(request.POST)
@@ -60,9 +55,9 @@ class Verification(View, BasicViewMixin):
         return render(request, 'user/verification.html', {'form': form})
 
 
-class Login(View):
+class Login(View, BasicViewMixin):
     def get(self, request):
-        return HttpResponse("hi")
+        return render(request, 'user/login.html', {'categories': self.categories})
 
 
 class Profile(View):
