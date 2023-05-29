@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "order",
     "product",
     "user",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # Celery settings
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/0',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        'KEY_PREFIX': 'myapp_cache_',
+    }
+}
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'smrazavi19911370'
+EMAIL_HOST_PASSWORD = 'aztquidnixmhfbhw'
