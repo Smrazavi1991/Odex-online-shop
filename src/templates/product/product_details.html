@@ -26,7 +26,7 @@
 							<div class="sp-wrap">
                             {% for picture in product_pictures %}
                             {% for img in picture.image %}
-								<a href="{{ img.image.url }}"><img src="{{ img.image.url }}" alt=""></a>
+								<a id="image" href="{{ img.image.url }}"><img src="{{ img.image.url }}" alt=""></a>
                             {% endfor %}
                             {% endfor %}
                             </div>
@@ -51,6 +51,7 @@
 								<div class="woo_pr_price">
 									<div class="woo_pr_offer_price">
 										{%  for discount in discounted_price %}
+                                            <p id="price" hidden>{{ discount.price }}</p>
                                             {% if discount.id == product.id %}
                                             {% if discount.price == None %}
                                             <h3>{{ product.price }} تومان</h3>
@@ -59,6 +60,7 @@
                                             {% endif %}
                                             {% endif %}
                                             {% endfor %}
+
 									</div>
 								</div>
 
@@ -140,10 +142,10 @@
 
 								<div class="woo_btn_action">
 									<div class="col-12 col-lg-auto p-0">
-										<input type="number" class="form-control qua_pr mb-2" value="1" />
+										<input type="number" name="count" id="count" class="form-control qua_pr mb-2" value="1" />
 									</div>
 									<div class="col-12 col-lg-auto">
-										<button type="submit" class="btn btn-block btn-dark mb-2">افزودن به سبد خرید <i class="ti-shopping-cart-full mr-2"></i></button>
+										<button type="submit" formmethod="post" onclick="add_to_cart(event, this)" class="btn btn-block btn-dark mb-2">افزودن به سبد خرید <i class="ti-shopping-cart-full mr-2"></i></button>
 									</div>
 								</div>
 
@@ -204,6 +206,7 @@
 															</div>
 														</div>
 													</li>
+                                                </ul>
                                                     {% endfor %}
 
 										<div class="review-wrapper">
@@ -237,5 +240,38 @@
 				</div>
 			</section>
 			<!-- =========================== Product Detail =================================== -->
+
+    <!-- ============================= Fetch API ==================================== -->
+            <script>
+
+        async function add_to_cart(event, el) {
+            event.preventDefault()
+
+            const image = document.querySelector('#image');
+            const count = document.querySelector('#count');
+
+
+            const response = await fetch("/api/v1/cart/add_to_cart/", {
+                method: el.formMethod,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pk: "{{ object.pk }}",
+                    name: "{{ object.name }}",
+                    price: "{{ object.price }}",
+                    image: image.getAttribute('href'),
+                    count: count.getAttribute('value'),
+                })
+            })
+
+            if (response.status === 200){
+                alert(response.status)
+            } else {
+               alert("Invalid Input")
+            }
+        }
+        </script>
+    <!-- ============================= Fetch API ==================================== -->
 
 {% endblock %}
