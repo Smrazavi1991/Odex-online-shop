@@ -247,3 +247,5 @@ src/media/
 # Only for Development only
 **/migrations/**
 
+src/config/secrets.py
+

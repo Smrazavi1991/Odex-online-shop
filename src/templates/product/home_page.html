@@ -1,7 +1,5 @@
 {% extends "landing_page_base.html" %}
 {% load static %}
-{% load percentage_discount %}
-{% load non_percentage_discount %}
 
 {% block content %}
     <!-- ======================== Top category ==================== -->
@@ -97,14 +95,14 @@
 								<!-- Single Item -->
 								<div class="item">
 									<div class="row">
-                                        {% for discount_product in discount_products %}
+                                        {% for discount_product in object_list %}
 										<div class="col-lg-4 col-md-4 col-sm-6 col-12">
 											<div class="woo_product_grid">
                                                 <div class="woo_product_thumb">
                                                 {% for product_picture in product_pictures %}
-                                                {% if product_picture.product_id == discount_product.id %}
+                                                {% if product_picture.id == discount_product.id %}
 
-													<img src={{ product_picture.image }} class="img-fluid" alt="" />
+													<img src={{ product_picture.image.url }} class="img-fluid" alt="" />
 
                                                 {% endif %}
                                                 {% endfor %}
@@ -114,14 +112,13 @@
 														<h4 class="woo_pro_title">{{ discount_product.name }}</h4>
 													</div>
 													<div class="woo_price">
-														<h6>{{ discount_product.price|calc_discount:{{ discount_product.discount.amount_of_non_percentage_discount }}تومان}}<span class="less_price">{{ discount_product.price }}تومان</span></h6>
+														<h6>{% for discount in discounted_price %}{% if discount.id == discount_product.id %}{{ discount.price }}تومان  {% endif %}{% endfor %}<span class="less_price">{{ discount_product.price }}تومان</span></h6>
 													</div>
 												</div>
 												<div class="woo_product_cart hover">
 													<ul>
-														<li><a href="javascript:void(0);" data-toggle="modal" data-target="#viewproduct-over" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
+														<li><a href="/product/{{ product.pk }}/" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
 														<li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
-														<li><a href="wishlist.html" class="woo_cart_btn btn_save"><i class="ti-heart"></i></a></li>
 													</ul>
 												</div>
 											</div>

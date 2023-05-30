@@ -1,0 +1,157 @@
+{% extends "landing_page_base.html" %}
+{% load static %}
+
+{% block title %} اودکس شاپ - دسته بندی {{ category.name }}{% endblock %}
+{% block content %}
+    			<!-- =========================== Breadcrumbs =================================== -->
+			<div class="breadcrumbs_wrap dark">
+				<div class="container">
+					<div class="row align-items-center">
+
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="text-center">
+								<h2 class="breadcrumbs_title">{{ category.name }}</h2>
+								<nav aria-label="breadcrumb">
+								  <ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="{% url 'Home-page' %}"><i class="ti-home"></i></a></li>
+                                    {% if category.sub == None %}
+									<li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+                                    {% elif category.sub.sub == None %}
+                                    <li class="breadcrumb-item"><a href="#">{{ category.sub.name }}</a></li>
+									<li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+                                    {% elif category.sub.sub.sub == None %}
+                                    <li class="breadcrumb-item"><a href="#">{{ category.sub.sub.name }}</a></li>
+                                    <li class="breadcrumb-item"><a href="#">{{ category.sub.name }}</a></li>
+									<li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+                                    {% endif %}
+								  </ol>
+								</nav>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- =========================== Breadcrumbs =================================== -->
+
+
+			<!-- =========================== Search Products =================================== -->
+			<section>
+				<div class="container">
+
+					<div class="row">
+						<div class="col-lg-12 col-md-12">
+							<div class="filter_search_opt">
+								<a href="javascript:void(0);" onclick="openFilterSearch()"><i class="ti-reload"></i></a>
+							</div>
+						</div>
+					</div>
+
+                    <!-- Single Product -->
+
+                    <div class="col-lg-12 col-md-12">
+
+                        <!-- Banner -->
+                        {% if category.name == "زنانه" %}
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="min_banner mb-5">
+                                    <img src="{% static "assets/img/min/banner-5.png" %}" class="img-fluid rounded" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Row -->
+                        <div class="row">
+
+                            <!-- Single Item -->
+                            {% for product in object_list %}
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="woo_product_grid">
+                                    {% if category.discount_is_active == True and category.discount %}
+                                    <span class="woo_pr_tag hot">ویژه</span>
+                                    {% elif product.discount_is_active == True and product.discount %}
+                                    <span class="woo_pr_tag hot">ویژه</span>
+                                    {% endif %}
+                                    <div class="woo_product_thumb">
+                                        {% for product_picture in product_pictures %}
+                                        {% if product_picture.id == product.id %}
+                                        {% if product_picture.image != None %}
+
+                                        <img src={{ product_picture.image.url }} class="img-fluid" alt="" />
+
+                                        {% else %}
+                                        <img src="{% static "No_Image_Available.jpg" %}" class="img-fluid" alt="" />
+
+                                        {% endif %}
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="woo_product_caption center">
+                                        <div class="woo_title">
+                                            <h4 class="woo_pro_title">{{ product.name }}</h4>
+                                        </div>
+                                        <div class="woo_price">
+                                            {%  for discount in discounted_price %}
+                                            {% if discount.id == product.id %}
+                                            {% if discount.price == None %}
+                                            <h6>{{ product.price }} تومان</h6>
+                                            {% else %}
+                                            <h6>{{ discount.price }}تومان  <span class="less_price">{{ product.price }}تومان</span></h6>
+                                            {% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="woo_product_cart hover">
+                                        <ul>
+                                            <li><a href="/product/{{ product.pk }}/" class="woo_cart_btn btn_cart"><i class="ti-eye"></i></a></li>
+                                            <li><a href="add-to-cart.html" class="woo_cart_btn btn_view"><i class="ti-shopping-cart"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                        <!-- Row -->
+
+                        {% if object_list|length > 9 %}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <nav aria-label="Page navigation example">
+                                  <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item right">
+                                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true"><i class="ti-arrow-right ml-1"></i>قبلی</span>
+                                      </a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                                    {% if object_list|length > 9 and object_list|length <= 18 %}
+                                    <li class="page-item active"><a class="page-link" href="?page=2">2</a></li>
+                                    {% endif %}
+                                    {% if object_list|length > 18 and object_list|length <= 27 %}
+                                    <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
+                                    {% endif %}
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item left">
+                                      <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true"><i class="ti-arrow-left ml-1"></i>بعدی</span>
+                                      </a>
+                                    </li>
+                                    {% endif %}
+                                  </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+				</div>
+			</section>
+			<!-- =========================== Search Products =================================== -->
+{% endblock %}
