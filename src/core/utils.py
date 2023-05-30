@@ -26,8 +26,9 @@ def identify_user_role(user_id: int):
     user_roles = Group.objects.filter(user__id=user_id)
     if not user_roles:
         list_of_roles = None
-    for user_role in user_roles:
-        list_of_roles.append(user_role.name)
+    else:
+        for user_role in user_roles:
+            list_of_roles.append(user_role.name)
     return list_of_roles
 
 
