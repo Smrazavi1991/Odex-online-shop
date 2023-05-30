@@ -1,5 +1,7 @@
 from django.db.models import Q
+
 from product.models import Category, ProductImage
+from core.utils import auth
 
 
 # Create your views here.
@@ -9,6 +11,17 @@ class BasicViewMixin:
     criterion2 = Q(is_active=True)
     categories = Category.objects.filter(criterion1 & criterion2)
     template_name = "landing_page_base.html"
+
+    def get_user_role(self, request):
+        return auth(self, request)
+
+    @staticmethod
+    def get_user_cart(request):
+        cart = request.COOKIES.get("cart", None)
+        if cart is None:
+            return None
+        else:
+            return cart
 
 
 class ProductsViewMixin:
@@ -70,3 +83,4 @@ class ProductsViewMixin:
                 temp_dict.setdefault("price", product.price - _)
             price_after_discount.append(temp_dict)
         return price_after_discount
+
