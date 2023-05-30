@@ -1,18 +1,13 @@
-from random import randint
 import re
 import datetime
-import redis
 
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.views import View
 from core.views import BasicViewMixin
 from .forms import RegisterUserForm, VerificationForm, SendOTPForm
-from django.http import JsonResponse
 from core.tasks import send_opt_email, send_opt_sms
 
 from .models import User
-from core.utils import identify_user_role, create_jwt_token
 
 
 class Register(View, BasicViewMixin):
@@ -34,29 +29,6 @@ class Verification(View, BasicViewMixin):
         form = VerificationForm()
         return render(request, "user/verification.html", {"categories": self.categories, "form": form})
 
-    # def post(self, request):
-    #     form = VerificationForm(request.POST)
-    #     if form.is_valid():
-    #         r = redis.Redis(host='localhost', port=6379, db=0)
-    #         otp = request.COOKIES.get('user_email_or_phone')
-    #         storedotp = r.get(otp).decode()
-    #         if form.cleaned_data['verification_code'] == storedotp:
-    #             pass
-    #
-    #
-    #             username = request.session.get('username', None)
-    #             user = User.objects.get(username=username)
-    #             auth_user = authenticate(username=user.username, password=user.password)
-    #             if auth_user:
-    #                 login(request, auth_user)
-    #                 role = identify_user_role()
-    #                 payload = {'user_id': auth_user.id, 'user_role': role}
-    #                 create_jwt_token(payload)
-    #                 return redirect('Home_page')
-    #             return JsonResponse({'message': 'Invalid credentials'}, status=401)
-    #     print(form.is_valid())
-    #     return render(request, 'user/verification.html', {'form': form})
-
 
 class Login(View, BasicViewMixin):
     def get(self, request):
@@ -77,6 +49,7 @@ class Login(View, BasicViewMixin):
             elif re.match(r'^(09)\d{9}$', form.cleaned_data['mail_phone']):
                 if User.objects.get(phone=form.cleaned_data['mail_phone']):
                     send_opt_sms(form.cleaned_data['mail_phone'], 60)
+                    response = redirect('Verification')
                     expiry_minutes = 1
                 else:
                     raise Exception('invalid phone')
