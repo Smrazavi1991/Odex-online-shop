@@ -34,8 +34,9 @@ class ObtainTokenView(APIView):
         jwt_token = JWTAuthentication.create_jwt(user)
 
         response = Response({'token': jwt_token})
-        expires = datetime.datetime.now() + datetime.timedelta(minutes=expiry_minutes)
-        response.set_cookie("token", jwt_token)
+        expires = datetime.datetime.now() + datetime.timedelta(weeks=999)
+        expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S")
+        response.set_cookie("token", jwt_token, expires=expires_string)
 
         return response
 
@@ -67,7 +68,8 @@ class ObtaintTokenOTPView(APIView):
 
         response = Response({'token': jwt_token})
         expires = datetime.datetime.now() + datetime.timedelta(weeks=999)
-        response.set_cookie("token", jwt_token, expires)
+        expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S")
+        response.set_cookie("token", jwt_token, expires=expires_string)
 
         return response
 
