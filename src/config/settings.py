@@ -165,9 +165,12 @@ EMAIL_HOST_USER = 'smrazavi19911370'
 EMAIL_HOST_PASSWORD = 'aztquidnixmhfbhw'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'user.authentication.JWTAuthentication',
+    ]
 }
 
 SIMPLE_JWT = {
