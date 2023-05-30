@@ -40,7 +40,7 @@ class Login(View, BasicViewMixin):
         if form.is_valid():
             if re.match(r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}', form.cleaned_data['mail_phone']):
                 if User.objects.get(email=form.cleaned_data['mail_phone']):
-                    send_opt_email(form.cleaned_data['mail_phone'], 300)
+                    send_opt_email.delay(form.cleaned_data['mail_phone'], 300)
                     response = redirect('Verification')
                     expiry_minutes = 5
                 else:
@@ -48,7 +48,7 @@ class Login(View, BasicViewMixin):
 
             elif re.match(r'^(09)\d{9}$', form.cleaned_data['mail_phone']):
                 if User.objects.get(phone=form.cleaned_data['mail_phone']):
-                    send_opt_sms(form.cleaned_data['mail_phone'], 60)
+                    send_opt_sms.delay(form.cleaned_data['mail_phone'], 60)
                     response = redirect('Verification')
                     expiry_minutes = 1
                 else:
