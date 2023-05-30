@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from user.authentication import JWTAuthentication
 
 from .serializers import ObtainTokenSerializer
 from user.models import User
@@ -26,11 +26,14 @@ class ObtainTokenView(APIView):
         # Generate the JWT token
         jwt_token = JWTAuthentication.create_jwt(user)
 
-        return Response({'token': jwt_token})
+        response = Response({'token': jwt_token})
+        response.set_cookie("token", jwt_token)
+
+        return response
 
 
 class Profile(APIView):
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         content = {"message": "yes we can"}
         return Response(content)
