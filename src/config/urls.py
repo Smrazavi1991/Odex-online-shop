@@ -29,5 +29,6 @@ urlpatterns = [
     path("profile/", Profile.as_view(), name="Profile"),
     path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page"),
     path("product/<int:pk>/", ProductDetails.as_view(), name="Product-page"),
-    path("api/v1/", include('user.api.v1.urls'))
+    path("api/v1/user/", include('user.api.v1.urls')),
+    path("api/v1/cart/", include('order.api.v1.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
