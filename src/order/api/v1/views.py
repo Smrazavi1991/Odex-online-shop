@@ -20,7 +20,7 @@ class AddToCartView(APIView):
         price = serializer.validated_data.get('price')
         image = serializer.validated_data.get('image')
         count = serializer.validated_data.get('count')
-        temp_dict = {'pk': pk, 'name': name, 'price': price, 'image': image, 'count': count}
+        temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': price, 'image': image, 'count': count}
 
         cart = request.COOKIES.get('cart', None)
         if not cart:
