@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from user.authentication import JWTAuthentication
 import redis
+import datetime
 
 from .serializers import ObtainTokenSerializer, ObtainTokenOTPSerializer
 from user.models import User
@@ -33,6 +34,7 @@ class ObtainTokenView(APIView):
         jwt_token = JWTAuthentication.create_jwt(user)
 
         response = Response({'token': jwt_token})
+        expires = datetime.datetime.now() + datetime.timedelta(minutes=expiry_minutes)
         response.set_cookie("token", jwt_token)
 
         return response
@@ -49,7 +51,7 @@ class ObtaintTokenOTPView(APIView):
         verification_code = serializer.validated_data.get('verification_code')
 
         r = redis.Redis(host='localhost', port=6379, db=0)
-        user_identifier = request.COOKIE.get('user_email_or_phone', None)
+        user_identifier = request.COOKIES.get('user_email_or_phone', None)
         storedcode = r.get(user_identifier).decode()
         if verification_code == storedcode:
             condition1 = Q(email=user_identifier)
@@ -64,7 +66,8 @@ class ObtaintTokenOTPView(APIView):
         jwt_token = JWTAuthentication.create_jwt(user)
 
         response = Response({'token': jwt_token})
-        response.set_cookie("token", jwt_token)
+        expires = datetime.datetime.now() + datetime.timedelta(weeks=999)
+        response.set_cookie("token", jwt_token, expires)
 
         return response
 
