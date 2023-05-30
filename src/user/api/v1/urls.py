@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('token/', ObtainTokenView.as_view(), name='token_obtain_pair'),
+    path('token/', ObtainTokenView.as_view(), name='token_obtain'),
+    path('otptoken/', ObtaintTokenOTPView.as_view(), name='token_obtain_otp'),
     # path("obtaintoken/", ObtainToken.as_view(), name="Obtain Token"),
     # path("register/", Register.as_view(), name="Register"),
     # path("verification/", Verification.as_view(), name="Verification"),
