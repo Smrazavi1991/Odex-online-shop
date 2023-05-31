@@ -95,7 +95,7 @@
                                         {% else %}
 										<li><a href="{%  url 'Register' %}"><i class="ti-user"></i></a></li>
                                         {% endif %}
-										<li><a href="javascript:void(0);" onclick="openRightMenu()"><i class="ti-shopping-cart"></i><span class="cart_counter">{{ cart | length }}</span></a></li>
+										<li><a href="javascript:void(0);" onclick="openRightMenu()"><i class="ti-shopping-cart"></i><span class="cart_counter">{{ cart|length }}</span></a></li>
 									</ul>
 								</div>
 								<div class="collapse" id="mySearch">
@@ -333,42 +333,20 @@
 							<!-- Single Item -->
 							<div class="cart_selected_single">
 								<div class="cart_selected_single_thumb">
-									<a href="/product/{{ product.pk }}/"><img src={{ product.image.url }} class="img-fluid" alt="" /></a>
+									<a href="/product/{{ product.pk }}/"><img src={{ product.image }} class="img-fluid" alt="" /></a>
 								</div>
 								<div class="cart_selected_single_caption">
 									<h4 class="product_title">{{ product.name }}</h4>
 									<span class="numberof_item">{{ product.price }} تومان</span>
-									<a href="#" class="text-danger">حذف</a>
+									<button class="btn-go-cart btn-theme">حذف</button>
 								</div>
 							</div>
                             {% endfor %}
                             {% endif %}
-							<!-- Single Item -->
-							<div class="cart_selected_single">
-								<div class="cart_selected_single_thumb">
-									<a href="#"><img src="{% static "assets/img/product.jpg" %}" class="img-fluid" alt="" /></a>
-								</div>
-								<div class="cart_selected_single_caption">
-									<h4 class="product_title">قورباغه‌ات را قورت بده</h4>
-									<span class="numberof_item">25000 تومان</span>
-									<a href="#" class="text-danger">حذف</a>
-								</div>
-							</div>
-							<!-- Single Item -->
-							<div class="cart_selected_single">
-								<div class="cart_selected_single_thumb">
-									<a href="#"><img src="{% static "assets/img/product.jpg" %}"class="img-fluid" alt="" /></a>
-								</div>
-								<div class="cart_selected_single_caption">
-									<h4 class="product_title">قورباغه‌ات را قورت بده</h4>
-									<span class="numberof_item">25000 تومان</span>
-									<a href="#" class="text-danger">حذف</a>
-								</div>
-							</div>
 						</div>
 
 						<div class="cart_subtotal">
-							<h6>جمع کل<span class="theme-cl">75000 تومان</span></h6>
+							<h6>جمع کل<span class="theme-cl">{{ total_price }} تومان</span></h6>
 						</div>
 
 						<div class="cart_action">
@@ -382,11 +360,40 @@
 			</div>
 			<!-- cart -->
 
-			<!-- Product View -->
+    <!-- ============================= Fetch API ==================================== -->
+            <script>
 
-			<!-- End Modal -->
+        async function add_to_cart(event, el) {
+            event.preventDefault()
 
-		</div>
+            const image = document.querySelector('#image');
+            const count = document.querySelector('#count');
+
+
+            const response = await fetch("/api/v1/cart/add_to_cart/", {
+                method: el.formMethod,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pk: "{{ object.pk }}",
+                    name: "{{ object.name }}",
+                    price: {{ object.price }},
+                    discounted_price: document.getElementById('price').innerHTML,
+                    image: image.getAttribute('href'),
+                    count: count.getAttribute('value'),
+                })
+            })
+
+            if (response.status === 200){
+                window.location.replace("")
+            } else {
+               alert("Invalid Input")
+            }
+        }
+        </script>
+    <!-- ============================= Fetch API ==================================== -->
+
 		<!-- ============================================================== -->
 		<!-- End Wrapper -->
 		<!-- ============================================================== -->
