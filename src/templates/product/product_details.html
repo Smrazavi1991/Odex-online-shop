@@ -51,7 +51,7 @@
 								<div class="woo_pr_price">
 									<div class="woo_pr_offer_price">
 										{%  for discount in discounted_price %}
-                                            <p id="price" hidden>{{ discount.price }}</p>
+                                            <p id="price" hidden="hidden">{{ discount.price }}</p>
                                             {% if discount.id == product.id %}
                                             {% if discount.price == None %}
                                             <h3>{{ product.price }} تومان</h3>
@@ -141,9 +141,6 @@
 								</div>
 
 								<div class="woo_btn_action">
-									<div class="col-12 col-lg-auto p-0">
-										<input type="number" name="count" id="count" class="form-control qua_pr mb-2" value="1" />
-									</div>
 									<div class="col-12 col-lg-auto">
 										<button type="submit" formmethod="post" onclick="add_to_cart(event, this)" class="btn btn-block btn-dark mb-2">افزودن به سبد خرید <i class="ti-shopping-cart-full mr-2"></i></button>
 									</div>
@@ -248,8 +245,6 @@
             event.preventDefault()
 
             const image = document.querySelector('#image');
-            const count = document.querySelector('#count');
-
 
             const response = await fetch("/api/v1/cart/add_to_cart/", {
                 method: el.formMethod,
@@ -259,14 +254,14 @@
                 body: JSON.stringify({
                     pk: "{{ object.pk }}",
                     name: "{{ object.name }}",
-                    price: "{{ object.price }}",
+                    price: {{ object.price }},
+                    discounted_price: document.getElementById('price').innerHTML,
                     image: image.getAttribute('href'),
-                    count: count.getAttribute('value'),
                 })
             })
 
             if (response.status === 200){
-                alert(response.status)
+                window.location.replace("")
             } else {
                alert("Invalid Input")
             }
