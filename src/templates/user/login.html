@@ -48,6 +48,16 @@
 										<input type="password" name="password" id="password" class="form-control" required>
 									</div>
 
+                                    {% if form.errors %}
+                                        <div class="alert alert-danger">
+                                            {% for field, errors in form.errors.items %}
+                                                {% for error in errors %}
+                                                    <p>{{ field }}: {{ error }}</p>
+                                                {% endfor %}
+                                            {% endfor %}
+                                         </div>
+                                    {% endif %}
+
 									<div class="login_flex">
 										<div class="login_flex_1">
 											<a href="/register/" class="text-bold">حساب کاربری ندارید؟ ثبت نام کنید</a>
@@ -77,6 +87,16 @@
 												<input id="id_email" type="text" name="mail_phone" class="form-control" style="text-align: center">
 											</div>
 										</div>
+
+                                        {% if form.errors %}
+                                            <div class="alert alert-danger">
+                                                {% for field, errors in form.errors.items %}
+                                                    {% for error in errors %}
+                                                        <p>{{ field }}: {{ error }}</p>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                             </div>
+                                        {% endif %}
 
 										<div class="col-lg-7 col-md-12">
 											<div class="login_flex">
