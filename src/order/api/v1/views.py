@@ -18,14 +18,18 @@ class AddToCartView(APIView):
         pk = serializer.validated_data.get('pk')
         name = serializer.validated_data.get('name')
         price = serializer.validated_data.get('price')
+        discounted_price = serializer.validated_data.get('discounted_price')
         image = serializer.validated_data.get('image')
-        count = serializer.validated_data.get('count')
-        temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': price, 'image': image, 'count': count}
+        if discounted_price != "None":
+            temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': discounted_price, 'image': image, 'count': 1}
+        else:
+            temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': price, 'image': image, 'count': 1}
 
         cart = request.COOKIES.get('cart', None)
         if not cart:
-            cart = []
-        cart.append(temp_dict)
+            cart = f'{temp_dict}'
+        else:
+            cart += f';{temp_dict}'
 
         response = Response({'cart': 'ok'})
         expires = datetime.datetime.now() + datetime.timedelta(weeks=999)
