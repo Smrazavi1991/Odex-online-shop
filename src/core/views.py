@@ -16,12 +16,40 @@ class BasicViewMixin:
         return auth(self, request)
 
     @staticmethod
-    def get_user_cart(request):
+    def get_user_cart(request, total: False):
         cart = request.COOKIES.get("cart", None)
+        print(cart)
         if cart is None:
             return None
         else:
-            return cart
+            product_list = []
+            total_price = 0
+            temp_name_count = {}
+            temp = cart.split(';')
+            for product in range(len(temp)):
+                products = eval(temp[product])
+                products['name'] = products['name'].decode('utf-8')
+                total_price += int(products['price'])
+                if len(temp_name_count) == 0:
+                    temp_name_count = {int(products['pk']): 1}
+                else:
+                    for k, v in temp_name_count.items():
+                        if int(products['pk']) == k:
+                            v += 1
+                            del products
+                            break
+                    else:
+                        temp_name_count.setdefault(int(products['pk']), 1)
+                        product_list.append(products)
+            for k, v in temp_name_count.items():
+                for item in product_list:
+                    if k == int(item['pk']):
+                        item['count'] = v
+
+            if not total:
+                return product_list
+            else:
+                return total_price
 
 
 class ProductsViewMixin:
