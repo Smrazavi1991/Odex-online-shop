@@ -5,5 +5,5 @@ class AddToCartViewSerializer(serializers.Serializer):
     pk = serializers.CharField()
     name = serializers.CharField(max_length=100)
     price = serializers.CharField()
+    discounted_price = serializers.CharField()
     image = serializers.CharField()
-    count = serializers.IntegerField()
