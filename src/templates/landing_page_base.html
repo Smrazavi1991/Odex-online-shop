@@ -95,12 +95,12 @@
                                         {% else %}
 										<li><a href="{%  url 'Register' %}"><i class="ti-user"></i></a></li>
                                         {% endif %}
-										<li><a href="javascript:void(0);" onclick="openRightMenu()"><i class="ti-shopping-cart"></i><span class="cart_counter">{{ cart|length }}</span></a></li>
+										<li><a href="javascript:void(0);" onclick="openRightMenu()"><i class="ti-shopping-cart"></i>{% if more_info.total_count %}<span class="cart_counter">{{ more_info.total_count }}</span>{% endif %}</a></li>
 									</ul>
 								</div>
 								<div class="collapse" id="mySearch">
 									<div class="blocks search_blocks">
-										<div class="input-group">
+										<div class="input-group"
 											<input type="text" class="form-control" placeholder="جستجو در فروشگاه (غیرفعال)">
 											<div class="input-group-append">
 											<button class="btn search_btn" type="button"><i class="ti-search"></i></button>
@@ -336,9 +336,9 @@
 									<a href="/product/{{ product.pk }}/"><img src={{ product.image }} class="img-fluid" alt="" /></a>
 								</div>
 								<div class="cart_selected_single_caption">
-									<h4 class="product_title">{{ product.name }}</h4>
+									<h4 class="product_title">{{ product.name }} × {{ product.count }}</h4>
 									<span class="numberof_item">{{ product.price }} تومان</span>
-									<button class="btn-go-cart btn-theme">حذف</button>
+									<button type="submit" id="remove"  name={{ product.pk }} formmethod="post" onclick="remove_from_cart(event,this)" class="btn-go-cart btn-theme">حذف</button>
 								</div>
 							</div>
                             {% endfor %}
@@ -346,7 +346,7 @@
 						</div>
 
 						<div class="cart_subtotal">
-							<h6>جمع کل<span class="theme-cl">{{ total_price }} تومان</span></h6>
+							<h6>جمع کل<span class="theme-cl">{{ more_info.total_price }} تومان</span></h6>
 						</div>
 
 						<div class="cart_action">
@@ -363,25 +363,18 @@
     <!-- ============================= Fetch API ==================================== -->
             <script>
 
-        async function add_to_cart(event, el) {
+        async function remove_from_cart(event, el) {
             event.preventDefault()
 
-            const image = document.querySelector('#image');
-            const count = document.querySelector('#count');
+            const pk = document.querySelector('#remove');
 
-
-            const response = await fetch("/api/v1/cart/add_to_cart/", {
+            const response = await fetch("/api/v1/cart/remove_from_cart/", {
                 method: el.formMethod,
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    pk: "{{ object.pk }}",
-                    name: "{{ object.name }}",
-                    price: {{ object.price }},
-                    discounted_price: document.getElementById('price').innerHTML,
-                    image: image.getAttribute('href'),
-                    count: count.getAttribute('value'),
+                    pk: pk.getAttribute('name')
                 })
             })
 
