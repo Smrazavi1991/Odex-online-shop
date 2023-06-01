@@ -13,7 +13,6 @@ class Home(ListView, BasicViewMixin, ProductsViewMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_role'] = self.get_user_role(self.request)
         context['cart'] = self.get_user_cart(self.request, total=False)
         context['more_info'] = self.get_user_cart(self.request, total=True)
         context["categories"] = self.categories
@@ -35,7 +34,6 @@ class CategoryProducts(ListView, BasicViewMixin, ProductsViewMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.categories
-        context['user_role'] = self.get_user_role(self.request)
         context['cart'] = self.get_user_cart(self.request, total=False)
         context['more_info'] = self.get_user_cart(self.request, total=True)
         context['product_pictures'] = self.get_pics_from_a_product_queryset(queryset=self.get_queryset(), is_primary=True)
@@ -57,7 +55,6 @@ class ProductDetails(DetailView, BasicViewMixin, ProductsViewMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.categories
-        context['user_role'] = self.get_user_role(self.request)
         context['cart'] = self.get_user_cart(self.request, total=False)
         context['more_info'] = self.get_user_cart(self.request, total=True)
         context['product_pictures'] = self.get_pics_from_a_product_queryset(queryset=self.get_queryset())

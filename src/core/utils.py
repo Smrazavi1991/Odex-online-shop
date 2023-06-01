@@ -23,17 +23,6 @@ def categories_cascade_deactivation_check():
                 category1.save()
 
 
-def identify_user_role(user_id: int):
-    list_of_roles = []
-    user_roles = Group.objects.filter(user__id=user_id)
-    if not user_roles:
-        list_of_roles = None
-    else:
-        for user_role in user_roles:
-            list_of_roles.append(user_role.name)
-    return list_of_roles
-
-
 def auth(self, request):
     # Extract the JWT from the cookie
     jwt_token = request.COOKIES.get("token", None)

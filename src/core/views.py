@@ -12,9 +12,6 @@ class BasicViewMixin:
     categories = Category.objects.filter(criterion1 & criterion2)
     template_name = "landing_page_base.html"
 
-    def get_user_role(self, request):
-        return auth(self, request)
-
     @staticmethod
     def get_user_cart(request, total: False):
         cart = request.COOKIES.get("cart", None)
