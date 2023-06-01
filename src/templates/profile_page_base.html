@@ -1,0 +1,83 @@
+{% extends "landing_page_base.html" %}
+{% load static %}
+
+
+{% block content %}
+    			<!-- =========================== Breadcrumbs =================================== -->
+			<div class="breadcrumbs_wrap dark">
+				<div class="container">
+					<div class="row align-items-center">
+
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="text-center">
+								<h2 class="breadcrumbs_title">{% block section_title%}{% endblock %}</h2>
+								<nav aria-label="breadcrumb">
+								  <ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="#"><i class="ti-home"></i></a></li>
+									<li class="breadcrumb-item"><a href="#">پروفایل کاربری</a></li>
+									<li class="breadcrumb-item active" aria-current="page">{% block this_section_title%}{% endblock %}</li>
+								  </ol>
+								</nav>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- =========================== Breadcrumbs =================================== -->
+
+
+			<!-- =========================== Account Settings =================================== -->
+			<section class="gray">
+				<div class="container">
+					<div class="row">
+
+						<div class="col-lg-4 col-md-3">
+							<nav class="dashboard-nav mb-10 mb-md-0">
+							  <div class="list-group list-group-sm list-group-strong list-group-flush-x">
+								<a class={% block sidebar-class-orders-list %}"list-group-item list-group-item-action dropright-toggle"{% endblock %} href="/profile/orders-list/">
+								  سفارشات من
+								</a>
+								<a class={% block sidebar-class-user-information %}"list-group-item list-group-item-action dropright-toggle" {% endblock %} href="/profile/user-information" onclick="go_user_info(event, this)">
+								  اطلاعات کاربر
+								</a>
+								<a class={% block sidebar-class-user-address %}"list-group-item list-group-item-action dropright-toggle" {% endblock %} href="/profile/user-address" onclick="go_user_address(event, this)">
+								  آدرس ها
+								</a>
+								<a class={% block sidebar-class-change-password %}"list-group-item list-group-item-action dropright-toggle"{% endblock %} href="/profile/change-password/">
+								  تغییر رمز عبور
+								</a>
+								<a class={% block sidebar-class-logout %}"list-group-item list-group-item-action dropright-toggle"{% endblock %} href="/profile/logout/">
+								  خروج
+								</a>
+							  </div>
+							</nav>
+						</div>
+            {% block main_content %}
+            {% endblock %}
+					</div>
+				</div>
+			</section>
+
+        <!-- ============================= Fetch API ==================================== -->
+            <script>
+
+        async function go_user_info(event, el) {
+            event.preventDefault()
+
+            const response = await fetch("/api/v1/user/token/", {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            if (response.status === 200){
+                window.location.replace("/profile/user-information/")
+            } else {
+               alert("Invalid Input")
+            }
+        }
+        </script>
+    <!-- ============================= Fetch API ==================================== -->
+{% endblock %}
