@@ -25,9 +25,13 @@
 						<div class="col-lg-6 col-md-12 col-sm-12">
 							<div class="sp-wrap">
                             {% for picture in product_pictures %}
+                            {% if picture.image %}
                             {% for img in picture.image %}
 								<a id="image" href="{{ img.image.url }}"><img src="{{ img.image.url }}" alt=""></a>
                             {% endfor %}
+                            {% else %}
+                                <img src="{% static "No_Image_Available.jpg" %}" alt="" />
+                            {% endif %}
                             {% endfor %}
                             </div>
 						</div>
@@ -244,8 +248,6 @@
         async function add_to_cart(event, el) {
             event.preventDefault()
 
-            const image = document.querySelector('#image');
-
             const response = await fetch("/api/v1/cart/add_to_cart/", {
                 method: el.formMethod,
                 headers: {
@@ -256,7 +258,7 @@
                     name: "{{ object.name }}",
                     price: {{ object.price }},
                     discounted_price: document.getElementById('price').innerHTML,
-                    image: image.getAttribute('href'),
+                    image: "{{ product_primary_picture.image }}",
                 })
             })
 
