@@ -1,0 +1,89 @@
+{% extends "landing_page_base.html" %}
+
+{% block title %}ورود با رمز یکبار مصرف{% endblock %}
+
+{%  block content %}
+    <!-- =========================== Breadcrumbs =================================== -->
+			<div class="breadcrumbs_wrap dark">
+				<div class="container">
+					<div class="row align-items-center">
+
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="text-center">
+								<h2 class="breadcrumbs_title">ورود</h2>
+								<nav aria-label="breadcrumb">
+								  <ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="#"><i class="ti-home"></i></a></li>
+									<li class="breadcrumb-item"><a href="#">پروفایل کاربری</a></li>
+									<li class="breadcrumb-item"><a href="#">ورود</a></li>
+									<li class="breadcrumb-item active" aria-current="page">ورود با رمز یکبار مصرف</li>
+								  </ol>
+								</nav>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+    <!-- =========================== Breadcrumbs =================================== -->
+
+    <!-- =========================== Login/Signup =================================== -->
+			<section>
+				<div class="container">
+
+					<div class="row">
+
+						<div class="col-lg-3 col-md-12 col-sm-12">
+						</div>
+
+						<div class="col-lg-6 col-md-12 col-sm-12">
+							<div class="login_signup">
+								<h3 class="login_sec_title" style="color: #2d3954">ورود با ایمیل یا شماره همراه</h3>
+								<form action="", method="post">
+                                    {% csrf_token %}
+									<div class="row">
+
+										<div class="col-lg-12 col-md-12">
+											<div class="form-group">
+                                                {{ form.subject.errors }}
+												<label for="id_email">آدرس ایمیل یا شماره همراه</label>
+												<input id="id_email" type="text" name="mail_phone" class="form-control" style="text-align: center">
+											</div>
+										</div>
+
+                                        {% if form.errors %}
+                                            <div class="alert alert-danger">
+                                                {% for field, errors in form.errors.items %}
+                                                    {% for error in errors %}
+                                                        <p>{{ field }}: {{ error }}</p>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                             </div>
+                                        {% endif %}
+
+										<div class="col-lg-7 col-md-12">
+											<div class="login_flex">
+												<div class="login_flex_1">
+												</div>
+												<div class="login_flex_2">
+													<div class="form-group mb-0">
+														<button type="submit" class="btn btn-md btn-theme">ارسال کد</button>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+								</form>
+							</div>
+						</div>
+
+                        <div class="col-lg-3 col-md-12 col-sm-12">
+						</div>
+					</div>
+				</div>
+			</section>
+    <!-- =========================== Login/Signup =================================== -->
+
+{% endblock %}
