@@ -18,7 +18,6 @@ class BasicViewMixin:
     @staticmethod
     def get_user_cart(request, total: False):
         cart = request.COOKIES.get("cart", None)
-        print(cart)
         if cart is None:
             return None
         else:
@@ -31,17 +30,20 @@ class BasicViewMixin:
                 products['name'] = products['name'].decode('utf-8')
                 total_price += int(products['price'])
                 if len(temp_name_count) == 0:
-                    temp_name_count = {int(products['pk']): 1}
+                    temp_name_count = {int(products['pk']): products['count']}
+                    product_list.append(products)
                 else:
                     for k, v in temp_name_count.items():
                         if int(products['pk']) == k:
-                            v += 1
+                            temp_name_count[k] += 1
                             del products
                             break
                     else:
-                        temp_name_count.setdefault(int(products['pk']), 1)
+                        temp_name_count.setdefault(int(products['pk']), products['count'])
                         product_list.append(products)
+            total_count = 0
             for k, v in temp_name_count.items():
+                total_count += v
                 for item in product_list:
                     if k == int(item['pk']):
                         item['count'] = v
@@ -49,7 +51,7 @@ class BasicViewMixin:
             if not total:
                 return product_list
             else:
-                return total_price
+                return {"total_price": total_price, 'total_count': total_count}
 
 
 class ProductsViewMixin:
