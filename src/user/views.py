@@ -2,7 +2,7 @@ import re
 import datetime
 import redis
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
@@ -163,6 +163,11 @@ class ChangePassword(TemplateView, BasicViewMixin):
     template_name = "user/change-password.html"
 
 
-class Logout(TemplateView, BasicViewMixin):
-    template_name = "user/logout.html"
+class Logout(View, BasicViewMixin):
+    def get(self, request):
+        logout(request)
+        response = redirect('Home-page')
+        response.set_cookie("token", '')
+        return response
+
 
