@@ -35,8 +35,7 @@ def identify_user_role(user_id: int):
 
 
 def auth(self, request):
-    # Extract the JWT from the Authorization header
-    # jwt_token = request.META.get('HTTP_AUTHORIZATION')
+    # Extract the JWT from the cookie
     jwt_token = request.COOKIES.get("token", None)
     if jwt_token is None:
         return None
