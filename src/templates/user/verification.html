@@ -14,8 +14,9 @@
 								<nav aria-label="breadcrumb">
 								  <ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="#"><i class="ti-home"></i></a></li>
-									<li class="breadcrumb-item"><a href="#">حساب کاربری</a></li>
-									<li class="breadcrumb-item active" aria-current="page">اعتبار سنجی اطلاعات</li>
+									<li class="breadcrumb-item"><a href="#">پروفایل کاربری</a></li>
+									<li class="breadcrumb-item"><a href="#">ورود</a></li>
+									<li class="breadcrumb-item active" aria-current="page">اعتبار سنجی</li>
 								  </ol>
 								</nav>
 							</div>
@@ -38,7 +39,7 @@
 						<div class="col-lg-6 col-md-12 col-sm-12">
 							<div class="login_signup">
 								<h3 class="login_sec_title" style="color: #2d3954">لطفا کد ارسالی را وارد نمایید.</h3>
-								<form action="/api/v1/user/otptoken/" method="POST" onsubmit="otpauthenticate(event, this)">
+								<form action="" method="POST">
                                     {% csrf_token %}
 									<div class="row">
 
@@ -82,30 +83,4 @@
 				</div>
 			</section>
     <!-- =========================== Login/Signup =================================== -->
-    <!-- ============================= Fetch API ==================================== -->
-            <script>
-
-        async function otpauthenticate(event, el) {
-            event.preventDefault()
-
-            const response = await fetch(el.action, {
-                method: el.method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    verification_code: el.querySelector("#verification_code").value,
-                })
-            })
-
-            if (response.status === 200){
-                alert("welcome")
-                 window.location.replace("/api/v1/user/profile")
-            } else {
-               alert("Invalid Input")
-            }
-        }
-        </script>
-    <!-- ============================= Fetch API ==================================== -->
-
 {% endblock %}
