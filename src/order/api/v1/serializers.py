@@ -7,3 +7,7 @@ class AddToCartViewSerializer(serializers.Serializer):
     price = serializers.CharField()
     discounted_price = serializers.CharField()
     image = serializers.CharField()
+
+
+class RemoveFromCartViewSerializer(serializers.Serializer):
+    pk = serializers.CharField()
