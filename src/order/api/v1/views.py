@@ -56,6 +56,7 @@ class RemoveFromCartView(APIView, BasicViewMixin):
                 product['count'] -= 1
                 if product['count'] == 0:
                     del product
+                    continue
             product['name'] = product['name'].encode('utf-8')
             if len(temp_str) == 0:
                 temp_str = f'{product}'
