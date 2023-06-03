@@ -26,7 +26,7 @@ def categories_cascade_deactivation_check():
 def auth(self, request):
     # Extract the JWT from the cookie
     jwt_token = request.COOKIES.get("token", None)
-    if jwt_token is None:
+    if not jwt_token:
         return None
 
     # Decode the JWT and verify its signature
