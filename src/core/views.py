@@ -1,5 +1,7 @@
 from django.db.models import Q
+
 from product.models import Category, ProductImage
+from core.utils import auth
 
 
 # Create your views here.
@@ -9,6 +11,44 @@ class BasicViewMixin:
     criterion2 = Q(is_active=True)
     categories = Category.objects.filter(criterion1 & criterion2)
     template_name = "landing_page_base.html"
+
+    @staticmethod
+    def get_user_cart(request, total: False):
+        cart = request.COOKIES.get("cart", None)
+        if cart is None:
+            return None
+        else:
+            product_list = []
+            total_price = 0
+            temp_name_count = {}
+            temp = cart.split(';')
+            for product in range(len(temp)):
+                products = eval(temp[product])
+                products['name'] = products['name'].decode('utf-8')
+                total_price += int(products['price'])
+                if len(temp_name_count) == 0:
+                    temp_name_count = {int(products['pk']): products['count']}
+                    product_list.append(products)
+                else:
+                    for k, v in temp_name_count.items():
+                        if int(products['pk']) == k:
+                            temp_name_count[k] += 1
+                            del products
+                            break
+                    else:
+                        temp_name_count.setdefault(int(products['pk']), products['count'])
+                        product_list.append(products)
+            total_count = 0
+            for k, v in temp_name_count.items():
+                total_count += v
+                for item in product_list:
+                    if k == int(item['pk']):
+                        item['count'] = v
+
+            if not total:
+                return product_list
+            else:
+                return {"total_price": total_price, 'total_count': total_count}
 
 
 class ProductsViewMixin:
@@ -70,3 +110,4 @@ class ProductsViewMixin:
                 temp_dict.setdefault("price", product.price - _)
             price_after_discount.append(temp_dict)
         return price_after_discount
+

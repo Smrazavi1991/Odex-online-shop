@@ -1,7 +1,9 @@
 from product.models import Category
 from django.contrib.auth.models import Group
 import jwt
-from config.secrets import SECRET_KEY
+from django.conf import settings
+from rest_framework.exceptions import AuthenticationFailed, ParseError
+from user.models import User
 
 
 def categories_cascade_deactivation_check():
@@ -21,17 +23,29 @@ def categories_cascade_deactivation_check():
                 category1.save()
 
 
-def identify_user_role(user_id: int):
-    list_of_roles = []
-    user_roles = Group.objects.filter(user__id=user_id)
-    if not user_roles:
-        list_of_roles = None
-    else:
-        for user_role in user_roles:
-            list_of_roles.append(user_role.name)
-    return list_of_roles
+def auth(self, request):
+    # Extract the JWT from the cookie
+    jwt_token = request.COOKIES.get("token", None)
+    if jwt_token is None:
+        return None
 
+    # Decode the JWT and verify its signature
+    try:
+        payload = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=['HS256'])
+    except jwt.exceptions.InvalidSignatureError:
+        raise AuthenticationFailed('Invalid signature')
+    except:
+        raise ParseError()
 
-def create_jwt_token(payload: dict):
-    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-    return {'token': token.decode('utf-8')}
+    # Get the user from the database
+    username_ = payload.get('user_identifier')
+    if username_ is None:
+        raise AuthenticationFailed('User identifier not found in JWT')
+
+    user = User.objects.filter(username=username_).first()
+    if user is None:
+        raise AuthenticationFailed('User not found')
+
+    # Return the user and token payload
+    return user, payload
+

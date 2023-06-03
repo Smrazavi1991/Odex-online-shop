@@ -39,10 +39,14 @@ class RegisterUserForm(forms.ModelForm):
         return user
 
 
-class VerificationForm(forms.Form):
-    verification_code = forms.CharField(max_length=6, error_messages={
-        'required': ',وارد کردن کد الزامی است.',
-        'max_length': 'طول کد وارد شده بیش از حد مجاز(6 کاراکتر) میباشد'
+class Loginform(forms.Form):
+    username = forms.CharField(error_messages={
+        'required': 'وارد کردن این فیلد الزامی است.',
+        'invalid': 'نام کاربری یا رمز عبور معتبر نمی باشد'
+    })
+    password = forms.CharField(error_messages={
+        'required': 'وارد کردن این فیلد الزامی است.',
+        'invalid': 'نام کاربری یا رمز عبور معتبر نمی باشد'
     })
 
 
@@ -51,3 +55,11 @@ class SendOTPForm(forms.Form):
         'required': 'وارد کردن این فیلد الزامی است.',
         'invalid': 'شماره همراه یا ایمیل معتبر نمی باشد'
     })
+
+
+class VerificationForm(forms.Form):
+    verification_code = forms.CharField(max_length=6, error_messages={
+        'required': ',وارد کردن کد الزامی است.',
+        'max_length': 'طول کد وارد شده بیش از حد مجاز(6 کاراکتر) میباشد'
+    })
+

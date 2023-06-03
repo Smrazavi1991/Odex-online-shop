@@ -19,15 +19,23 @@ from django.conf.urls.static import static
 from django.conf import settings
 from product.views import *
 from user.views import *
+from user import urls
+
+
+loginpatterns = [
+    path("", Login.as_view(), name="Login"),
+    path("otp-login/", OtpLogin.as_view(), name="OTP Login"),
+    path("otp-verification/", Verification.as_view(), name="Verification"),
+]
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", Home.as_view(), name="Home-page"),
     path("register/", Register.as_view(), name="Register"),
-    path("verification/", Verification.as_view(), name="Verification"),
-    path("login/", Login.as_view(), name="Login"),
-    path("profile/", Profile.as_view(), name="Profile"),
+    path("login/", include(loginpatterns)),
+    path("profile/", include(urls)),
     path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page"),
     path("product/<int:pk>/", ProductDetails.as_view(), name="Product-page"),
-    path("api/v1/", include('user.api.v1.urls'))
+    path("api/v1/user/", include('user.api.v1.urls')),
+    path("api/v1/cart/", include('order.api.v1.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
