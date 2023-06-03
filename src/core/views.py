@@ -15,7 +15,7 @@ class BasicViewMixin:
     @staticmethod
     def get_user_cart(request, total: False):
         cart = request.COOKIES.get("cart", None)
-        if cart is None:
+        if not cart:
             return None
         else:
             product_list = []
@@ -25,7 +25,7 @@ class BasicViewMixin:
             for product in range(len(temp)):
                 products = eval(temp[product])
                 products['name'] = products['name'].decode('utf-8')
-                total_price += int(products['price'])
+                total_price += int(products['price']) * products['count']
                 if len(temp_name_count) == 0:
                     temp_name_count = {int(products['pk']): products['count']}
                     product_list.append(products)
