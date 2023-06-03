@@ -76,8 +76,8 @@ class OtpLogin(View, BasicViewMixin):
                     expiry_minutes = 1
 
             if user:
-                expires = datetime.datetime.now() + datetime.timedelta(minutes=expiry_minutes)
-                expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S")
+                expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=expiry_minutes)
+                expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT")
                 response.set_cookie("user_email_or_phone", form.cleaned_data['mail_phone'], expires=expires_string)
                 return response
 
