@@ -338,7 +338,7 @@
 								<div class="cart_selected_single_caption">
 									<h4 class="product_title">{{ product.name }} × {{ product.count }}</h4>
 									<span class="numberof_item">{{ product.price }} تومان</span>
-									<button type="submit" id="remove"  name={{ product.pk }} formmethod="post" onclick="remove_from_cart(event,this)" class="btn-go-cart btn-theme">حذف</button>
+									<button type="submit" id="remove-{{ product.pk }}"  name={{ product.pk }} formmethod="post" onclick="remove_from_cart(event,this)" class="btn-go-cart btn-theme">حذف</button>
 								</div>
 							</div>
                             {% endfor %}
@@ -366,7 +366,7 @@
         async function remove_from_cart(event, el) {
             event.preventDefault()
 
-            const pk = document.querySelector('#remove');
+            {#const pk = document.querySelector('#remove-{{ product.pk }}');#}
 
             const response = await fetch("/api/v1/cart/remove_from_cart/", {
                 method: el.formMethod,
@@ -374,7 +374,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    pk: pk.getAttribute('name')
+                    pk: el.name
                 })
             })
 
