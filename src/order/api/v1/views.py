@@ -20,11 +20,10 @@ class AddToCartView(APIView):
         name = serializer.validated_data.get('name')
         price = serializer.validated_data.get('price')
         discounted_price = serializer.validated_data.get('discounted_price')
-        image = serializer.validated_data.get('image')
         if discounted_price != "None":
-            temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': discounted_price, 'image': image, 'count': 1}
+            temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': discounted_price, 'count': 1}
         else:
-            temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': price, 'image': image, 'count': 1}
+            temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': price, 'count': 1}
 
         cart = request.COOKIES.get('cart', None)
         if not cart:
@@ -52,6 +51,7 @@ class RemoveFromCartView(APIView, BasicViewMixin):
         cart = self.get_user_cart(self.request, total=False)
         temp_str = ''
         for product in cart:
+            product['image'] = ""
             if product['pk'] == pk:
                 product['count'] -= 1
                 if product['count'] == 0:
