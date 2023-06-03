@@ -25,6 +25,13 @@ class BasicViewMixin:
             for product in range(len(temp)):
                 products = eval(temp[product])
                 products['name'] = products['name'].decode('utf-8')
+                condition1 = Q(product_id=products['pk'])
+                condition2 = Q(is_primary=True)
+                product_image = ProductImage.objects.filter(condition1 & condition2).first()
+                if product_image:
+                    products['image'] = product_image
+                else:
+                    products['image'] = None
                 total_price += int(products['price']) * products['count']
                 if len(temp_name_count) == 0:
                     temp_name_count = {int(products['pk']): products['count']}
