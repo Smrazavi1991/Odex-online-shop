@@ -333,7 +333,11 @@
 							<!-- Single Item -->
 							<div class="cart_selected_single">
 								<div class="cart_selected_single_thumb">
-									<a href="/product/{{ product.pk }}/"><img src={{ product.image }} class="img-fluid" alt="" /></a>
+                                    {% if product.image.image %}
+									<a href="/product/{{ product.pk }}/"><img src="{{ product.image.image.url }}" class="img-fluid" alt="" /></a>
+                                    {% else %}
+                                    <a href="/product/{{ product.pk }}/"><img src="{% static "No_Image_Available.jpg" %}" class="img-fluid" alt="" /></a>
+                                    {% endif %}
 								</div>
 								<div class="cart_selected_single_caption">
 									<h4 class="product_title">{{ product.name }} × {{ product.count }}</h4>
