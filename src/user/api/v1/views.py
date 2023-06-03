@@ -1,18 +1,12 @@
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.utils.decorators import method_decorator
-from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from user.authentication import JWTAuthentication
-import redis
 import datetime
 
 from .serializers import UserInformationSerializer
-from user.models import User
-from core.utils import identify_user_role
+
 
 
 class ObtainTokenView(APIView):
@@ -35,16 +29,19 @@ class ObtainTokenView(APIView):
 class UserInformation(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserInformationSerializer
+
     def get(self, request):
         user = self.request.user
         serializer_ = self.serializer_class(user)
         return Response(serializer_.data)
+
     def patch(self, request):
         user = self.request.user
         serializer_ = self.serializer_class(user, data=request.data, partial=True)
         serializer_.is_valid(raise_exception=True)
         serializer_.save()
         return Response(serializer_.data)
+
 
 class UserAddress(APIView):
     pass
