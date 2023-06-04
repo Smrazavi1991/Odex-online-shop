@@ -1,7 +1,6 @@
 from django.db.models import Q
 
 from product.models import Category, ProductImage
-from core.utils import auth
 
 
 # Create your views here.
