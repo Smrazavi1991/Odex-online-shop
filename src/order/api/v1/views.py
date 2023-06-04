@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .serializers import AddToCartViewSerializer, RemoveFromCartViewSerializer
+from .serializers import AddToCartViewSerializer, RemoveFromCartViewSerializer, UpdateCartSerializer
 from core.views import BasicViewMixin
 
 
@@ -69,3 +69,18 @@ class RemoveFromCartView(APIView, BasicViewMixin):
         response.set_cookie("cart", temp_str, expires=expires_string)
 
         return response
+
+
+class UpdateCart(APIView, BasicViewMixin):
+    permission_classes = [AllowAny]
+    serializer_class = UpdateCartSerializer
+
+    def get(self, request):
+        cart_items = []
+        cart = self.get_user_cart(self.request, total=False)
+        print(cart)
+        more_info = self.get_user_cart(self.request, total=True)
+        for item in cart:
+            serializer_ = self.serializer_class(item)
+            cart_items.append(serializer_.data)
+        return Response({"cart": cart_items, "more_info": more_info})
