@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .serializers import AddToCartViewSerializer, RemoveFromCartViewSerializer, UpdateCartSerializer
+from .serializers import AddToCartViewSerializer, RemoveFromCartViewSerializer, UpdateCartSerializer, CalculateTotalSerializer
 from core.views import BasicViewMixin
 
 
@@ -53,10 +53,8 @@ class RemoveFromCartView(APIView, BasicViewMixin):
         for product in cart:
             product['image'] = ""
             if product['pk'] == pk:
-                product['count'] -= 1
-                if product['count'] == 0:
-                    del product
-                    continue
+                del product
+                continue
             product['name'] = product['name'].encode('utf-8')
             if len(temp_str) == 0:
                 temp_str = f'{product}'
@@ -76,11 +74,50 @@ class UpdateCart(APIView, BasicViewMixin):
     serializer_class = UpdateCartSerializer
 
     def get(self, request):
-        cart_items = []
         cart = self.get_user_cart(self.request, total=False)
-        print(cart)
-        more_info = self.get_user_cart(self.request, total=True)
-        for item in cart:
-            serializer_ = self.serializer_class(item)
-            cart_items.append(serializer_.data)
-        return Response({"cart": cart_items, "more_info": more_info})
+        serializer_ = self.serializer_class(data=cart, many=True)
+        serializer_.is_valid(raise_exception=True)
+        return Response(serializer_.data)
+
+    def patch(self, request):
+        serializer_ = self.serializer_class(data=request.data, partial=True)
+        serializer_.is_valid(raise_exception=True)
+
+        pk = serializer_.validated_data['pk']
+        count = serializer_.validated_data['count']
+        print(pk, type(pk), count, type(count))
+        cart = self.get_user_cart(self.request, total=False)
+        temp_str = ''
+        for product in cart:
+            product['image'] = ""
+            if product['pk'] == pk:
+                product['count'] = count
+            product['name'] = product['name'].encode('utf-8')
+            if len(temp_str) == 0:
+                temp_str = f'{product}'
+            else:
+                temp_str += f';{product}'
+
+        response = Response({'cart': 'ok'})
+        expires = datetime.datetime.now() + datetime.timedelta(weeks=999)
+        expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S")
+        response.set_cookie("cart", temp_str, expires=expires_string)
+
+        return response
+
+
+class CalculateTotal(APIView, BasicViewMixin):
+    permission_classes = [AllowAny]
+    serializer_class = CalculateTotalSerializer
+
+    def get(self, request):
+        totals = self.get_user_cart(self.request, total=True)
+        serializer_ = self.serializer_class(data=totals)
+        serializer_.is_valid(raise_exception=True)
+        return Response(serializer_.data)
+
+
+class CalculateDiscount(APIView, BasicViewMixin):
+    # permission_classes = [AllowAny]
+    # serial
+    pass
