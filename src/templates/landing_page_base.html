@@ -95,7 +95,7 @@
                                         {% else %}
 										<li><a href="{%  url 'Register' %}"><i class="ti-user"></i></a></li>
                                         {% endif %}
-										<li><a href="{% url 'cart' %}"><i class="ti-shopping-cart"></i></a></li>
+										<li><a href="{% url 'Cart' %}"><i class="ti-shopping-cart"></i></a></li>
 									</ul>
 								</div>
 								<div class="collapse" id="mySearch">
@@ -404,3 +404,4 @@
   };
 })();
 </script>
+{% block scr %}{% endblock %}
