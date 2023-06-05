@@ -1,0 +1,202 @@
+{% extends "landing_page_base.html" %}
+
+{% block title %}سبد خرید{% endblock %}
+
+{%  block content %}
+			<!-- =========================== Breadcrumbs =================================== -->
+			<div class="breadcrumbs_wrap dark">
+				<div class="container">
+					<div class="row align-items-center">
+
+						<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="text-center">
+								<h2 class="breadcrumbs_title">سبد خرید</h2>
+								<nav aria-label="breadcrumb">
+								  <ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="{% url 'Home-page' %}"><i class="ti-home"></i></a></li>
+									<li class="breadcrumb-item active" aria-current="page">سبد خرید</li>
+								  </ol>
+								</nav>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- =========================== Breadcrumbs =================================== -->
+
+			<!-- =========================== Add To Cart =================================== -->
+			<section>
+				<div class="container">
+					<div class="row">
+
+						<div class="col-lg-8 col-md-12 col-sm-12 col-12">
+							<div class="table-responsive">
+								<table  id="product-table" class="table">
+									<thead>
+										<tr>
+											<th scope="col">محصول</th>
+											<th scope="col">قیمت</th>
+											<th scope="col">تعداد</th>
+											<th scope="col">حذف</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+
+							<!-- Coupon Box -->
+							<div class="row align-items-end justify-content-between mb-10 mb-md-0">
+								<div class="col-12 col-md-7">
+
+									<!-- Coupon -->
+									<form action="/api/v1/cart/get-discount/" class="mb-7 mb-md-0">
+										<div class="row form-row">
+											<div class="col">
+												<!-- Input -->
+												<input class="form-control form-control-sm" type="text" placeholder="کد تخفیف را وارد کنید">
+											</div>
+											<div class="col-auto">
+												<!-- Button -->
+												<button class="btn btn-dark" type="submit">اعمال</button>
+											</div>
+										</div>
+									</form>
+
+								</div>
+
+							</div>
+							<!-- Coupon Box -->
+
+						</div>
+
+						<div class="col-lg-4 col-md-12 col-sm-12 col-12">
+							<div class="cart_detail_box mb-4">
+								<div class="card-body">
+									<ul class="list-group list-group-sm list-group-flush-y list-group-flush-x">
+										<li class="list-group-item d-flex">
+											<span><h5>جمع کل</h5></span> <span id="total_price" class="mr-auto font-size-sm">89000 تومان</span>
+										</li>
+										<li class="list-group-item font-size-sm text-center text-gray-500">
+											هزینه ارسال در بررسی محاسبه می شود *
+										</li>
+									</ul>
+								</div>
+							</div>
+							<a class="btn btn-block btn-dark mb-2" href="#">انتخاب آدرس و نهایی سازی سفارش</a>
+						</div>
+
+
+					</div>
+				</div>
+			</section>
+{% endblock %}
+{% block scr %}
+    <script>
+    $(document).ready(function (){
+        function populateTable(data) {
+            const tableBody = $("#product-table tbody");
+
+    data.forEach(item => {
+        const row = $("<tr></tr>");
+
+        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
+        row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
+        row.append($("<td></td>").html(`<input id="item_count" type="number" class="form-control tbl_quan" value=${item.count} />`));
+        row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
+        {#row.append($("<td></td>").text(item.count));#}
+        tableBody.append(row);
+    });
+}
+    $.getJSON('/api/v1/cart/update-cart/', function (data)
+    {
+        populateTable(data);
+    });
+    $.getJSON('/api/v1/cart/get-total-price/', function (data)
+    {
+    $("#total_price").text(`${data.total_price} تومان`);
+    });
+    });
+    </script>
+    <!-- ============================= Fetch API ==================================== -->
+    <script>
+
+        async function removeproduct(event, el) {
+            event.preventDefault()
+
+            const response = await fetch(el.href, {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pk: el.id,
+                })
+            })
+
+            if (response.status === 200){
+                alert("removed successfully")
+                $.getJSON("/api/v1/cart/update-cart/", function (data)
+            {
+                $("#product-table tbody").empty()
+                const tableBody = $("#product-table tbody");
+
+    data.forEach(item => {
+        const row = $("<tr></tr>");
+
+        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
+        row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
+        row.append($("<td></td>").html(`<input id="item_count" type="number" class="form-control tbl_quan" value=${item.count} />`));
+        row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
+        tableBody.append(row);
+            });
+            })} else {
+               alert("Invalid Input")
+            }
+        }
+        </script>
+
+        <script>
+
+        async function updatecount(event, el) {
+            event.preventDefault()
+
+            const num = document.getElementById('item_count');
+            let value;
+            value = num.valueAsNumber;
+
+            const response = await fetch(el.href, {
+                method: "patch",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pk: el.id,
+                    count: value,
+                })
+            })
+
+            if (response.status === 200){
+                alert("updated successfully")
+                $.getJSON('/api/v1/cart/update-cart/', function (data)
+            {
+                $("#product-table tbody").empty()
+                const tableBody = $("#product-table tbody");
+
+    data.forEach(item => {
+        const row = $("<tr></tr>");
+
+        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
+        row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
+        row.append($("<td></td>").html(`<input id="item_count" type="number" class="form-control tbl_quan" value=${item.count} />`));
+        row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
+        tableBody.append(row);
+            });
+            })} else {
+               alert("Invalid Input")
+            }
+        }
+        </script>
+    <!-- ============================= Fetch API ==================================== -->
+{% endblock %}
