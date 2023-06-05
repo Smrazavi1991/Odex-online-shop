@@ -23,6 +23,7 @@ from drf_yasg import openapi
 
 from product.views import *
 from user.views import *
+from order.views import *
 from user import urls
 
 schema_view = get_schema_view(
@@ -54,6 +55,7 @@ urlpatterns = [
     path("register/", Register.as_view(), name="Register"),
     path("login/", include(loginpatterns)),
     path("profile/", include(urls)),
+    path("cart", Cart.as_view(), name="Cart"),
     path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page"),
     path("product/<int:pk>/", ProductDetails.as_view(), name="Product-page"),
     path("api/v1/user/", include('user.api.v1.urls')),
