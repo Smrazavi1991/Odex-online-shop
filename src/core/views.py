@@ -28,7 +28,7 @@ class BasicViewMixin:
                 condition2 = Q(is_primary=True)
                 product_image = ProductImage.objects.filter(condition1 & condition2).first()
                 if product_image:
-                    products['image'] = product_image
+                    products['image'] = product_image.image
                 else:
                     products['image'] = None
                 total_price += int(products['price']) * products['count']
