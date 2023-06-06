@@ -32,8 +32,8 @@
 					<div class="row">
 
 						<div class="col-lg-8 col-md-12">
-							<form>
-
+							<form action="/api/v1/user/user-address/" method="post" onsubmit="createaddress(event, this)">
+                            {% csrf_token %}
 								<!-- Heading -->
 								<h4 class="mb-5">ارسال سفارش به:</h4>
 
@@ -57,34 +57,16 @@
 									<!-- Collapse -->
 									<div class="collapse" id="checkoutShippingAddressCollapse" style="">
 									  <div class="row mt-4">
-										<div class="col-12">
-
-										  <!-- Country -->
-										  <div class="form-group">
-											<label for="checkoutShippingAddressCountry">کشور *</label>
-											<input class="form-control form-control-sm" id="checkoutShippingAddressCountry" type="text" placeholder="کشور">
-										  </div>
-
-										</div>
-										<div class="col-12">
-
-										  <!-- Address Line 1 -->
-										  <div class="form-group">
-											<label for="checkoutShippingAddressLineOne">آدرس 1 *</label>
-											<input class="form-control form-control-sm" id="checkoutShippingAddressLineOne" type="text" placeholder="آدرس 1">
-										  </div>
-
-										</div>
-										<div class="col-12">
-
-										  <!-- Address Line 2 -->
-										  <div class="form-group">
-											<label for="checkoutShippingAddressLineTwo">آدرس 2</label>
-											<input class="form-control form-control-sm" id="checkoutShippingAddressLineTwo" type="text" placeholder="آدرس 2 (اختیاری)">
-										  </div>
-
-										</div>
 										<div class="col-6">
+
+										  <!-- Province -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressProvince">استان *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressProvince" type="text" placeholder="استان">
+										  </div>
+
+										</div>
+                                        <div class="col-6">
 
 										  <!-- Town / City -->
 										  <div class="form-group">
@@ -93,8 +75,18 @@
 										  </div>
 
 										</div>
-										<div class="col-6">
 
+										<div class="col-12">
+
+										  <!-- Address Line -->
+										  <div class="form-group">
+											<label for="checkoutShippingMainAddress">آدرس *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingMainAddress" type="text" placeholder="آدرس">
+										  </div>
+
+										</div>
+
+                                        <div class="col-6">
 										  <!-- Town / City -->
 										  <div class="form-group">
 											<label for="checkoutShippingAddressZIP">کد پستی *</label>
@@ -224,7 +216,7 @@
             data.forEach(item => {
                 const row = $("<tr></tr>");
 
-                row.append($("<td></td>").html(`<div class="custom-control custom-radio"><input class="custom-control-input" id="checkoutShippingStandard" name="address" type="radio"><label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label></div>`));
+                row.append($("<td></td>").html(`<div class="custom-control custom-radio"><input class="custom-control-input" id="checkoutSendingAddress" name="address" type="radio"><label class="custom-control-label text-body text-nowrap" for="checkoutSendingAddress">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label></div>`));
                 tableBody.append(row);
             });
         }
@@ -242,7 +234,7 @@
                     $("#total_price").text(`${data.total_price} تومان`);
                 });
             } else {
-                $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>4<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، صفحه مورد نظر شما وجود ندارد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
+                $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
             }
         }
         authenticate(event)
@@ -251,42 +243,42 @@
     <!-- ============================= Fetch API ==================================== -->
     <script>
 
-        async function removeproduct(event, el) {
+        async function createaddress(event, el) {
             event.preventDefault()
 
-            const response = await fetch(el.href, {
-                method: "post",
+            const response = await fetch("/api/v1/user/user-address/", {
+                method: el.method,
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    pk: el.id,
-                })
+                    province: $("#checkoutShippingAddressProvince").val(),
+                    city: $("#checkoutShippingAddressTown").val(),
+                    address: $("#checkoutShippingMainAddress").val(),
+                    postal_code: $("#checkoutShippingAddressZIP").val(),
+                }),
             })
 
-            if (response.status === 200){
-                alert("removed successfully")
-                $.getJSON("/api/v1/cart/update-cart/", function (data)
-            {
-                $("#product-table tbody").empty()
-                const tableBody = $("#product-table tbody");
+            if (response.status === 200) {
+                alert("آدرس با موفقیت ثبت شد")
 
-    data.forEach(item => {
-        const row = $("<tr></tr>");
+                function populateTable(data) {
+                    $("#user-addresses tbody").empty()
+                    const tableBody = $("#user-addresses tbody");
 
-        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
-        row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
-        row.append($("<td></td>").html(`<input id=${item.pk} type="number" class="form-control tbl_quan" value=${item.count} />`));
-        row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
-        tableBody.append(row);
-            });
-            });
-            $.getJSON('/api/v1/cart/get-total-price/', function (data)
-    {
-    $("#total_price").text(`${data.total_price} تومان`);
-    })
+                    data.forEach(item => {
+                        const row = $("<tr></tr>");
+
+                        row.append($("<td></td>").html(`<div class="custom-control custom-radio"><input class="custom-control-input" id="checkoutShippingStandard" name="address" type="radio"><label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label></div>`));
+                        tableBody.append(row);
+                    });
+                }
+
+                $.getJSON('/api/v1/user/user-address/', function (data) {
+                    populateTable(data);
+                });
             } else {
-               alert("Invalid Input")
+                alert("ثبت آدرس جدید با مشکل همراه شد")
             }
         }
         </script>
