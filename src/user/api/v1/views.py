@@ -70,5 +70,7 @@ class UserAddress(APIView):
     def post(self, request):
         serializer_ = self.serializer_class(data=request.data)
         serializer_.is_valid(raise_exception=True)
-        serializer_.save()
+        username = self.request.session.get('username', None)
+        user = User.objects.get(username=username)
+        user.address.create(province=serializer_.validated_data['province'], city=serializer_.validated_data['city'], address=serializer_.validated_data['address'], postal_code=serializer_.validated_data['postal_code'])
         return Response({'status': 'ok'})
