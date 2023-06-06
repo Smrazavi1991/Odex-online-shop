@@ -27,7 +27,7 @@
 			<!-- =========================== Breadcrumbs =================================== -->
 
 			<!-- =========================== Billing Section =================================== -->
-			<section>
+			<section id="page">
 				<div class="container">
 					<div class="row">
 
@@ -39,49 +39,8 @@
 
 								<!-- Address selection -->
 								<div class="table-responsive mb-3">
-									<table class="table table-bordered table-sm table-hover mb-0">
+									<table id="user-addresses" class="table table-bordered table-sm table-hover mb-0">
 										<tbody>
-											<tr>
-												<td>
-													<div class="custom-control custom-radio">
-														<input class="custom-control-input" id="checkoutShippingStandard" name="shipping" type="radio">
-														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">آدرس ۱</label>
-													</div>
-												</td>
-											</tr>
-
-{#											<tr>#}
-{#												<td>#}
-{#													<div class="custom-control custom-radio">#}
-{#														<input class="custom-control-input" id="checkoutShippingExpress" name="shipping" type="radio">#}
-{#														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingExpress">ارسال اکسپرس</label>#}
-{#													</div>#}
-{#												</td>#}
-{#												<td>تحویل در 3 - 5 روز کاری</td>#}
-{#												<td>12000 تومان</td>#}
-{#											</tr>#}
-{##}
-{#											<tr>#}
-{#												<td>#}
-{#													<div class="custom-control custom-radio">#}
-{#														<input class="custom-control-input" id="checkoutShippingShort" name="shipping" type="radio">#}
-{#														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingShort">1 - 2 ارسال</label>#}
-{#													</div>#}
-{#												</td>#}
-{#												<td>تحویل در 1 - 2 روز کاری</td>#}
-{#												<td>18000 تومان</td>#}
-{#											</tr>#}
-{##}
-{#											<tr>#}
-{#												<td>#}
-{#													<div class="custom-control custom-radio">#}
-{#														<input class="custom-control-input" id="checkoutShippingFree" name="shipping" type="radio">#}
-{#														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingFree">ارسال رایگان</label>#}
-{#													</div>#}
-{#												</td>#}
-{#												<td>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است.</td>#}
-{#												<td>00</td>#}
-{#											</tr>#}
 										</tbody>
 									</table>
 								</div>
@@ -257,13 +216,37 @@
 
 {% endblock %}
 {% block scr %}
-        <script>
-    $(document).ready(function (){
-    $.getJSON('/api/v1/cart/get-total-price/', function (data)
-    {
-    $("#total_price").text(`${data.total_price} تومان`);
-    });
-    });
+    <script>
+    $(document).ready(function () {
+        function populateTable(data) {
+            const tableBody = $("#user-addresses tbody");
+
+            data.forEach(item => {
+                const row = $("<tr></tr>");
+
+                row.append($("<td></td>").html(`<div class="custom-control custom-radio"><input class="custom-control-input" id="checkoutShippingStandard" name="address" type="radio"><label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label></div>`));
+                tableBody.append(row);
+            });
+        }
+
+        async function authenticate(event) {
+            event.preventDefault()
+            const response = await fetch("/api/v1/user/token/", {
+                method: "GET",
+            })
+            if (response.status === 200) {
+                $.getJSON('/api/v1/user/user-address/', function (data) {
+                    populateTable(data);
+                });
+                $.getJSON('/api/v1/cart/get-total-price/', function (data) {
+                    $("#total_price").text(`${data.total_price} تومان`);
+                });
+            } else {
+                $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>4<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، صفحه مورد نظر شما وجود ندارد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
+            }
+        }
+        authenticate(event)
+    })
     </script>
     <!-- ============================= Fetch API ==================================== -->
     <script>
