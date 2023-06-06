@@ -1,0 +1,361 @@
+{% extends "landing_page_base.html" %}
+
+{% block title %}نهایی سازی سفارش{% endblock %}
+
+{%  block content %}
+    			<!-- =========================== Breadcrumbs =================================== -->
+			<div class="breadcrumbs_wrap dark">
+				<div class="container">
+					<div class="row align-items-center">
+
+						<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="text-center">
+								<h2 class="breadcrumbs_title">نهایی سازی سفارش</h2>
+								<nav aria-label="breadcrumb">
+								  <ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="{% url 'Home-page' %}"><i class="ti-home"></i></a></li>
+									<li class="breadcrumb-item"><a href="/cart/">سبد خرید</a></li>
+									<li class="breadcrumb-item active" aria-current="page">نهایی سازی سفارش</li>
+								  </ol>
+								</nav>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- =========================== Breadcrumbs =================================== -->
+
+			<!-- =========================== Billing Section =================================== -->
+			<section>
+				<div class="container">
+					<div class="row">
+
+						<div class="col-lg-8 col-md-12">
+							<form>
+
+								<!-- Heading -->
+								<h4 class="mb-5">ارسال سفارش به:</h4>
+
+								<!-- Address selection -->
+								<div class="table-responsive mb-3">
+									<table class="table table-bordered table-sm table-hover mb-0">
+										<tbody>
+											<tr>
+												<td>
+													<div class="custom-control custom-radio">
+														<input class="custom-control-input" id="checkoutShippingStandard" name="shipping" type="radio">
+														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">آدرس ۱</label>
+													</div>
+												</td>
+											</tr>
+
+{#											<tr>#}
+{#												<td>#}
+{#													<div class="custom-control custom-radio">#}
+{#														<input class="custom-control-input" id="checkoutShippingExpress" name="shipping" type="radio">#}
+{#														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingExpress">ارسال اکسپرس</label>#}
+{#													</div>#}
+{#												</td>#}
+{#												<td>تحویل در 3 - 5 روز کاری</td>#}
+{#												<td>12000 تومان</td>#}
+{#											</tr>#}
+{##}
+{#											<tr>#}
+{#												<td>#}
+{#													<div class="custom-control custom-radio">#}
+{#														<input class="custom-control-input" id="checkoutShippingShort" name="shipping" type="radio">#}
+{#														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingShort">1 - 2 ارسال</label>#}
+{#													</div>#}
+{#												</td>#}
+{#												<td>تحویل در 1 - 2 روز کاری</td>#}
+{#												<td>18000 تومان</td>#}
+{#											</tr>#}
+{##}
+{#											<tr>#}
+{#												<td>#}
+{#													<div class="custom-control custom-radio">#}
+{#														<input class="custom-control-input" id="checkoutShippingFree" name="shipping" type="radio">#}
+{#														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingFree">ارسال رایگان</label>#}
+{#													</div>#}
+{#												</td>#}
+{#												<td>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است.</td>#}
+{#												<td>00</td>#}
+{#											</tr>#}
+										</tbody>
+									</table>
+								</div>
+
+								<!-- Address -->
+								<div class="mb-5">
+
+									<!-- Checkbox -->
+									<div class="customs-control customs-checkbox">
+										<input class="customs-control-input" id="checkoutShippingAddress" type="checkbox" />
+										<label for="checkoutShippingAddress" class="customs-control-label font-size-sm collapsed" data-toggle="collapse" data-target="#checkoutShippingAddressCollapse">به آدرس دیگری ارسال شود؟</label>
+									</div>
+
+									<!-- Collapse -->
+									<div class="collapse" id="checkoutShippingAddressCollapse" style="">
+									  <div class="row mt-4">
+										<div class="col-12">
+
+										  <!-- Country -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressCountry">کشور *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressCountry" type="text" placeholder="کشور">
+										  </div>
+
+										</div>
+										<div class="col-12">
+
+										  <!-- Address Line 1 -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressLineOne">آدرس 1 *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressLineOne" type="text" placeholder="آدرس 1">
+										  </div>
+
+										</div>
+										<div class="col-12">
+
+										  <!-- Address Line 2 -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressLineTwo">آدرس 2</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressLineTwo" type="text" placeholder="آدرس 2 (اختیاری)">
+										  </div>
+
+										</div>
+										<div class="col-6">
+
+										  <!-- Town / City -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressTown">شهر *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressTown" type="text" placeholder="شهر">
+										  </div>
+
+										</div>
+										<div class="col-6">
+
+										  <!-- Town / City -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressZIP">کد پستی *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressZIP" type="text" placeholder="کد پستی">
+										  </div>
+
+										</div>
+										<div class="col-12">
+
+										  <!-- Button -->
+										  <button class="btn btn-outline-dark" type="submit">
+											ذخیره آدرس
+										  </button>
+
+										</div>
+									  </div>
+									</div>
+
+								</div>
+
+
+								<!-- Heading -->
+								<h4 class="mb-3">شیوه ارسال</h4>
+
+								<!-- Shipping details -->
+								<div class="table-responsive mb-3">
+									<table class="table table-bordered table-sm table-hover mb-0">
+										<tbody>
+											<tr>
+												<td>
+													<div class="custom-control custom-radio">
+														<input class="custom-control-input" id="checkoutShippingStandard" name="shipping" type="radio">
+														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">ارسال استاندارد</label>
+													</div>
+												</td>
+												<td>تحویل در 5 - 7 روز کاری</td>
+												<td>8000 تومان</td>
+											</tr>
+
+											<tr>
+												<td>
+													<div class="custom-control custom-radio">
+														<input class="custom-control-input" id="checkoutShippingExpress" name="shipping" type="radio">
+														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingExpress">ارسال اکسپرس</label>
+													</div>
+												</td>
+												<td>تحویل در 3 - 5 روز کاری</td>
+												<td>12000 تومان</td>
+											</tr>
+
+											<tr>
+												<td>
+													<div class="custom-control custom-radio">
+														<input class="custom-control-input" id="checkoutShippingShort" name="shipping" type="radio">
+														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingShort">1 - 2 ارسال</label>
+													</div>
+												</td>
+												<td>تحویل در 1 - 2 روز کاری</td>
+												<td>18000 تومان</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+							</form>
+                            <!-- Coupon Box -->
+							<div class="row align-items-end justify-content-between mb-10 mb-md-0">
+								<div class="col-12 col-md-7">
+
+									<!-- Coupon -->
+									<form action="/api/v1/cart/get-discount/" class="mb-7 mb-md-0">
+										<div class="row form-row">
+											<div class="col" style="padding-right: 5px;">
+												<!-- Input -->
+												<input class="form-control form-control-sm" type="text" placeholder="کد تخفیف دارید؟">
+											</div>
+											<div class="col-auto">
+												<!-- Button -->
+												<button class="btn btn-dark" type="submit">بررسی کد</button>
+											</div>
+										</div>
+									</form>
+
+								</div>
+
+							</div>
+							<!-- Coupon Box -->
+						</div>
+
+                        <div class="col-12 col-md-12 col-lg-4">
+							<div class="cart_detail_box mb-4">
+								<div class="card-body">
+									<ul class="list-group list-group-sm list-group-flush-y list-group-flush-x">
+										<li class="list-group-item d-flex">
+											<h5 class="mb-0">خلاصه سفارش</h5>
+										</li>
+										<li class="list-group-item d-flex">
+											<span>جمع کل سبد خرید</span> <span id="total_price" class="mr-auto font-size-sm">89000 تومان</span>
+										</li>
+										<li class="list-group-item d-flex">
+											<span>ارسال</span> <span id="total_price" class="mr-auto font-size-sm">89000 تومان</span>
+										</li>
+                                        <li class="list-group-item d-flex">
+											<span>تخفیف</span> <span class="mr-auto font-size-sm">0</span>
+										</li>
+										<li class="list-group-item d-flex font-size-lg font-weight-bold">
+											<span>قیمت نهایی</span> <span class="mr-auto font-size-sm">89000 تومان</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<a class="btn btn-block btn-dark mb-2" href="#">نهایی سازی سفارش</a>
+						</div>
+
+					</div>
+				</div>
+			</section>
+			<!-- =========================== Billing Section =================================== -->
+
+{% endblock %}
+{% block scr %}
+        <script>
+    $(document).ready(function (){
+    $.getJSON('/api/v1/cart/get-total-price/', function (data)
+    {
+    $("#total_price").text(`${data.total_price} تومان`);
+    });
+    });
+    </script>
+    <!-- ============================= Fetch API ==================================== -->
+    <script>
+
+        async function removeproduct(event, el) {
+            event.preventDefault()
+
+            const response = await fetch(el.href, {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pk: el.id,
+                })
+            })
+
+            if (response.status === 200){
+                alert("removed successfully")
+                $.getJSON("/api/v1/cart/update-cart/", function (data)
+            {
+                $("#product-table tbody").empty()
+                const tableBody = $("#product-table tbody");
+
+    data.forEach(item => {
+        const row = $("<tr></tr>");
+
+        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
+        row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
+        row.append($("<td></td>").html(`<input id=${item.pk} type="number" class="form-control tbl_quan" value=${item.count} />`));
+        row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
+        tableBody.append(row);
+            });
+            });
+            $.getJSON('/api/v1/cart/get-total-price/', function (data)
+    {
+    $("#total_price").text(`${data.total_price} تومان`);
+    })
+            } else {
+               alert("Invalid Input")
+            }
+        }
+        </script>
+
+        <script>
+
+        async function updatecount(event, el) {
+            event.preventDefault()
+
+            const num = document.getElementById(el.id);
+            let value;
+            num.addEventListener('change',(event)=>{
+                value = event.target.valueAsNumber;
+            });
+            value = num.valueAsNumber;
+
+            const response = await fetch(el.href, {
+                method: "patch",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pk: el.id,
+                    count: value,
+                })
+            })
+
+            if (response.status === 200){
+                alert("updated successfully")
+                $.getJSON('/api/v1/cart/update-cart/', function (data)
+            {
+                $("#product-table tbody").empty()
+                const tableBody = $("#product-table tbody");
+
+    data.forEach(item => {
+        const row = $("<tr></tr>");
+
+        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
+        row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
+        row.append($("<td></td>").html(`<input id=${item.pk} type="number" class="form-control tbl_quan" value=${item.count} />`));
+        row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
+        tableBody.append(row);
+            });
+            });
+            $.getJSON('/api/v1/cart/get-total-price/', function (data)
+    {
+    $("#total_price").text(`${data.total_price} تومان`);
+    })
+            } else {
+               alert("Invalid Input")
+            }
+        }
+        </script>
+    <!-- ============================= Fetch API ==================================== -->
+{% endblock %}
