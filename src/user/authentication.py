@@ -21,7 +21,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
     def create_jwt(cls, user):
         # Create the JWT payload
         payload = {
-            'user_identifier': user.username,
+            'user_identifier': user,
             'exp': int((datetime.now() + timedelta(weeks=999)).timestamp()),
             'iat': datetime.now().timestamp(),
         }
