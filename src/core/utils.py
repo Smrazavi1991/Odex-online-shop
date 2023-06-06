@@ -39,8 +39,8 @@ def auth(self, request):
 
     # Get the user from the database
     username_ = payload.get('user_identifier')
-    if username_ is None:
-        raise AuthenticationFailed('User identifier not found in JWT')
+    if not username_:
+        raise AuthenticationFailed('User information not found in JWT')
 
     user = User.objects.filter(username=username_).first()
     if user is None:
