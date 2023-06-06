@@ -11,4 +11,4 @@ class UserInformationSerializer(serializers.ModelSerializer):
 class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = ['pk', 'province', 'city', 'address', 'postal_code']
+        fields = ['province', 'city', 'address', 'postal_code']
