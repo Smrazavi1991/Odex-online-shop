@@ -4,6 +4,7 @@ import redis
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
@@ -42,7 +43,9 @@ class Login(View, BasicViewMixin):
             user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password'))
             if user:
                 login(request, user)
-                return redirect('Home-page')
+                response = redirect('Home-page')
+                request.session['username'] = form.cleaned_data.get('username')
+                return response
         return render(request, 'user/login.html', {"categories": self.categories, 'form': form})
 
 
@@ -107,10 +110,10 @@ class Verification(View, BasicViewMixin):
         return render(request, 'user/register.html', {"categories": self.categories, 'form': form})
 
 
-class Profile(RedirectView):
+class Profile(LoginRequiredMixin, RedirectView):
     permanent = True
     pattern_name = "Orders list"
-
+    login_url = "/login/"
 
 class OrdersList(TemplateView, BasicViewMixin):
     template_name = "user/orders-list.html"
