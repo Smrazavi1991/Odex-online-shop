@@ -57,6 +57,7 @@ urlpatterns = [
     path("profile/", include(urls)),
     path("cart", Cart.as_view(), name="Cart"),
     path("review-order/", ReviewOrder.as_view(), name="Review Order"),
+    path("order-confirmation/", OrderConfirmation.as_view(), name="Order Confirmation"),
     path("category/<int:pk>/", CategoryProducts.as_view(), name="Category-page"),
     path("product/<int:pk>/", ProductDetails.as_view(), name="Product-page"),
     path("api/v1/user/", include('user.api.v1.urls')),
