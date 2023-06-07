@@ -16,3 +16,10 @@ class ReviewOrder(LoginRequiredMixin, View, BasicViewMixin):
 
     def get(self, request):
         return render(request, "order/review-order.html", {"categories": self.categories})
+
+
+class OrderConfirmation(LoginRequiredMixin, View, BasicViewMixin):
+    login_url = "/login/"
+
+    def get(self, request):
+        return render(request, "order/order-confirmation.html", {"categories": self.categories})
