@@ -150,11 +150,11 @@
 										<div class="row form-row">
 											<div class="col" style="padding-right: 5px;">
 												<!-- Input -->
-												<input class="form-control form-control-sm" id="code" type="text" placeholder="کد تخفیف دارید؟">
+												<input class="form-control form-control-sm" id="code" type="text" placeholder="کد تخفیف" value="کد تخفیف">
 											</div>
 											<div class="col-auto">
 												<!-- Button -->
-												<button class="btn btn-dark" type="submit">بررسی کد</button>
+												<button class="btn btn-dark" id="update" type="submit">بروز رسانی خلاصه سفارش</button>
 											</div>
 										</div>
 									</form>
@@ -187,7 +187,7 @@
 									</ul>
 								</div>
 							</div>
-							<a class="btn btn-block btn-dark mb-2" href="/order-confirmation/">ثبت سفارش</a>
+							<a class="btn btn-block btn-dark mb-2" id="approve" href="/order-confirmation/" onclick="dump_data_to_local(event, this)">تایید و ثبت سفارش</a>
 						</div>
 
 					</div>
@@ -227,6 +227,7 @@
             }
         }
         authenticate(event)
+        $("#approve").hide()
     })
     </script>
     <!-- ============================= Fetch API ==================================== -->
@@ -289,7 +290,8 @@
             })
 
             if (response.status === 200){
-                alert("کد تخفیف روی سبد خرید اعمال شد")
+                alert("بروزرسانی با موفقیت همراه شد")
+                $("#approve").show()
                 $.getJSON(el.action , function (data) {
     $("#total_price").text(`${data.total_price} تومان`);
     $("#discount").text(`${data.discount} تومان`);
@@ -297,8 +299,20 @@
     $("#final_price").text(`${data.final_price} تومان`);
             });
                 } else {
-               alert("کد تخفیف نامعتبر است")
+               alert("خطا! یا کد تخفیف نامعتبری وارد کردید و یا گزینه شیوه ارسال را انتخاب نکرده اید")
             }
+        }
+        </script>
+
+        <script>
+
+        async function dump_data_to_local(event, el) {
+            event.preventDefault()
+
+            localStorage.setItem("shipping_price", $("#shipping_price").text());
+            localStorage.setItem("total_price", $("#final_price").text());
+            localStorage.setItem("address_id", $("input[name='address']:checked").val());
+            window.location.replace("/order-confirmation/")
         }
         </script>
     <!-- ============================= Fetch API ==================================== -->
