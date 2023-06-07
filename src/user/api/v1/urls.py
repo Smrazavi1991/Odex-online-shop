@@ -1,5 +1,4 @@
-from django.urls import path, include
-from rest_framework_simplejwt import views as jwt_views
+from django.urls import path
 from user.api.v1.views import *
 from django.conf.urls.static import static
 from django.conf import settings
