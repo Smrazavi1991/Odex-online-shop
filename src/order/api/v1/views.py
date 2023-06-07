@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import NotFound
 
 from .serializers import *
-from ...models import DiscountCoupon
+from ...models import DiscountCoupon, Cart, Order
 from user.models import User
 from core.views import BasicViewMixin
 
@@ -130,7 +130,11 @@ class CalculateDiscount(APIView, BasicViewMixin):
         serializer_ = self.serializer_class(data=request.data)
         serializer_.is_valid(raise_exception=True)
         CalculateDiscount.shipping_price = serializer_.validated_data['shipping_price']
-        coupon_code = DiscountCoupon.objects.filter(code=serializer_.validated_data['code'])
+        if not serializer_.validated_data['code'] == "کد تخفیف":
+            coupon_code = DiscountCoupon.objects.filter(code=serializer_.validated_data['code'])
+        else:
+            response = Response({'value': 0})
+            return response
         if coupon_code:
             username = self.request.session.get('username', None)
             user = User.objects.get(username=username)
@@ -161,14 +165,32 @@ class CalculateDiscount(APIView, BasicViewMixin):
 
 class SubmitOrder(APIView, BasicViewMixin):
     permission_classes = [IsAuthenticated]
+    serializer_class = SubmitOrderSerializer
 
-    def get(self, request):
-        total_price = self.get_user_cart(self.request, total=True)['total_price']
-        discount = CalculateDiscount.discount_amount
-        shipping_price = CalculateDiscount.shipping_price
-        if discount < 100:
-            final_price = (total_price + shipping_price) * (1-discount/100)
-            discount = (total_price + shipping_price) * (discount/100)
-        else:
-            final_price = (total_price + shipping_price) - (discount)
-        return Response({'total_price': total_price, 'discount': discount, 'shipping_price': shipping_price, 'final_price': final_price})
+    def post(self, request):
+        username = self.request.session.get('username', None)
+        user = User.objects.get(username=username)
+
+        item = self.get_user_cart(self.request, total=False)
+        for product in item:
+            del product['image']
+
+        serializer_ = self.serializer_class(data=request.data)
+        serializer_.is_valid(raise_exception=True)
+        shipping_price = serializer_.validated_data['shipping_price']
+        address_id = serializer_.validated_data['address_id']
+        total_price = serializer_.validated_data['total_price']
+
+        cart = Cart(customer=user, item=item, shipping_price=shipping_price, address_id=address_id, total_price=total_price)
+        cart.save()
+
+        status = 'r'
+
+        order = Order(cart=cart, status=status)
+        order.save()
+
+        response = Response({'order_id': order.pk})
+        response.set_cookie("cart", '')
+        return response
+
+
