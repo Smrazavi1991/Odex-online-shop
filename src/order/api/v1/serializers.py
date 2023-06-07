@@ -23,3 +23,8 @@ class UpdateCartSerializer(serializers.Serializer):
 class CalculateTotalSerializer(serializers.Serializer):
     total_price = serializers.IntegerField()
     total_count = serializers.IntegerField()
+
+
+class CalculateDiscountSerializer(serializers.Serializer):
+    code = serializers.CharField(max_length=10)
+    shipping_price = serializers.IntegerField()
