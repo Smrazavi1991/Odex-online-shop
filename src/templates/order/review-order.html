@@ -118,8 +118,8 @@
 											<tr>
 												<td>
 													<div class="custom-control custom-radio">
-														<input class="custom-control-input" id="checkoutShippingStandard" name="shipping" type="radio">
-														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">ارسال استاندارد</label>
+														<input class="custom-control-input" id="checkoutShippingStandard" name="shipping" type="radio" value="8000">
+														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">ارسال معمولی</label>
 													</div>
 												</td>
 												<td>تحویل در 5 - 7 روز کاری</td>
@@ -129,22 +129,11 @@
 											<tr>
 												<td>
 													<div class="custom-control custom-radio">
-														<input class="custom-control-input" id="checkoutShippingExpress" name="shipping" type="radio">
+														<input class="custom-control-input" id="checkoutShippingExpress" name="shipping" type="radio" value="18000">
 														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingExpress">ارسال اکسپرس</label>
 													</div>
 												</td>
 												<td>تحویل در 3 - 5 روز کاری</td>
-												<td>12000 تومان</td>
-											</tr>
-
-											<tr>
-												<td>
-													<div class="custom-control custom-radio">
-														<input class="custom-control-input" id="checkoutShippingShort" name="shipping" type="radio">
-														<label class="custom-control-label text-body text-nowrap" for="checkoutShippingShort">1 - 2 ارسال</label>
-													</div>
-												</td>
-												<td>تحویل در 1 - 2 روز کاری</td>
 												<td>18000 تومان</td>
 											</tr>
 										</tbody>
@@ -157,11 +146,11 @@
 								<div class="col-12 col-md-7">
 
 									<!-- Coupon -->
-									<form action="/api/v1/cart/get-discount/" class="mb-7 mb-md-0">
+									<form action="/api/v1/cart/get-discount/" method="post" onsubmit="getdiscount(event, this)" class="mb-7 mb-md-0">
 										<div class="row form-row">
 											<div class="col" style="padding-right: 5px;">
 												<!-- Input -->
-												<input class="form-control form-control-sm" type="text" placeholder="کد تخفیف دارید؟">
+												<input class="form-control form-control-sm" id="code" type="text" placeholder="کد تخفیف دارید؟">
 											</div>
 											<div class="col-auto">
 												<!-- Button -->
@@ -184,21 +173,21 @@
 											<h5 class="mb-0">خلاصه سفارش</h5>
 										</li>
 										<li class="list-group-item d-flex">
-											<span>جمع کل سبد خرید</span> <span id="total_price" class="mr-auto font-size-sm">89000 تومان</span>
+											<span>جمع کل سبد خرید</span> <span id="total_price" class="mr-auto font-size-sm">0 تومان</span>
 										</li>
 										<li class="list-group-item d-flex">
-											<span>ارسال</span> <span id="total_price" class="mr-auto font-size-sm">89000 تومان</span>
+											<span>ارسال</span> <span id="shipping_price" class="mr-auto font-size-sm">0 تومان</span>
 										</li>
                                         <li class="list-group-item d-flex">
-											<span>تخفیف</span> <span class="mr-auto font-size-sm">0</span>
+											<span>تخفیف</span> <span class="mr-auto font-size-sm" id="discount">0</span>
 										</li>
 										<li class="list-group-item d-flex font-size-lg font-weight-bold">
-											<span>قیمت نهایی</span> <span class="mr-auto font-size-sm">89000 تومان</span>
+											<span>قیمت نهایی</span> <span class="mr-auto font-size-sm" id="final_price">0 تومان</span>
 										</li>
 									</ul>
 								</div>
 							</div>
-							<a class="btn btn-block btn-dark mb-2" href="#">نهایی سازی سفارش</a>
+							<a class="btn btn-block btn-dark mb-2" href="/order-confirmation/">ثبت سفارش</a>
 						</div>
 
 					</div>
@@ -216,7 +205,7 @@
             data.forEach(item => {
                 const row = $("<tr></tr>");
 
-                row.append($("<td></td>").html(`<div class="custom-control custom-radio"><input class="custom-control-input" id="checkoutSendingAddress" name="address" type="radio"><label class="custom-control-label text-body text-nowrap" for="checkoutSendingAddress">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label></div>`));
+                row.append($("<td></td>").html(`<div class="custom-control custom-radio"><input class="custom-control-input" id="checkoutSendingAddress-${item.pk}" name="address" type="radio" value="${item.pk}"><label class="custom-control-label text-body text-nowrap" for="checkoutSendingAddress-${item.pk}">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label></div>`));
                 tableBody.append(row);
             });
         }
@@ -281,54 +270,34 @@
                 alert("ثبت آدرس جدید با مشکل همراه شد")
             }
         }
-        </script>
+    </script>
 
-        <script>
+    <script>
 
-        async function updatecount(event, el) {
+        async function getdiscount(event, el) {
             event.preventDefault()
 
-            const num = document.getElementById(el.id);
-            let value;
-            num.addEventListener('change',(event)=>{
-                value = event.target.valueAsNumber;
-            });
-            value = num.valueAsNumber;
-
-            const response = await fetch(el.href, {
-                method: "patch",
+            const response = await fetch(el.action, {
+                method: el.method,
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    pk: el.id,
-                    count: value,
+                    code: el.querySelector("#code").value,
+                    shipping_price: $("input[name='shipping']:checked").val(),
                 })
             })
 
             if (response.status === 200){
-                alert("updated successfully")
-                $.getJSON('/api/v1/cart/update-cart/', function (data)
-            {
-                $("#product-table tbody").empty()
-                const tableBody = $("#product-table tbody");
-
-    data.forEach(item => {
-        const row = $("<tr></tr>");
-
-        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
-        row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
-        row.append($("<td></td>").html(`<input id=${item.pk} type="number" class="form-control tbl_quan" value=${item.count} />`));
-        row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
-        tableBody.append(row);
-            });
-            });
-            $.getJSON('/api/v1/cart/get-total-price/', function (data)
-    {
+                alert("کد تخفیف روی سبد خرید اعمال شد")
+                $.getJSON(el.action , function (data) {
     $("#total_price").text(`${data.total_price} تومان`);
-    })
-            } else {
-               alert("Invalid Input")
+    $("#discount").text(`${data.discount} تومان`);
+    $("#shipping_price").text(`${data.shipping_price} تومان`);
+    $("#final_price").text(`${data.final_price} تومان`);
+            });
+                } else {
+               alert("کد تخفیف نامعتبر است")
             }
         }
         </script>
