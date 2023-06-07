@@ -3,7 +3,7 @@ import datetime
 from django.core.validators import MinValueValidator
 from django.db import models
 from core.models import BaseModel
-from user.models import User
+from user.models import User, Address
 from product.models import Discount
 from django_jalali.db import models as jmodels
 import jdatetime
@@ -13,7 +13,9 @@ import jdatetime
 class Cart(BaseModel):
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     item = models.JSONField("Item in cart")
-    shipping_price = models.PositiveIntegerField("Shipping Price")
+    shipping_price = models.CharField("Shipping Price", default="0", max_length=100)
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
+    total_price = models.CharField("Total Price", default="0", max_length=100)
 
     def customer_name(self):
         return self.customer.get_full_name()
