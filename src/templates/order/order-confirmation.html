@@ -36,8 +36,7 @@
 							  <div class="card-body text-center">
 								<h2 class="pb-2">مبارکه! بابت انتخاب فروشگاه ما از شما متشکریم</h2>
 								<p class="font-size-sm mb-2">سفارش شما ثبت شده است و در اسرع وقت رسیدگی می شود.</p>
-								<p class="font-size-sm mb-2">حتماً شماره سفارش خود را یادداشت کنید <span class="font-weight-medium">857DFR5478124.</span></p>
-								<p class="font-size-sm">همکاران ما به زودی درمورد نحوه پرداخت با شما تماس خواهند گرفت.<u>اکنون می توانید:</u></p><a class="btn btn-secondary mt-3 ml-3" href="/">بازگشت به خانه</a><a class="btn btn-primary mt-3" href="order-tracking.html"><i class="czi-location"></i>&nbsp;پیگیری سفارش</a>
+								<p class="font-size-sm">همکاران ما به زودی درمورد نحوه پرداخت با شما تماس خواهند گرفت.<u>اکنون می توانید:</u></p><a class="btn btn-secondary mt-3 ml-3" href="/">بازگشت به خانه</a><a class="btn btn-primary mt-3" href="order-tracking.html"><i class="czi-location"></i>&nbsp;مشاهده سفارشات</a>
 							  </div>
 							</div>
 
@@ -48,28 +47,33 @@
 			<!-- =========================== Add To Cart =================================== -->
 {% endblock %}
 {% block scr %}
+            <!-- ============================= Fetch API ==================================== -->
     <script>
     $(document).ready(function () {
-        function populateTable(data) {
-            const tableBody = $("#user-addresses tbody");
+        async function load_data_from_local(event) {
+            event.preventDefault()
 
-            data.forEach(item => {
-                const row = $("<tr></tr>");
-
-                row.append($("<td></td>").html(`<div class="custom-control custom-radio"><input class="custom-control-input" id="checkoutSendingAddress-${item.pk}" name="address" type="radio" value="${item.pk}"><label class="custom-control-label text-body text-nowrap" for="checkoutSendingAddress-${item.pk}">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label></div>`));
-                tableBody.append(row);
-            });
+            const response = await fetch("/api/v1/cart/submit-order/", {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    shipping_price: localStorage.getItem("shipping_price"),
+                    total_price: localStorage.getItem("total_price"),
+                    address_id: localStorage.getItem("address_id"),
+                }),
+            })
         }
 
         async function authenticate(event) {
             event.preventDefault()
             const response = await fetch("/api/v1/user/token/", {
                 method: "GET",
-            })
+            });
             if (response.status === 200) {
-                $.getJSON('/api/v1/cart/submit-order/', function (data) {
-                    $("#total_price").text(`${data.total_price} تومان`);
-                });
+                load_data_from_local(event)
+                localStorage.clear()
             } else {
                 $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
             }
@@ -77,77 +81,5 @@
         authenticate(event)
     })
     </script>
-    <!-- ============================= Fetch API ==================================== -->
-    <script>
-
-        async function createaddress(event, el) {
-            event.preventDefault()
-
-            const response = await fetch("/api/v1/user/user-address/", {
-                method: el.method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    province: $("#checkoutShippingAddressProvince").val(),
-                    city: $("#checkoutShippingAddressTown").val(),
-                    address: $("#checkoutShippingMainAddress").val(),
-                    postal_code: $("#checkoutShippingAddressZIP").val(),
-                }),
-            })
-
-            if (response.status === 200) {
-                alert("آدرس با موفقیت ثبت شد")
-
-                function populateTable(data) {
-                    $("#user-addresses tbody").empty()
-                    const tableBody = $("#user-addresses tbody");
-
-                    data.forEach(item => {
-                        const row = $("<tr></tr>");
-
-                        row.append($("<td></td>").html(`<div class="custom-control custom-radio"><input class="custom-control-input" id="checkoutShippingStandard" name="address" type="radio"><label class="custom-control-label text-body text-nowrap" for="checkoutShippingStandard">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label></div>`));
-                        tableBody.append(row);
-                    });
-                }
-
-                $.getJSON('/api/v1/user/user-address/', function (data) {
-                    populateTable(data);
-                });
-            } else {
-                alert("ثبت آدرس جدید با مشکل همراه شد")
-            }
-        }
-    </script>
-
-    <script>
-
-        async function getdiscount(event, el) {
-            event.preventDefault()
-
-            const response = await fetch(el.action, {
-                method: el.method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    code: el.querySelector("#code").value,
-                    shipping_price: $("input[name='shipping']:checked").val(),
-                })
-            })
-
-            if (response.status === 200){
-                alert("کد تخفیف روی سبد خرید اعمال شد")
-                $.getJSON(el.action , function (data) {
-    $("#total_price").text(`${data.total_price} تومان`);
-    $("#discount").text(`${data.discount} تومان`);
-    $("#shipping_price").text(`${data.shipping_price} تومان`);
-    $("#final_price").text(`${data.final_price} تومان`);
-            });
-                } else {
-               alert("کد تخفیف نامعتبر است")
-            }
-        }
-        </script>
     <!-- ============================= Fetch API ==================================== -->
 {% endblock %}
