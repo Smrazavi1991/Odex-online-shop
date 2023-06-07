@@ -3,8 +3,11 @@ import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import NotFound
 
-from .serializers import AddToCartViewSerializer, RemoveFromCartViewSerializer, UpdateCartSerializer, CalculateTotalSerializer
+from .serializers import *
+from ...models import DiscountCoupon
+from user.models import User
 from core.views import BasicViewMixin
 
 
@@ -118,6 +121,54 @@ class CalculateTotal(APIView, BasicViewMixin):
 
 
 class CalculateDiscount(APIView, BasicViewMixin):
-    # permission_classes = [AllowAny]
-    # serial
-    pass
+    permission_classes = [IsAuthenticated]
+    serializer_class = CalculateDiscountSerializer
+    discount_amount = 0
+    shipping_price = 0
+
+    def post(self, request):
+        serializer_ = self.serializer_class(data=request.data)
+        serializer_.is_valid(raise_exception=True)
+        CalculateDiscount.shipping_price = serializer_.validated_data['shipping_price']
+        coupon_code = DiscountCoupon.objects.filter(code=serializer_.validated_data['code'])
+        if coupon_code:
+            username = self.request.session.get('username', None)
+            user = User.objects.get(username=username)
+            for code in coupon_code:
+                if code.discount_is_active and code.owner == user:
+                    if code.discount.amount_of_percentage_discount:
+                        CalculateDiscount.discount_amount = code.discount.amount_of_percentage_discount
+                        response = Response({'value': CalculateDiscount.discount_amount})
+                    else:
+                        CalculateDiscount.discount_amount = code.discount.amount_of_non_percentage_discount
+                        response = Response({'value': CalculateDiscount.discount_amount})
+                    code.is_deleted = True
+                    code.save()
+                    return response
+        raise NotFound('invalid code')
+
+    def get(self, request):
+        total_price = self.get_user_cart(self.request, total=True)['total_price']
+        discount = CalculateDiscount.discount_amount
+        shipping_price = CalculateDiscount.shipping_price
+        if discount < 100:
+            final_price = (total_price + shipping_price) * (1-discount/100)
+            discount = (total_price + shipping_price) * (discount/100)
+        else:
+            final_price = (total_price + shipping_price) - (discount)
+        return Response({'total_price': total_price, 'discount': discount, 'shipping_price': shipping_price, 'final_price': final_price})
+
+
+class SubmitOrder(APIView, BasicViewMixin):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        total_price = self.get_user_cart(self.request, total=True)['total_price']
+        discount = CalculateDiscount.discount_amount
+        shipping_price = CalculateDiscount.shipping_price
+        if discount < 100:
+            final_price = (total_price + shipping_price) * (1-discount/100)
+            discount = (total_price + shipping_price) * (discount/100)
+        else:
+            final_price = (total_price + shipping_price) - (discount)
+        return Response({'total_price': total_price, 'discount': discount, 'shipping_price': shipping_price, 'final_price': final_price})
