@@ -1,30 +1,25 @@
 {% extends "profile_page_base.html" %}
 {% load static %}
+{% block title %}حساب کاربری{% endblock %}
 
-{% block title %}پروفایل{% endblock %}
-
-{% block section_title %}اطلاعات کاربر{% endblock %}
-{% block this_section_title %}اطلاعات کاربر{% endblock %}
-
-{% block sidebar-class-user-information %}"list-group-item list-group-item-action dropright-toggle active"{% endblock %}
-{% block sidebar %}
+{% block main_content %}
     			<!-- =========================== Account Settings =================================== -->
 
-						<div class="col-lg-8 col-md-9">
+						<div id="page" class="col-lg-8 col-md-9">
 							<!-- Total Items -->
 							<div class="card style-2">
 								<div class="card-header">
 									<h4 class="mb-0">اطلاعات کاربر</h4>
 								</div>
 								<div class="card-body">
-									<form class="submit-page">
+									<form action="/api/v1/user/user-information/" enctype="multipart/form-data" class="submit-page" id="my-form">
 										<div class="row">
 
 											<div class="col-12 col-md-6">
 											  <!-- Email -->
 											  <div class="form-group">
-												<label>نام *</label>
-												<input class="form-control" type="text" placeholder="نام *" value="بهمن" required="">
+												<label>نام</label>
+												<input class="form-control" id="first_name" name="first_name" type="text" placeholder="نام">
 											  </div>
 
 											</div>
@@ -32,70 +27,33 @@
 											<div class="col-12 col-md-6">
 											  <!-- Last Name -->
 											  <div class="form-group">
-												<label>نام خانوادگی *</label>
-												<input class="form-control" type="text" placeholder="نام خانوادگی *" value="سیدی" required="">
+												<label>نام خانوادگی</label>
+												<input class="form-control" id="last_name" name="last_name" type="text" placeholder="نام خانوادگی">
 											  </div>
 
 											</div>
-
-											<div class="col-12">
-												<!-- Email -->
-												<div class="form-group">
-													<label> آدرس ایمیل *</label>
-													<input class="form-control" type="email" placeholder="آدرس ایمیل *" value="demo@gmail.com" required="">
-												</div>
-											</div>
-
-											<div class="col-12 col-md-6">
-												<!-- Password -->
-												<div class="form-group">
-													<label>رمز عبور فعلی *</label>
-													<input class="form-control" type="password" placeholder="رمز عبور فعلی *" required="">
-												</div>
-											</div>
-
-											<div class="col-12 col-md-6">
-												<!-- Password -->
-												<div class="form-group">
-													<label>رمز عبور جدید *</label>
-													<input class="form-control" type="password" placeholder="رمز عبور جدید *" required="">
-												</div>
-											</div>
-
 											<div class="col-12 col-lg-6">
 												<!-- Birthday -->
 												<div class="form-group">
 
 													<label>تاریخ تولد</label>
-													<div class="row">
+													<div class="row" id="date">
 														<div class="col-auto">
 															<!-- Date -->
 															<label class="sr-only">روز</label>
-															<select class="form-control">
-															  <option>10</option>
-															  <option>11</option>
-															  <option selected="">12</option>
-															</select>
+															<input class="form-control" type="number" id="day" name="day" min="1" max="31" value="1"/>
 														</div>
 
-														<div class="col">
+														<div class="col-auto">
 															<!-- Date -->
 															<label class="sr-only">ماه</label>
-															<select class="form-control">
-															  <option>فروردین</option>
-															  <option>اردیبهشت</option>
-															  <option selected="">خرداد</option>
-															</select>
+                                                            <input class="form-control" type="number" id="month" name="month" min="1" max="12" value="1"/>
 														</div>
 
 														<div class="col-auto">
 															<!-- Date -->
 															<label class="sr-only">سال</label>
-															<select class="form-control">
-															  <option>1370</option>
-															  <option selected="">1369</option>
-															  <option>1368</option>
-															</select>
+                                                            <input class="form-control" type="number" id="year" name="year" min="1300" max="1402" value="1402"/>
 														</div>
 
 													</div>
@@ -108,20 +66,33 @@
 												<div class="form-group mb-8">
 													<label>جنسیت</label>
 													<div class="btn-group-toggle mt-2 d-flex bd-highlight">
-														<div class="ml-2">
-															<input id="male" class="radio-custom" name="gen" type="radio">
-															<label for="male" class="radio-custom-label">مرد</label>
-														</div>
-														<div class="mr-1">
-															<input id="female" class="radio-custom" name="gen" type="radio">
-															<label for="female" class="radio-custom-label">زن</label>
-														</div>
+                                                        <div class="id_100">
+                                                            <label class="sr-only">جنسیت</label>
+                                                            <select class="form-control" name="gender">
+                                                                <option id="male" value="male">مرد</option>
+                                                                <option id="female" value="female">زن</option>
+                                                            </select>
+                                                        </div>
 													</div>
 												</div>
 											</div>
 
+                                            <div class="col-6">
+												<!-- choose profile picture -->
+												<div class="form-group">
+													<label> تصویر پروفایل</label>
+													<input class="form-control" type="file" id="profile_pic" name="profile_pic" placeholder="تصویر پروفایل" value="">
+												</div>
+											</div>
+                                            <div class="col-6">
+												<!-- profile picture -->
+												<div class="form-group">
+{#													<img src="" alt="" width="100" height="100" id="user_pic">#}
+												</div>
+											</div>
+
 											<div class="col-12">
-											  <button class="btn btn-dark" type="submit">ذخیره تغییرات</button>
+											  <button class="btn btn-dark" onclick="updateinfo(event,this)" type="submit">ذخیره تغییرات</button>
 											</div>
 
 										</div>
@@ -130,12 +101,87 @@
 							</div>
 						</div>
                 <!-- =========================== Account Settings =================================== -->
-<script>
-$.getJSON('/api/profile/', function(data) {
-// Set form fields using received data
-$('input[name=email]').val(data.email);
-$('input[name=phone_number]').val(data.phone_number);
-$('input[name=full_name]').val(data.full_name);
-});
-</script>
+{% endblock %}
+{% block scr %}
+    <script>
+    $(document).ready(function () {
+        async function authenticate(event) {
+            event.preventDefault()
+            const response = await fetch("/api/v1/user/token/", {
+                method: "GET",
+            })
+            if (response.status === 200) {
+                $.getJSON('/api/v1/user/user-information/', function (data) {
+                     console.log('Retrieved user profile data:', data);
+                    $('input[name=first_name]').val(data.first_name);
+                    $('input[name=last_name]').val(data.last_name);
+                    $('#user_pic').attr("src", data.profile_pic);
+                    $("div.id_100 select").val(data.gender).change();
+                    $("#profile_pic").val(data.profile_pic)
+
+                    var datestr = data.birthday;
+                    var dateArr = datestr.split("-");
+                    var year = dateArr[0];
+                    var month = dateArr[1];
+                    var day = dateArr[2];
+                    $('input[name=year]').val(year);
+                    $('input[name=month]').val(month);
+                    $('input[name=day]').val(day);
+                });
+                $("#page_title").text("اطلاعات کاربر");
+                $("#current_page").text("اطلاعات کاربر");
+                $("#user_info").attr("class", "list-group-item list-group-item-action dropright-toggle active");
+            } else {
+                $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
+            }
+        }
+        authenticate(event)
+    })
+    </script>
+    <!-- ============================= Fetch API ==================================== -->
+    <script>
+
+        async function updateinfo(event, el) {
+            event.preventDefault()
+
+            var year = $("#year").val();
+            var month = $("#month").val();
+            var day = $("#day").val();
+            var dateString = year + "-" + month + "-" + day;
+
+            var form = document.getElementById("my-form");
+            var formData = new FormData(form);
+
+            formData.set("birthday", dateString);
+
+            const response = await fetch("/api/v1/user/user-information/", {
+                method: "patch",
+                body: formData,
+            });
+
+            if (response.status === 200) {
+                alert("اطلاعات با موفقیت بروزرسانی شد")
+
+               $.getJSON('/api/v1/user/user-information/', function (data) {
+                    $('input[name=first_name]').val(data.first_name);
+                    $('input[name=last_name]').val(data.last_name);
+                    $('#user_pic').attr("src", data.profile_pic);
+                    $("div.id_100 select").val(data.gender).change();
+                    $("#profile_pic").val(data.profile_pic)
+                    var datestr = data.birthday;
+                    var dateArr = datestr.split("-");
+                    var year = dateArr[0];
+                    var month = dateArr[1];
+                    var day = dateArr[2];
+
+                    $('input[name=year]').val(year);
+                    $('input[name=month]').val(month);
+                    $('input[name=day]').val(day);
+                });
+            } else {
+                alert("ثبت اطلاعات جدید با مشکل همراه شد")
+            }
+        }
+    </script>
+{#    <!-- ============================= Fetch API ==================================== -->#}
 {% endblock %}

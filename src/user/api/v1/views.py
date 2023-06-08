@@ -6,8 +6,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from user.authentication import JWTAuthentication
 import datetime
 
-from .serializers import UserInformationSerializer, UserAddressSerializer
+from .serializers import *
 from user.models import User, Address
+from order.models import Order, Cart
 
 
 class ObtainTokenView(APIView):
@@ -34,20 +35,31 @@ class UserInformation(APIView):
     serializer_class = UserInformationSerializer
 
     def get(self, request):
-        user = self.request.user
+        username = self.request.session['username']
+        user = User.objects.get(username=username)
         serializer_ = self.serializer_class(user)
         return Response(serializer_.data)
 
     def patch(self, request):
-        user = self.request.user
+        username = self.request.session['username']
+        user = User.objects.get(username=username)
         serializer_ = self.serializer_class(user, data=request.data, partial=True)
         serializer_.is_valid(raise_exception=True)
         serializer_.save()
+        user.refresh_from_db()
         return Response(serializer_.data)
 
 
-# class UserAddress(APIView):
-#     pass
+class OrdersList(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserOrderSerializer
+
+    def get(self, request):
+        username = self.request.session['username']
+        user = User.objects.get(username=username)
+        order = Order.objects.filter(cart__customer_id=user.pk)
+        serializer_ = self.serializer_class(order, many=True)
+        return Response(serializer_.data)
 
 
 class ChangePassword(APIView):
@@ -74,3 +86,6 @@ class UserAddress(APIView):
         user = User.objects.get(username=username)
         user.address.create(province=serializer_.validated_data['province'], city=serializer_.validated_data['city'], address=serializer_.validated_data['address'], postal_code=serializer_.validated_data['postal_code'])
         return Response({'status': 'ok'})
+
+    # def patch(self, request):
+    #     pass
