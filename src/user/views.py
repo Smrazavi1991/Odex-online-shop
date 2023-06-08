@@ -15,7 +15,7 @@ from .forms import RegisterUserForm, VerificationForm, SendOTPForm, Loginform
 from core.tasks import send_opt_email, send_opt_sms
 
 from .models import User
-from order.models import Order
+from order.models import Order, Cart
 
 
 class Register(View, BasicViewMixin):
@@ -106,24 +106,26 @@ class Verification(View, BasicViewMixin):
                 user = User.objects.filter(condition1 | condition2).first()
                 if user:
                     login(request, user)
-                    return redirect('Home-page')
+                    response = redirect('Home-page')
+                    request.session['username'] = user.username
+                    return response
         return render(request, 'user/register.html', {"categories": self.categories, 'form': form})
 
 
 class Profile(LoginRequiredMixin, RedirectView):
     permanent = True
-    pattern_name = "Orders list"
+    pattern_name = "User information"
     login_url = "/login/"
 
-class OrdersList(TemplateView, BasicViewMixin):
+
+class OrdersList(LoginRequiredMixin, TemplateView, BasicViewMixin):
+    login_url = "/login/"
     template_name = "user/orders-list.html"
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.categories
-        context['cart'] = self.get_user_cart(self.request, total=False)
-        context['more_info'] = self.get_user_cart(self.request, total=True)
-        context['orders'] = Order.objects.filter(cart__customer_id=self.request.user.pk)
         return context
 
 
@@ -135,19 +137,10 @@ class OrderTracking(TemplateView, BasicViewMixin):
     template_name = "user/order-tracking.html"
 
 
-class UserInformation(TemplateView, BasicViewMixin):
-    template_name = "user/user-information.html"
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UserInformation, self).dispatch(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["categories"] = self.categories
-        context['cart'] = self.get_user_cart(self.request, total=False)
-        context['more_info'] = self.get_user_cart(self.request, total=True)
-        return context
+class UserInformation(LoginRequiredMixin, View, BasicViewMixin):
+    login_url = "/login/"
+    def get(self, request):
+        return render(request, 'user/user-information.html', {"categories": self.categories})
 
 
 class UserAddress(TemplateView, BasicViewMixin):
