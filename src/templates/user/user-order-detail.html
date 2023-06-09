@@ -1,0 +1,158 @@
+{% extends "profile_page_base.html" %}
+{% load static %}
+{% block title %}جزئیات سفارش{% endblock %}
+
+{% block main_content %}
+    			<!-- =========================== My Order =================================== -->
+						<div class="col-lg-8 col-md-9">
+
+							<div class="card-body bg-white mb-4">
+								<div class="row">
+									<div class="col-6 col-lg-3">
+										<!-- Heading -->
+										<h6 class="text-muted mb-1">شماره سفارش:</h6>
+										<!-- Text -->
+										<p class="mb-lg-0 font-size-sm font-weight-bold">{{ pk }}</p>
+									</div>
+
+									<div class="col-6 col-lg-3">
+										<!-- Heading -->
+										<h6 class="text-muted mb-1">زمان ثبت سفارش:</h6>
+										<!-- Text -->
+										<p class="mb-lg-0 font-size-sm font-weight-bold">
+											<span id="order-create-date"></span>
+										</p>
+									</div>
+
+									<div class="col-6 col-lg-3">
+										<!-- Heading -->
+										<h6 class="text-muted mb-1">وضعیت:</h6>
+										<!-- Text -->
+										<p class="mb-0 font-size-sm font-weight-bold" id="order-status"></p>
+									</div>
+
+									<div class="col-6 col-lg-3">
+										<!-- Heading -->
+										<h6 class="text-muted mb-1">مجموع قیمت سفارش:</h6>
+										<!-- Text -->
+										<p class="mb-0 font-size-sm font-weight-bold" id="order-total-price"></p>
+									</div>
+
+								</div>
+							</div>
+                    <div class="card style-2 mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0" id="order-item-count">2 مورد سفارش</h4>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="table-responsive">
+								<table  id="product-of-order-table" class="table">
+									<thead>
+										<tr>
+											<th scope="col">تصویر محصول</th>
+											<th scope="col">نام محصول</th>
+											<th scope="col">تعداد</th>
+											<th scope="col">قیمت واحد</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+
+
+
+						</div>
+                    </div>
+							<!-- Shipping & Billing -->
+							<div class="card style-2">
+								<div class="card-header">
+									<h4 class="mb-0">جزئیات ارسال و صورتحساب</h4>
+								</div>
+								<div class="card-body">
+									<div class="row">
+
+										<div class="col-12 col-md-6">
+											<!-- Heading -->
+											<p class="mb-2 font-weight-bold">
+											  آدرس ارسال:
+											</p>
+
+											<p class="mb-7 mb-md-0" id="order-address">
+											</p>
+										</div>
+
+										<div class="col-12 col-md-6">
+
+											<!-- Heading -->
+											<p class="mb-2 font-weight-bold">
+											  روش ارسال:
+											</p>
+
+											<p class="mb-4 text-gray-500" id="order-shipping">
+											</p>
+
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</section>
+			<!-- =========================== My Order =================================== -->
+{% endblock %}
+{% block scr %}
+                <!-- ============================= Fetch API ==================================== -->
+    <script>
+    $(document).ready(function () {
+        function populateTable(data) {
+            const tableBody = $("#product-of-order-table tbody");
+
+    data.cart.item.forEach(i => {
+        const row = $("<tr></tr>");
+
+        row.append($("<td></td>").html(`<div class="col-4 col-md-3 col-xl-2"><a href="/product/${i.pk}/"><img id="order-product-image-${i.pk}" src="" alt="..." class="img-fluid"></a></div>`));
+        row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><a class="text-body" href="/product/${i.pk}/">${i.name}</a></p>`));
+        row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.count}</span></p>`));
+        row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.price}</span></p>`));
+        tableBody.append(row);
+    });
+}
+        function populateImage(data) {
+
+    data.cart.cart_item_pics.forEach(i => {
+        $(`#order-product-image-${i.pk}`).attr('src', `${i.image}`)
+    });
+}
+        async function authenticate(event) {
+            event.preventDefault()
+            const response = await fetch("/api/v1/user/token/", {
+                method: "GET",
+            })
+            if (response.status === 200) {
+                $.getJSON('/api/v1/user/user-order-detail/{{ pk }}/', function (data)
+                {
+                    $("#order-create-date").text(data.create_date);
+                    $("#order-status").text(data.status);
+                    $("#order-total-price").text(data.cart.total_price);
+                    $("#order-item-count").text(`${data.cart.item.length} مورد سفارش `);
+                    $("#order-address").text(`${data.cart.address.province}- ${data.cart.address.city}- ${data.cart.address.address} - کدپستی: ${data.cart.address.postal_code}`);
+                    $("#order-shipping").text(`${data.cart.shipping_method}`);
+                    populateTable(data);
+                    populateImage(data);
+                });
+                $("#page_title").text("سفارشات من");
+                $("#current_page").text("سفارشات من");
+                $("#order_list").attr("class", "list-group-item list-group-item-action dropright-toggle active");
+            } else {
+                $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
+            }
+}
+        authenticate(event)
+    })
+    </script>
+    <!-- ============================= Fetch API ==================================== -->
+{% endblock %}
