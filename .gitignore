@@ -242,8 +242,8 @@ fabric.properties
 !**/migrations
 !**/migrations/__init__.py
 
-src/media/
-!src/media/default-profile.jpg
+src/media/product_images
+src/media/user_profile_pic
 =======
 # Only for Development only
 **/migrations/**
