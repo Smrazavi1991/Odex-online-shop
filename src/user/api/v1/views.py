@@ -46,7 +46,6 @@ class UserInformation(APIView):
         serializer_ = self.serializer_class(user, data=request.data, partial=True)
         serializer_.is_valid(raise_exception=True)
         serializer_.save()
-        user.refresh_from_db()
         return Response(serializer_.data)
 
 
