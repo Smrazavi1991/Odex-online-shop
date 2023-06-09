@@ -50,7 +50,7 @@ class UserInformation(APIView):
         return Response(serializer_.data)
 
 
-class OrdersList(APIView):
+class UserOrdersList(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserOrderSerializer
 
@@ -59,6 +59,17 @@ class OrdersList(APIView):
         user = User.objects.get(username=username)
         order = Order.objects.filter(cart__customer_id=user.pk)
         serializer_ = self.serializer_class(order, many=True)
+        return Response(serializer_.data)
+
+
+class UserOrderDetail(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserOrderSerializer
+
+    def get(self, request, **kwargs):
+        order = Order.objects.get(pk=self.kwargs['pk'])
+        serializer_ = self.serializer_class(order)
+        print(serializer_.data)
         return Response(serializer_.data)
 
 
