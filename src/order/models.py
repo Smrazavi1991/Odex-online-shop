@@ -23,13 +23,13 @@ class Cart(BaseModel):
 
 class Order(BaseModel):
     statuses = [
-        ('r', 'registered'),
-        ('p', 'processing'),
-        ('s', 'sent'),
-        ('d', 'delivered')
+        ('ثبت شده', 'ثبت شده'),
+        ('در حال پردازش', 'در حال پردازش'),
+        ('ارسال شده', 'ارسال شده'),
+        ('به مقصد رسیده', 'به مقصد رسیده')
     ]
-    cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
-    status = models.CharField('Status', choices=statuses, max_length=1)
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, related_name='order')
+    status = models.CharField('Status', choices=statuses, max_length=13)
 
 
 class DiscountCoupon(BaseModel):
