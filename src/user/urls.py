@@ -5,9 +5,9 @@ from user.views import *
 
 urlpatterns = [
     path("", Profile.as_view(), name="Profile"),
-    path("orders-list/", OrdersList.as_view(), name="Orders list"),
-    path("order-detail/<int:pk>/", OrderDetail.as_view(), name="Order detail"),
-    path("order-tracking/", OrderTracking.as_view(), name="Order tracking"),
+    path("user_orders-list/", UserOrdersList.as_view(), name="User orders list"),
+    path("user-order-detail/<int:pk>/", UserOrderDetail.as_view(), name="User order detail"),
+    path("user-order-tracking/<int:pk>/", UserOrderTracking.as_view(), name="User order tracking"),
     path("user-information/", UserInformation.as_view(), name="User information"),
     path("user-address/", UserAddress.as_view(), name="User address"),
     path("change-password/", ChangePassword.as_view(), name="Change password"),
