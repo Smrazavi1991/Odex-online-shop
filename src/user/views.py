@@ -3,11 +3,10 @@ import datetime
 import redis
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.utils.decorators import method_decorator
+from django.views.generic import DetailView
 from django.views.generic.base import TemplateView, RedirectView
 from django.views import View
 from core.views import BasicViewMixin
@@ -118,10 +117,9 @@ class Profile(LoginRequiredMixin, RedirectView):
     login_url = "/login/"
 
 
-class OrdersList(LoginRequiredMixin, TemplateView, BasicViewMixin):
+class UserOrdersList(LoginRequiredMixin, TemplateView, BasicViewMixin):
     login_url = "/login/"
-    template_name = "user/orders-list.html"
-
+    template_name = "user/user-orders-list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -129,12 +127,30 @@ class OrdersList(LoginRequiredMixin, TemplateView, BasicViewMixin):
         return context
 
 
-class OrderDetail(TemplateView, BasicViewMixin):
-    template_name = "user/order-detail.html"
+class UserOrderDetail(LoginRequiredMixin, DetailView, BasicViewMixin):
+    login_url = "/login/"
+
+    def get_queryset(self):
+        return Order.objects.filter(id=self.kwargs['pk'])
+
+    template_name = "user/user-order-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        order = self.get_queryset()[0]
+        context["pk"] = order.pk
+        return context
 
 
-class OrderTracking(TemplateView, BasicViewMixin):
-    template_name = "user/order-tracking.html"
+class UserOrderTracking(LoginRequiredMixin, TemplateView, BasicViewMixin):
+    login_url = "/login/"
+    template_name = "user/user-order-tracking.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
 
 
 class UserInformation(LoginRequiredMixin, View, BasicViewMixin):
