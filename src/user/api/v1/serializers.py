@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from user.models import User, Address
 from order.models import Order, Cart
-from product.models import Product
-from core.views import ProductsViewMixin
 from django_jalali.serializers.serializerfield import JDateField
 
 
@@ -13,6 +11,14 @@ class UserInformationSerializer(serializers.ModelSerializer):
         model = User
         fields = ['first_name', 'last_name', 'birthday', 'gender', 'profile_pic']
 
+    def update(self, instance, validated_data):
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.birthday = validated_data.get('birthday', instance.birthday)
+        instance.gender = validated_data.get('gender', instance.gender)
+        instance.profile_pic = validated_data.get('profile_pic', 'default-profile.jpg')
+        instance.save()
+        return instance
 
 class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,11 +29,10 @@ class UserAddressSerializer(serializers.ModelSerializer):
 class UserCartSerializer(serializers.ModelSerializer):
     address = UserAddressSerializer(required=True)
     shipping_method = serializers.SerializerMethodField()
-    cart_item_pics = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
-        fields = ['customer', 'item', 'shipping_price', 'address', 'total_price', 'shipping_method', 'cart_item_pics']
+        fields = ['customer', 'item', 'shipping_price', 'address', 'total_price', 'shipping_method']
 
     def get_shipping_method(self, obj):
         if obj.shipping_price == "18000 تومان":
@@ -35,16 +40,6 @@ class UserCartSerializer(serializers.ModelSerializer):
         else:
             shipping_method = "ارسال معمولی (تحویل در 5 - 7 روز کاری)"
         return shipping_method
-
-    def get_cart_item_pics(self, obj):
-        print(type(obj.item))
-        for i in obj.item:
-            product = Product.objects.get(pk=i.pk)
-            if obj.item.index(i) == 0:
-                pic = ProductsViewMixin.get_pics_from_a_product_queryset(product, is_primary=True)
-            else:
-                pic.append(ProductsViewMixin.get_pics_from_a_product_queryset(product, is_primary=True))
-        return pic
 
 
 class UserOrderSerializer(serializers.ModelSerializer):
