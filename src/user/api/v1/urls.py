@@ -6,8 +6,8 @@ from django.conf import settings
 urlpatterns = [
     path('token/', ObtainTokenView.as_view(), name='token_obtain'),
     path('user-address/', UserAddress.as_view(), name='User address'),
-    path("orders-list/", OrdersList.as_view(), name="Orders List"),
-    # path("register/", Register.as_view(), name="Register"),
+    path("user-orders-list/", UserOrdersList.as_view(), name="Orders List"),
+    path("user-order-detail/<int:pk>/", UserOrderDetail.as_view(), name="User order detail"),
     # path("verification/", Verification.as_view(), name="Verification"),
     # path("login/", Login.as_view(), name="Login"),
     path("user-information/", UserInformation.as_view(), name="Profile-API"),
