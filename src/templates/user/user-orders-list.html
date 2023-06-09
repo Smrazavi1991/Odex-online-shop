@@ -34,6 +34,7 @@
     			<!-- =========================== My All Orders =================================== -->
 {% endblock %}
 {% block scr %}
+                <!-- ============================= Fetch API ==================================== -->
     <script>
     $(document).ready(function () {
         function populateTable(data) {
@@ -42,11 +43,11 @@
     data.forEach(item => {
         const row = $("<tr></tr>");
 
-        row.append($("<td></td>").html(`<a href="profile/order-detail/${item.pk}/"></a>${item.pk}`));
+        row.append($("<td></td>").html(`<a href="/profile/user-order-detail/${item.pk}/">${item.pk}</a>`));
         row.append($("<td></td>").html(`${item.create_date}`));
         row.append($("<td></td>").html(`${item.cart.total_price}`));
         row.append($("<td></td>").html(`${item.status}`));
-        row.append($("<td></td>").html(`<a href="profile/order_tracking/${item.pk}/" class="btn btn-sm btn-theme">پیگیری سفارش</a>`));
+        row.append($("<td></td>").html(`<a href="profile/user-order-tracking/${item.pk}/" class="btn btn-sm btn-theme">پیگیری سفارش</a>`));
         tableBody.append(row);
     });
 }
@@ -56,7 +57,7 @@
                 method: "GET",
             })
             if (response.status === 200) {
-                $.getJSON('/api/v1/user/orders-list/', function (data)
+                $.getJSON('/api/v1/user/user-orders-list/', function (data)
                 {
                     populateTable(data);
                 });
@@ -71,49 +72,4 @@
     })
     </script>
     <!-- ============================= Fetch API ==================================== -->
-{#    <script>#}
-{##}
-{#        async function updateinfo(event, el) {#}
-{#            event.preventDefault()#}
-{##}
-{#            var year = $("#year").val();#}
-{#            var month = $("#month").val();#}
-{#            var day = $("#day").val();#}
-{#            var dateString = year + "-" + month + "-" + day;#}
-{##}
-{#            var form = document.getElementById("my-form");#}
-{#            var formData = new FormData(form);#}
-{##}
-{#            formData.set("birthday", dateString);#}
-{##}
-{#            const response = await fetch("/api/v1/user/user-information/", {#}
-{#                method: "patch",#}
-{#                body: formData,#}
-{#            });#}
-{##}
-{#            if (response.status === 200) {#}
-{#                alert("اطلاعات با موفقیت بروزرسانی شد")#}
-{##}
-{#               $.getJSON('/api/v1/user/user-information/', function (data) {#}
-{#                    $('input[name=first_name]').val(data.first_name);#}
-{#                    $('input[name=last_name]').val(data.last_name);#}
-{#                    $('#user_pic').attr("src", data.profile_pic);#}
-{#                    $("div.id_100 select").val(data.gender).change();#}
-{#                    $("#profile_pic").val(data.profile_pic)#}
-{#                    var datestr = data.birthday;#}
-{#                    var dateArr = datestr.split("-");#}
-{#                    var year = dateArr[0];#}
-{#                    var month = dateArr[1];#}
-{#                    var day = dateArr[2];#}
-{##}
-{#                    $('input[name=year]').val(year);#}
-{#                    $('input[name=month]').val(month);#}
-{#                    $('input[name=day]').val(day);#}
-{#                });#}
-{#            } else {#}
-{#                alert("ثبت اطلاعات جدید با مشکل همراه شد")#}
-{#            }#}
-{#        }#}
-{#    </script>#}
-{#    <!-- ============================= Fetch API ==================================== -->#}
 {% endblock %}
