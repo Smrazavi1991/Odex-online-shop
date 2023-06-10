@@ -26,7 +26,7 @@ def categories_cascade_deactivation_check():
 def auth(self, request):
     # Extract the JWT from the cookie
     jwt_token = request.COOKIES.get("token", None)
-    if jwt_token is None:
+    if not jwt_token:
         return None
 
     # Decode the JWT and verify its signature
@@ -39,8 +39,8 @@ def auth(self, request):
 
     # Get the user from the database
     username_ = payload.get('user_identifier')
-    if username_ is None:
-        raise AuthenticationFailed('User identifier not found in JWT')
+    if not username_:
+        raise AuthenticationFailed('User information not found in JWT')
 
     user = User.objects.filter(username=username_).first()
     if user is None:

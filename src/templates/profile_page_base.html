@@ -10,12 +10,12 @@
 
 						<div class="col-lg-12 col-md-12 col-sm-12">
 							<div class="text-center">
-								<h2 class="breadcrumbs_title">{% block section_title%}{% endblock %}</h2>
+								<h2 class="breadcrumbs_title" id="page_title"></h2>
 								<nav aria-label="breadcrumb">
 								  <ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="#"><i class="ti-home"></i></a></li>
+									<li class="breadcrumb-item"><a href="{% url 'Home-page' %}"><i class="ti-home"></i></a></li>
 									<li class="breadcrumb-item"><a href="#">پروفایل کاربری</a></li>
-									<li class="breadcrumb-item active" aria-current="page">{% block this_section_title%}{% endblock %}</li>
+									<li class="breadcrumb-item active" id="current_page" aria-current="page"></li>
 								  </ol>
 								</nav>
 							</div>
@@ -35,19 +35,19 @@
 						<div class="col-lg-4 col-md-3">
 							<nav class="dashboard-nav mb-10 mb-md-0">
 							  <div class="list-group list-group-sm list-group-strong list-group-flush-x">
-								<a class={% block sidebar-class-orders-list %}"list-group-item list-group-item-action dropright-toggle"{% endblock %} href="/profile/orders-list/">
+								<a class="list-group-item list-group-item-action dropright-toggle" id="order_list" href="/profile/user_orders-list/">
 								  سفارشات من
 								</a>
-								<a class={% block sidebar-class-user-information %}"list-group-item list-group-item-action dropright-toggle" {% endblock %} href="/profile/user-information" onclick="go_user_info(event, this)">
+								<a class="list-group-item list-group-item-action dropright-toggle" id="user_info" href="/profile/user-information">
 								  اطلاعات کاربر
 								</a>
-								<a class={% block sidebar-class-user-address %}"list-group-item list-group-item-action dropright-toggle" {% endblock %} href="/profile/user-address" onclick="go_user_address(event, this)">
+								<a class="list-group-item list-group-item-action dropright-toggle" id="user_addr" href="/profile/user-address">
 								  آدرس ها
 								</a>
-								<a class={% block sidebar-class-change-password %}"list-group-item list-group-item-action dropright-toggle"{% endblock %} href="/profile/change-password/">
+								<a class="list-group-item list-group-item-action dropright-toggle" id="change_pass" href="/profile/change-password/">
 								  تغییر رمز عبور
 								</a>
-								<a class={% block sidebar-class-logout %}"list-group-item list-group-item-action dropright-toggle"{% endblock %} href="/profile/logout/">
+								<a class="list-group-item list-group-item-action dropright-toggle" href="/profile/logout/">
 								  خروج
 								</a>
 							  </div>
@@ -58,26 +58,4 @@
 					</div>
 				</div>
 			</section>
-
-        <!-- ============================= Fetch API ==================================== -->
-            <script>
-
-        async function go_user_info(event, el) {
-            event.preventDefault()
-
-            const response = await fetch("/api/v1/user/token/", {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-
-            if (response.status === 200){
-                window.location.replace("/profile/user-information/")
-            } else {
-               alert("Invalid Input")
-            }
-        }
-        </script>
-    <!-- ============================= Fetch API ==================================== -->
 {% endblock %}

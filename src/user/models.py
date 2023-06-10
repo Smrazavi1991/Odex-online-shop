@@ -22,8 +22,8 @@ class Address(BaseModel):
 
 class User(AbstractUser):
     genders = [
-        ('m', 'male'),
-        ('f', 'female')
+        ('male', 'male'),
+        ('female', 'female')
     ]
 
     phone_regex = RegexValidator(regex=r'^(09)\d{9}$', message="Phone number must be entered in the format: "
@@ -32,8 +32,8 @@ class User(AbstractUser):
     email = models.EmailField('Email Address', unique=True)
     phone = models.CharField('Phone', max_length=11, unique=True, validators=[phone_regex])
     birthday = jmodels.jDateField('Birth Date', null=True, blank=True)
-    gender = models.CharField('Gender', choices=genders, max_length=1, null=True, blank=True)
-    profile_pic = models.ImageField('Profile Picture', null=True, upload_to='user_profile_pic', blank=True)
+    gender = models.CharField('Gender', choices=genders, max_length=6, null=True, blank=True)
+    profile_pic = models.ImageField('Profile Picture', null=True, upload_to='user_profile_pic', default="default-profile.jpg")
     phone_verified = models.BooleanField('Phone Verified', default=False)
     address = models.ManyToManyField(Address, blank=True)
     date_joined = jmodels.jDateTimeField(_("date joined"), auto_now_add=True)

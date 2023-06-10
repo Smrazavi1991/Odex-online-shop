@@ -95,7 +95,7 @@
                                         {% else %}
 										<li><a href="{%  url 'Register' %}"><i class="ti-user"></i></a></li>
                                         {% endif %}
-										<li><a href="javascript:void(0);" onclick="openRightMenu()"><i class="ti-shopping-cart"></i>{% if more_info.total_count %}<span class="cart_counter">{{ more_info.total_count }}</span>{% endif %}</a></li>
+										<li><a href="{% url 'Cart' %}"><i class="ti-shopping-cart"></i></a></li>
 									</ul>
 								</div>
 								<div class="collapse" id="mySearch">
@@ -317,48 +317,6 @@
 					</div>
 				</div>
 			</footer>
-			<!-- ============================ Footer End ================================== -->
-
-
-			<!-- cart -->
-			<!-- Switcher Start -->
-			<div class="w3-ch-sideBar w3-bar-block w3-card-2 w3-animate-right" style="display:none;left:0;" id="rightMenu">
-				<div class="rightMenu-scroll">
-					<h4 class="cart_heading">سبد خرید شما</h4>
-					<button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large"><i class="ti-close"></i></button>
-					<div class="right-ch-sideBar" id="side-scroll">
-                        {%  if cart|length != 0 %}
-						<div class="cart_select_items">
-                            {% for product in cart %}
-							<!-- Single Item -->
-							<div class="cart_selected_single">
-								<div class="cart_selected_single_thumb">
-									<a href="/product/{{ product.pk }}/"><img src={{ product.image }} class="img-fluid" alt="" /></a>
-								</div>
-								<div class="cart_selected_single_caption">
-									<h4 class="product_title">{{ product.name }} × {{ product.count }}</h4>
-									<span class="numberof_item">{{ product.price }} تومان</span>
-									<button type="submit" id="remove"  name={{ product.pk }} formmethod="post" onclick="remove_from_cart(event,this)" class="btn-go-cart btn-theme">حذف</button>
-								</div>
-							</div>
-                            {% endfor %}
-                            {% endif %}
-						</div>
-
-						<div class="cart_subtotal">
-							<h6>جمع کل<span class="theme-cl">{{ more_info.total_price }} تومان</span></h6>
-						</div>
-
-						<div class="cart_action">
-							<ul>
-								<li><a href="#" class="btn btn-go-cart btn-theme">مشاهده / ویرایش سبد خرید</a></li>
-							</ul>
-						</div>
-
-					</div>
-				</div>
-			</div>
-			<!-- cart -->
 
     <!-- ============================= Fetch API ==================================== -->
             <script>
@@ -366,15 +324,13 @@
         async function remove_from_cart(event, el) {
             event.preventDefault()
 
-            const pk = document.querySelector('#remove');
-
             const response = await fetch("/api/v1/cart/remove_from_cart/", {
                 method: el.formMethod,
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    pk: pk.getAttribute('name')
+                    pk: el.name
                 })
             })
 
@@ -405,14 +361,6 @@
 		<script src="{% static "assets/js/jQuery.style.switcher.js" %}"></script>
 		<script src="{% static "assets/js/custom.js" %}"></script>
 
-		<script>
-			function openRightMenu() {
-				document.getElementById("rightMenu").style.display = "block";
-			}
-			function closeRightMenu() {
-				document.getElementById("rightMenu").style.display = "none";
-			}
-		</script>
 		<!-- ============================================================== -->
 		<!-- This page plugins -->
 		<!-- ============================================================== -->
@@ -456,3 +404,4 @@
   };
 })();
 </script>
+{% block scr %}{% endblock %}

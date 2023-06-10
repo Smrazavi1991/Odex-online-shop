@@ -1,14 +1,14 @@
-from django.urls import path, include
-from rest_framework_simplejwt import views as jwt_views
+from django.urls import path
 from user.api.v1.views import *
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
     path('token/', ObtainTokenView.as_view(), name='token_obtain'),
-    # path('otptoken/', ObtaintTokenOTPView.as_view(), name='token_obtain_otp'),
-    # path("obtaintoken/", ObtainToken.as_view(), name="Obtain Token"),
-    # path("register/", Register.as_view(), name="Register"),
+    path('user-address/', UserAddress.as_view(), name='User address'),
+    path("user-orders-list/", UserOrdersList.as_view(), name="Orders List"),
+    path("user-order-detail/<int:pk>/", UserOrderDetail.as_view(), name="User order detail"),
+    path("user-order-pics/<int:pk>/", UserOrderPics.as_view(), name="User order pics"),
     # path("verification/", Verification.as_view(), name="Verification"),
     # path("login/", Login.as_view(), name="Login"),
     path("user-information/", UserInformation.as_view(), name="Profile-API"),

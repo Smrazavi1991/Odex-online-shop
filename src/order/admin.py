@@ -4,8 +4,8 @@ from .models import *
 
 # Register your models here.
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'item', 'shipping_price', 'customer_name', 'last_change', 'is_deleted')
-    search_fields = ("item", )
+    list_display = ('id', 'item', 'shipping_price', 'customer_name', 'last_change', 'is_deleted', 'address', 'total_price')
+    search_fields = ("item", "customer_name", "address")
 
 
 class OrderAdmin(admin.ModelAdmin):

@@ -1,0 +1,85 @@
+{% extends "landing_page_base.html" %}
+
+{% block title %}سفارش ثبت شد{% endblock %}
+
+{%  block content %}
+    			<!-- =========================== Breadcrumbs =================================== -->
+			<div class="breadcrumbs_wrap dark">
+				<div class="container">
+					<div class="row align-items-center">
+
+						<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="text-center">
+								<h2 class="breadcrumbs_title">سفارش ثبت شد</h2>
+								<nav aria-label="breadcrumb">
+								  <ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="{% url 'Home-page' %}"><i class="ti-home"></i></a></li>
+									<li class="breadcrumb-item"><a href="/cart/">سبد خرید</a></li>
+									<li class="breadcrumb-item" aria-current="page">نهایی سازی سفارش</li>
+									<li class="breadcrumb-item active" aria-current="page">سفارش ثبت شد</li>
+								  </ol>
+								</nav>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- =========================== Breadcrumbs =================================== -->
+			<!-- =========================== Add To Cart =================================== -->
+			<section>
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-lg-10 col-md-12 col-sm-12">
+
+							<div class="card py-3 mt-sm-3">
+							  <div class="card-body text-center">
+								<h2 class="pb-2">مبارکه! بابت انتخاب فروشگاه ما از شما متشکریم</h2>
+								<p class="font-size-sm mb-2">سفارش شما ثبت شده است و در اسرع وقت رسیدگی می شود.</p>
+								<p class="font-size-sm">همکاران ما به زودی درمورد نحوه پرداخت با شما تماس خواهند گرفت.<u>اکنون می توانید:</u></p><a class="btn btn-secondary mt-3 ml-3" href="/">بازگشت به خانه</a><a class="btn btn-primary mt-3" href="order-tracking.html"><i class="czi-location"></i>&nbsp;مشاهده سفارشات</a>
+							  </div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- =========================== Add To Cart =================================== -->
+{% endblock %}
+{% block scr %}
+            <!-- ============================= Fetch API ==================================== -->
+    <script>
+    $(document).ready(function () {
+        async function load_data_from_local(event) {
+            event.preventDefault()
+
+            const response = await fetch("/api/v1/cart/submit-order/", {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    shipping_price: localStorage.getItem("shipping_price"),
+                    total_price: localStorage.getItem("total_price"),
+                    address_id: localStorage.getItem("address_id"),
+                }),
+            })
+        }
+
+        async function authenticate(event) {
+            event.preventDefault()
+            const response = await fetch("/api/v1/user/token/", {
+                method: "GET",
+            });
+            if (response.status === 200) {
+                load_data_from_local(event)
+                localStorage.clear()
+            } else {
+                $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
+            }
+        }
+        authenticate(event)
+    })
+    </script>
+    <!-- ============================= Fetch API ==================================== -->
+{% endblock %}

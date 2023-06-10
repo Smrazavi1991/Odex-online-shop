@@ -1,7 +1,6 @@
 from django.db.models import Q
 
 from product.models import Category, ProductImage
-from core.utils import auth
 
 
 # Create your views here.
@@ -15,7 +14,7 @@ class BasicViewMixin:
     @staticmethod
     def get_user_cart(request, total: False):
         cart = request.COOKIES.get("cart", None)
-        if cart is None:
+        if not cart:
             return None
         else:
             product_list = []
@@ -25,7 +24,14 @@ class BasicViewMixin:
             for product in range(len(temp)):
                 products = eval(temp[product])
                 products['name'] = products['name'].decode('utf-8')
-                total_price += int(products['price'])
+                condition1 = Q(product_id=products['pk'])
+                condition2 = Q(is_primary=True)
+                product_image = ProductImage.objects.filter(condition1 & condition2).first()
+                if product_image:
+                    products['image'] = product_image.image
+                else:
+                    products['image'] = None
+                total_price += int(products['price']) * products['count']
                 if len(temp_name_count) == 0:
                     temp_name_count = {int(products['pk']): products['count']}
                     product_list.append(products)

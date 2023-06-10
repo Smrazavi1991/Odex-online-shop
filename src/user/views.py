@@ -3,10 +3,10 @@ import datetime
 import redis
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.utils.decorators import method_decorator
+from django.views.generic import DetailView
 from django.views.generic.base import TemplateView, RedirectView
 from django.views import View
 from core.views import BasicViewMixin
@@ -14,7 +14,7 @@ from .forms import RegisterUserForm, VerificationForm, SendOTPForm, Loginform
 from core.tasks import send_opt_email, send_opt_sms
 
 from .models import User
-from order.models import Order
+from order.models import Order, Cart
 
 
 class Register(View, BasicViewMixin):
@@ -42,7 +42,9 @@ class Login(View, BasicViewMixin):
             user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password'))
             if user:
                 login(request, user)
-                return redirect('Home-page')
+                response = redirect('Home-page')
+                request.session['username'] = form.cleaned_data.get('username')
+                return response
         return render(request, 'user/login.html', {"categories": self.categories, 'form': form})
 
 
@@ -76,8 +78,8 @@ class OtpLogin(View, BasicViewMixin):
                     expiry_minutes = 1
 
             if user:
-                expires = datetime.datetime.now() + datetime.timedelta(minutes=expiry_minutes)
-                expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S")
+                expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=expiry_minutes)
+                expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT")
                 response.set_cookie("user_email_or_phone", form.cleaned_data['mail_phone'], expires=expires_string)
                 return response
 
@@ -103,48 +105,58 @@ class Verification(View, BasicViewMixin):
                 user = User.objects.filter(condition1 | condition2).first()
                 if user:
                     login(request, user)
-                    return redirect('Home-page')
+                    response = redirect('Home-page')
+                    request.session['username'] = user.username
+                    return response
         return render(request, 'user/register.html', {"categories": self.categories, 'form': form})
 
 
-class Profile(RedirectView):
+class Profile(LoginRequiredMixin, RedirectView):
     permanent = True
-    pattern_name = "Orders list"
+    pattern_name = "User information"
+    login_url = "/login/"
 
 
-class OrdersList(TemplateView, BasicViewMixin):
-    template_name = "user/orders-list.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["categories"] = self.categories
-        context['cart'] = self.get_user_cart(self.request, total=False)
-        context['more_info'] = self.get_user_cart(self.request, total=True)
-        context['orders'] = Order.objects.filter(cart__customer_id=self.request.user.pk)
-        return context
-
-
-class OrderDetail(TemplateView, BasicViewMixin):
-    template_name = "user/order-detail.html"
-
-
-class OrderTracking(TemplateView, BasicViewMixin):
-    template_name = "user/order-tracking.html"
-
-
-class UserInformation(TemplateView, BasicViewMixin):
-    template_name = "user/user-information.html"
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UserInformation, self).dispatch(*args, **kwargs)
+class UserOrdersList(LoginRequiredMixin, TemplateView, BasicViewMixin):
+    login_url = "/login/"
+    template_name = "user/user-orders-list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.categories
-        context['cart'] = self.get_user_cart(self.request, total=False)
-        context['more_info'] = self.get_user_cart(self.request, total=True)
         return context
+
+
+class UserOrderDetail(LoginRequiredMixin, DetailView, BasicViewMixin):
+    login_url = "/login/"
+
+    def get_queryset(self):
+        return Order.objects.filter(id=self.kwargs['pk'])
+
+    template_name = "user/user-order-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        order = self.get_queryset()[0]
+        context["pk"] = order.pk
+        return context
+
+
+class UserOrderTracking(LoginRequiredMixin, TemplateView, BasicViewMixin):
+    login_url = "/login/"
+    template_name = "user/user-order-tracking.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
+
+
+class UserInformation(LoginRequiredMixin, View, BasicViewMixin):
+    login_url = "/login/"
+    def get(self, request):
+        return render(request, 'user/user-information.html', {"categories": self.categories})
 
 
 class UserAddress(TemplateView, BasicViewMixin):

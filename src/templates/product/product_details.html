@@ -198,7 +198,7 @@
 																	<div class="review-info">
 																		<div class="review-comment">
 																			<div class="review-author">
-                                                                                {{ product_comment.owner }} در پاسخ به {{ product_comment.reply.owner }}
+                                                                                {{ product_comment.owner }}{% if product_comment.reply %} در پاسخ به {{ product_comment.reply.owner }}{% endif %}
 																			</div>
 																		</div>
 																	</div>
@@ -207,8 +207,8 @@
 															</div>
 														</div>
 													</li>
+                                                {% endfor %}
                                                 </ul>
-                                                    {% endfor %}
 
 										<div class="review-wrapper">
 											<div class="review-wrapper-header">
@@ -241,8 +241,7 @@
 				</div>
 			</section>
 			<!-- =========================== Product Detail =================================== -->
-
-    <!-- ============================= Fetch API ==================================== -->
+            <!-- ============================= Fetch API ==================================== -->
             <script>
 
         async function add_to_cart(event, el) {
@@ -258,17 +257,15 @@
                     name: "{{ object.name }}",
                     price: {{ object.price }},
                     discounted_price: document.getElementById('price').innerHTML,
-                    image: "{{ product_primary_picture.image }}",
                 })
             })
 
             if (response.status === 200){
-                window.location.replace("")
+                alert("کالا به سبد خرید اضافه شد.")
             } else {
-               alert("Invalid Input")
+               alert("در پروسه ثبت خرید مشکلی رخ داده است.")
             }
         }
         </script>
     <!-- ============================= Fetch API ==================================== -->
-
 {% endblock %}
