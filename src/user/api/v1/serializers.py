@@ -49,3 +49,8 @@ class UserOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['pk', 'create_date', 'cart', 'status']
+
+
+class UserOrderPicsSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    image = serializers.ImageField()
