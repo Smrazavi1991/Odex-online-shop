@@ -8,8 +8,9 @@ import datetime
 
 from .serializers import *
 from user.models import User, Address
-from order.models import Order, Cart
-
+from order.models import Order
+from product.models import Product
+from core.views import ProductsViewMixin
 
 class ObtainTokenView(APIView):
     permission_classes = [AllowAny]
@@ -68,6 +69,24 @@ class UserOrderDetail(APIView):
     def get(self, request, **kwargs):
         order = Order.objects.get(pk=self.kwargs['pk'])
         serializer_ = self.serializer_class(order)
+        return Response(serializer_.data)
+
+
+class UserOrderPics(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserOrderPicsSerializer
+
+    def get(self, request, **kwargs):
+        order = Order.objects.get(pk=self.kwargs['pk'])
+        items = order.cart.item
+        for i in items:
+            product = Product.objects.filter(pk=i['pk'])
+            if items.index(i) == 0:
+                pic = ProductsViewMixin.get_pics_from_a_product_queryset(product, is_primary=True)
+            else:
+                temp = ProductsViewMixin.get_pics_from_a_product_queryset(product, is_primary=True)
+                pic.append(temp[0])
+        serializer_ = self.serializer_class(pic, many=True)
         print(serializer_.data)
         return Response(serializer_.data)
 
