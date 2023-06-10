@@ -114,7 +114,7 @@
     data.cart.item.forEach(i => {
         const row = $("<tr></tr>");
 
-        row.append($("<td></td>").html(`<div class="col-4 col-md-3 col-xl-2"><a href="/product/${i.pk}/"><img id="order-product-image-${i.pk}" src="" alt="..." class="img-fluid"></a></div>`));
+        row.append($("<td></td>").html(`<div class="tbl_cart_product_thumb"><a id=${i.pk} href="/product/${i.pk}/"><img id="order-product-image-${i.pk}" src="" alt="..." class="img-fluid"></a></div>`));
         row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><a class="text-body" href="/product/${i.pk}/">${i.name}</a></p>`));
         row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.count}</span></p>`));
         row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.price}</span></p>`));
@@ -123,8 +123,8 @@
 }
         function populateImage(data) {
 
-    data.cart.cart_item_pics.forEach(i => {
-        $(`#order-product-image-${i.pk}`).attr('src', `${i.image}`)
+    data.forEach(item => {
+        $(`#${item.id}`).html(`<img id="order-product-image-${item.id}" src="${item.image}" alt="..." class="img-fluid">`);
     });
 }
         async function authenticate(event) {
@@ -142,6 +142,9 @@
                     $("#order-address").text(`${data.cart.address.province}- ${data.cart.address.city}- ${data.cart.address.address} - کدپستی: ${data.cart.address.postal_code}`);
                     $("#order-shipping").text(`${data.cart.shipping_method}`);
                     populateTable(data);
+                });
+                $.getJSON('/api/v1/user/user-order-pics/{{ pk }}/', function (data)
+                {
                     populateImage(data);
                 });
                 $("#page_title").text("سفارشات من");
