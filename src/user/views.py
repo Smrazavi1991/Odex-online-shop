@@ -17,6 +17,33 @@ from .models import User
 from order.models import Order, Cart
 
 
+class ContactUs(TemplateView, BasicViewMixin):
+    template_name = "contact-us.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
+
+
+class Faq(TemplateView, BasicViewMixin):
+    template_name = "faq.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
+
+
+class AboutUs(TemplateView, BasicViewMixin):
+    template_name = "about-us.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
+
+
 class Register(View, BasicViewMixin):
 
     def get(self, request):
