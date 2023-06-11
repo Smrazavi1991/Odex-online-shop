@@ -117,7 +117,7 @@
         row.append($("<td></td>").html(`<div class="tbl_cart_product_thumb"><a id=${i.pk} href="/product/${i.pk}/"><img id="order-product-image-${i.pk}" src="" alt="..." class="img-fluid"></a></div>`));
         row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><a class="text-body" href="/product/${i.pk}/">${i.name}</a></p>`));
         row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.count}</span></p>`));
-        row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.price}</span></p>`));
+        row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.price} تومان</span></p>`));
         tableBody.append(row);
     });
 }
