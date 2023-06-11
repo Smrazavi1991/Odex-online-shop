@@ -69,9 +69,9 @@
                             {% for product in object_list %}
                             <div class="col-lg-4 col-md-4 col-sm-6">
                                 <div class="woo_product_grid">
-                                    {% if category.discount_is_active == True and category.discount %}
+                                    {% if category.discount_is_active == True %}
                                     <span class="woo_pr_tag hot">ویژه</span>
-                                    {% elif product.discount_is_active == True and product.discount %}
+                                    {% elif product.discount_is_active == True %}
                                     <span class="woo_pr_tag hot">ویژه</span>
                                     {% endif %}
                                     <div class="woo_product_thumb">
