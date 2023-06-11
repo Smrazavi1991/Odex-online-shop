@@ -9,6 +9,7 @@ from .serializers import *
 from ...models import DiscountCoupon, Cart, Order
 from user.models import User
 from core.views import BasicViewMixin
+from product.models import Product
 
 
 class AddToCartView(APIView):
@@ -173,6 +174,9 @@ class SubmitOrder(APIView, BasicViewMixin):
 
         item = self.get_user_cart(self.request, total=False)
         for product in item:
+            p = Product.objects.get(pk=product['pk'])
+            p.count -= 1
+            p.save()
             del product['image']
 
         serializer_ = self.serializer_class(data=request.data)
@@ -184,7 +188,7 @@ class SubmitOrder(APIView, BasicViewMixin):
         cart = Cart(customer=user, item=item, shipping_price=shipping_price, address_id=address_id, total_price=total_price)
         cart.save()
 
-        status = 'r'
+        status = 'ثبت شده'
 
         order = Order(cart=cart, status=status)
         order.save()
