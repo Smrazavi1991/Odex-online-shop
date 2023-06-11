@@ -1,5 +1,5 @@
 {% extends "landing_page_base.html" %}
-
+{% load static %}
 {% block title %}سبد خرید{% endblock %}
 
 {%  block content %}
@@ -55,7 +55,7 @@
 								<div class="card-body">
 									<ul class="list-group list-group-sm list-group-flush-y list-group-flush-x">
 										<li class="list-group-item d-flex">
-											<span><h5>جمع کل</h5></span> <span id="total_price" class="mr-auto font-size-sm">89000 تومان</span>
+											<span><h5>جمع کل</h5></span> <span id="total_price" class="mr-auto font-size-sm">0 تومان</span>
 										</li>
 										<li class="list-group-item font-size-sm text-center text-gray-500">
 											هزینه ارسال در بررسی محاسبه می شود *
@@ -80,7 +80,7 @@
     data.forEach(item => {
         const row = $("<tr></tr>");
 
-        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
+        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="${item.image}" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
         row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
         row.append($("<td></td>").html(`<input id=${item.pk} type="number" class="form-control tbl_quan" value=${item.count} />`));
         row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
@@ -91,6 +91,7 @@
     $.getJSON('/api/v1/cart/update-cart/', function (data)
     {
         populateTable(data);
+        $(`#null`).attr(`src`,`{% static "No_Image_Available.jpg" %}`);
     });
     $.getJSON('/api/v1/cart/get-total-price/', function (data)
     {
@@ -115,7 +116,7 @@
             })
 
             if (response.status === 200){
-                alert("removed successfully")
+                alert("کالا با موفقیت از سبد خرید حذف گردید.")
                 $.getJSON("/api/v1/cart/update-cart/", function (data)
             {
                 $("#product-table tbody").empty()
@@ -124,19 +125,20 @@
     data.forEach(item => {
         const row = $("<tr></tr>");
 
-        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
+        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="${item.image}" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
         row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
         row.append($("<td></td>").html(`<input id=${item.pk} type="number" class="form-control tbl_quan" value=${item.count} />`));
         row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
         tableBody.append(row);
             });
             });
+            $(`#null`).attr(`src`,`{% static "No_Image_Available.jpg" %}`);
             $.getJSON('/api/v1/cart/get-total-price/', function (data)
     {
     $("#total_price").text(`${data.total_price} تومان`);
     })
             } else {
-               alert("Invalid Input")
+               alert("حذف کالا با موفقیت انجام نشد.")
             }
         }
         </script>
@@ -165,7 +167,7 @@
             })
 
             if (response.status === 200){
-                alert("updated successfully")
+                alert("تغییرات با موفقیت ثبت شد")
                 $.getJSON('/api/v1/cart/update-cart/', function (data)
             {
                 $("#product-table tbody").empty()
@@ -174,19 +176,20 @@
     data.forEach(item => {
         const row = $("<tr></tr>");
 
-        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="item_image" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
+        row.append($("<td></td>").html(`<div class="tbl_cart_product"><div class="tbl_cart_product_thumb"><img id="${item.image}" src="${item.image}" class="img-fluid" alt="${item.name}"/></div><div class="tbl_cart_product_caption"><h5 id="item_name" class="tbl_pr_title">${item.name}</h5></div></div>`));
         row.append($("<td></td>").html(`<h4 id="item_price" class="tbl_org_price">${item.price} تومان</h4>`));
         row.append($("<td></td>").html(`<input id=${item.pk} type="number" class="form-control tbl_quan" value=${item.count} />`));
         row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/cart/remove-from-cart/" id="${item.pk}" onclick="removeproduct(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div><div class="tbl_pr_action"><a href="/api/v1/cart/update-cart/" id="${item.pk}" onclick="updatecount(event,this)" class="tbl_remove"><i class="ti-reload"></i></a></div>`));
         tableBody.append(row);
             });
             });
+            $(`#null`).attr(`src`,`{% static "No_Image_Available.jpg" %}`);
             $.getJSON('/api/v1/cart/get-total-price/', function (data)
     {
     $("#total_price").text(`${data.total_price} تومان`);
     })
             } else {
-               alert("Invalid Input")
+               alert("ثبت تغییرات با مشکل مواجه شد.")
             }
         }
         </script>
