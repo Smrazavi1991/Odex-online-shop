@@ -6,9 +6,7 @@ from .models import Product, Category, ProductComment
 
 # Create your views here.
 class Home(ListView, BasicViewMixin, ProductsViewMixin):
-    condition1 = Q(discount_is_active=True)
-    condition2 = Q(discount=True)
-    queryset = Product.objects.filter(condition1 & condition2)
+    queryset = Product.objects.filter(discount_is_active=True)
     template_name = "product/home_page.html"
 
     def get_context_data(self, **kwargs):
