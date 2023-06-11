@@ -87,7 +87,6 @@ class UserOrderPics(APIView):
                 temp = ProductsViewMixin.get_pics_from_a_product_queryset(product, is_primary=True)
                 pic.append(temp[0])
         serializer_ = self.serializer_class(pic, many=True)
-        print(serializer_.data)
         return Response(serializer_.data)
 
 
