@@ -170,13 +170,18 @@ class UserOrderDetail(LoginRequiredMixin, DetailView, BasicViewMixin):
         return context
 
 
-class UserOrderTracking(LoginRequiredMixin, TemplateView, BasicViewMixin):
+class UserOrderTracking(LoginRequiredMixin, DetailView, BasicViewMixin):
     login_url = "/login/"
     template_name = "user/user-order-tracking.html"
+
+    def get_queryset(self):
+        return Order.objects.filter(id=self.kwargs['pk'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.categories
+        order = self.get_queryset()[0]
+        context["pk"] = order.pk
         return context
 
 
