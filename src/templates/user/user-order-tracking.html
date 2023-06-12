@@ -1,6 +1,10 @@
 {% extends "profile_page_base.html" %}
 {% load static %}
 {% block title %}وضعیت سفارش{% endblock %}
+{% block route %}
+    <li class="breadcrumb-item"><a href="{% url 'Profile' %}">پروفایل کاربری</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'User orders list' %}">سفارشات من</a></li>
+{% endblock %}
 
 {% block main_content %}
     					<!-- =========================== Add To Cart =================================== -->
@@ -8,14 +12,11 @@
 							<div class="checked-shop">
 
 								<div class="row">
-									<div class="col-lg-4 col-md-4 col-sm-12">
-										<div class="ship_status_box"><span class="text-bold ml-2">ارسال از طریق:</span>پست ویژه</div>
+									<div class="col-lg-7 col-md-4 col-sm-12">
+										<div class="ship_status_box" id="order-shipping-method"><span class="text-bold ml-2">ارسال از طریق:</span></div>
 									</div>
-									<div class="col-lg-4 col-md-4 col-sm-12">
-										<div class="ship_status_box" id="order-status"><span class="text-bold ml-2">وضعیت:</span></div>
-									</div>
-									<div class="col-lg-4 col-md-4 col-sm-12">
-										<div class="ship_status_box" id="order-date-registered"><span class="text-bold ml-2">تاریخ ثبت سفارش:</span></div>
+									<div class="col-lg-5 col-md-4 col-sm-12">
+										<div class="ship_status_box" id="order-deliver-date"><span class="text-bold ml-2">تاریخ حدودی تحویل:</span></div>
 									</div>
 								</div>
 
@@ -35,18 +36,7 @@
 											</li>
 
 											<!-- Single List -->
-											<li class="processing">
-												<div class="trach_single_list">
-													<div class="trach_icon_list"><i class="ti-package"></i></div>
-													<div class="track_list_caption">
-														<h4 class="mb-0">سفارش تأیید شد</h4>
-														<p>سفارش شما تأیید شده است.</p>
-													</div>
-												</div>
-											</li>
-
-											<!-- Single List -->
-											<li>
+											<li id="proccessing">
 												<div class="trach_single_list">
 													<div class="trach_icon_list"><i class="ti-thumb-up"></i></div>
 													<div class="track_list_caption">
@@ -57,12 +47,12 @@
 											</li>
 
 											<!-- Single List -->
-											<li>
+											<li id="ready-to-send">
 												<div class="trach_single_list">
 													<div class="trach_icon_list"><i class="ti-gift"></i></div>
 													<div class="track_list_caption">
-														<h4 class="mb-0">آماده ارسال</h4>
-														<p>سفارش شما برای ارسال آماده است.</p>
+														<h4 class="mb-0">ارسال شد</h4>
+														<p>سفارش شما ارسال شد.</p>
 													</div>
 												</div>
 											</li>
@@ -79,25 +69,6 @@
                 <!-- ============================= Fetch API ==================================== -->
     <script>
     $(document).ready(function () {
-        function populateTable(data) {
-            const tableBody = $("#product-of-order-table tbody");
-
-    data.cart.item.forEach(i => {
-        const row = $("<tr></tr>");
-
-        row.append($("<td></td>").html(`<div class="tbl_cart_product_thumb"><a id=${i.pk} href="/product/${i.pk}/"><img id="order-product-image-${i.pk}" src="" alt="..." class="img-fluid"></a></div>`));
-        row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><a class="text-body" href="/product/${i.pk}/">${i.name}</a></p>`));
-        row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.count}</span></p>`));
-        row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.price}</span></p>`));
-        tableBody.append(row);
-    });
-}
-        function populateImage(data) {
-
-    data.forEach(item => {
-        $(`#${item.id}`).html(`<img id="order-product-image-${item.id}" src="${item.image}" alt="..." class="img-fluid">`);
-    });
-}
         async function authenticate(event) {
             event.preventDefault()
             const response = await fetch("/api/v1/user/token/", {
@@ -106,20 +77,17 @@
             if (response.status === 200) {
                 $.getJSON('/api/v1/user/user-order-detail/{{ pk }}/', function (data)
                 {
-                    $("#order-status").html(`<span class="text-bold ml-2">وضعیت:</span>${data.status}`);
-                    $("#order-date-registered").html(`<span class="text-bold ml-2">تاریخ ثبت سفارش:</span>${data.create_date}`);
-                    $("#order-total-price").text(data.cart.total_price);
-                    $("#order-item-count").text(`${data.cart.item.length} مورد سفارش `);
-                    $("#order-address").text(`${data.cart.address.province}- ${data.cart.address.city}- ${data.cart.address.address} - کدپستی: ${data.cart.address.postal_code}`);
-                    $("#order-shipping").text(`${data.cart.shipping_method}`);
-                    populateTable(data);
+                    $("#order-deliver-date").html(`<span dir="rtl" class="text-bold ml-2">تاریخ حدودی تحویل:</span>${data.cart.deliver_time}`);
+                    $("#order-shipping-method").html(`<span class="text-bold ml-2">ارسال از طریق:</span>${data.cart.shipping_method}`);
+                    $("#page_title").text(`رهگیری سفارش شماره ${data.pk}`);
+                    if (`${data.status}` === "در حال پردازش") {
+                        $("#proccessing").addClass("processing");
+                    } else if (`${data.status}` === "آماده ارسال") {
+                        $("#proccessing").addClass("complete");
+                        $("#ready-to-send").addClass("complete");
+                    }
                 });
-                $.getJSON('/api/v1/user/user-order-pics/{{ pk }}/', function (data)
-                {
-                    populateImage(data);
-                });
-                $("#page_title").text("سفارشات من");
-                $("#current_page").text("سفارشات من");
+                $("#current_page").text("رهگیری سفارش");
                 $("#order_list").attr("class", "list-group-item list-group-item-action dropright-toggle active");
             } else {
                 $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
