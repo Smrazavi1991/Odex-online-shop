@@ -319,28 +319,28 @@
 			</footer>
 
     <!-- ============================= Fetch API ==================================== -->
-            <script>
-
-        async function remove_from_cart(event, el) {
-            event.preventDefault()
-
-            const response = await fetch("/api/v1/cart/remove_from_cart/", {
-                method: el.formMethod,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    pk: el.name
-                })
-            })
-
-            if (response.status === 200){
-                window.location.replace("")
-            } else {
-               alert("Invalid Input")
-            }
-        }
-        </script>
+{#            <script>#}
+{##}
+        {#async function remove_from_cart(event, el) {#}
+        {#    event.preventDefault()#}
+        {##}
+        {#    const response = await fetch("/api/v1/cart/remove_from_cart/", {#}
+        {#        method: el.formMethod,#}
+        {#        headers: {#}
+        {#            'Content-Type': 'application/json'#}
+        {#        },#}
+        {#        body: JSON.stringify({#}
+        {#            pk: el.name#}
+        {#        })#}
+        {#    })#}
+        {##}
+        {#    if (response.status === 200){#}
+        {#        window.location.replace("")#}
+        {#    } else {#}
+        {#       alert("Invalid Input")#}
+        {#    }#}
+        {#}#}
+        {#</script>#}
     <!-- ============================= Fetch API ==================================== -->
 
 		<!-- ============================================================== -->
