@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework import serializers
 from user.models import User, Address
 from order.models import Order, Cart
@@ -29,10 +31,11 @@ class UserAddressSerializer(serializers.ModelSerializer):
 class UserCartSerializer(serializers.ModelSerializer):
     address = UserAddressSerializer(required=True)
     shipping_method = serializers.SerializerMethodField()
+    deliver_time = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
-        fields = ['customer', 'item', 'shipping_price', 'address', 'total_price', 'shipping_method']
+        fields = ['customer', 'item', 'shipping_price', 'address', 'total_price', 'create_date', 'shipping_method', 'deliver_time']
 
     def get_shipping_method(self, obj):
         if obj.shipping_price == "18000 تومان":
@@ -40,6 +43,16 @@ class UserCartSerializer(serializers.ModelSerializer):
         else:
             shipping_method = "ارسال معمولی (تحویل در 5 - 7 روز کاری)"
         return shipping_method
+
+    def get_deliver_time(self, obj):
+        if obj.shipping_price == "18000 تومان":
+            deliver_time = obj.create_date + datetime.timedelta(days=5)
+            time_string = deliver_time.strftime("%Y-%m-%d")
+        else:
+            deliver_time = obj.create_date + datetime.timedelta(days=7)
+            time_string = deliver_time.strftime("%Y-%m-%d")
+        return time_string
+
 
 
 class UserOrderSerializer(serializers.ModelSerializer):
