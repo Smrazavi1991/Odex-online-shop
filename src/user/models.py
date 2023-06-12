@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import AbstractUser
 from core.models import BaseModel
 from django.db import models
@@ -31,9 +33,9 @@ class User(AbstractUser):
 
     email = models.EmailField('Email Address', unique=True)
     phone = models.CharField('Phone', max_length=11, unique=True, validators=[phone_regex])
-    birthday = jmodels.jDateField('Birth Date', null=True, blank=True)
+    birthday = jmodels.jDateField('Birth Date', default=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc))
     gender = models.CharField('Gender', choices=genders, max_length=6, null=True, blank=True)
-    profile_pic = models.ImageField('Profile Picture', null=True, upload_to='user_profile_pic', default="default-profile.jpg")
+    profile_pic = models.ImageField('Profile Picture', upload_to='user_profile_pic', default="default-profile.jpg")
     phone_verified = models.BooleanField('Phone Verified', default=False)
     address = models.ManyToManyField(Address, blank=True)
     date_joined = jmodels.jDateTimeField(_("date joined"), auto_now_add=True)

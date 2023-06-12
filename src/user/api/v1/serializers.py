@@ -16,7 +16,7 @@ class UserInformationSerializer(serializers.ModelSerializer):
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.birthday = validated_data.get('birthday', instance.birthday)
         instance.gender = validated_data.get('gender', instance.gender)
-        instance.profile_pic = validated_data.get('profile_pic', 'default-profile.jpg')
+        instance.profile_pic = validated_data.get('profile_pic', instance.profile_pic)
         instance.save()
         return instance
 
