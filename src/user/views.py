@@ -187,19 +187,18 @@ class UserOrderTracking(LoginRequiredMixin, DetailView, BasicViewMixin):
 
 class UserInformation(LoginRequiredMixin, View, BasicViewMixin):
     login_url = "/login/"
+
     def get(self, request):
         return render(request, 'user/user-information.html', {"categories": self.categories})
 
 
-class UserAddress(TemplateView, BasicViewMixin):
+class UserAddress(LoginRequiredMixin, TemplateView, BasicViewMixin):
     template_name = "user/user_address.html"
+    login_url = "/login/"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.categories
-        context['cart'] = self.get_user_cart(self.request, total=False)
-        context['more_info'] = self.get_user_cart(self.request, total=True)
-        context['orders'] = Order.objects.filter(cart__customer_id=self.request.user.pk)
         return context
 
 
