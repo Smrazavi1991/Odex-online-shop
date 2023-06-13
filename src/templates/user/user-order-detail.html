@@ -1,7 +1,10 @@
 {% extends "profile_page_base.html" %}
 {% load static %}
 {% block title %}جزئیات سفارش{% endblock %}
-
+{% block route %}
+    <li class="breadcrumb-item"><a href="{% url 'Profile' %}">پروفایل کاربری</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'User orders list' %}">سفارشات من</a></li>
+{% endblock %}
 {% block main_content %}
     			<!-- =========================== My Order =================================== -->
 						<div class="col-lg-8 col-md-9">
@@ -108,13 +111,13 @@
                 <!-- ============================= Fetch API ==================================== -->
     <script>
     $(document).ready(function () {
-        function populateTable(data) {
+        async function populateTable(data) {
             const tableBody = $("#product-of-order-table tbody");
 
     data.cart.item.forEach(i => {
         const row = $("<tr></tr>");
 
-        row.append($("<td></td>").html(`<div class="tbl_cart_product_thumb"><a id=${i.pk} href="/product/${i.pk}/"><img id="order-product-image-${i.pk}" src="" alt="..." class="img-fluid"></a></div>`));
+        row.append($("<td></td>").html(`<div class="tbl_cart_product_thumb"><a href="/product/${i.pk}/"><img id="img-${i.pk}" src="" alt="..." class="img-fluid"></a></div>`));
         row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><a class="text-body" href="/product/${i.pk}/">${i.name}</a></p>`));
         row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.count}</span></p>`));
         row.append($("<td></td>").html(`<p class="mb-2 font-size-sm font-weight-bold"><span class="theme-cl">${i.price} تومان</span></p>`));
@@ -124,7 +127,7 @@
         function populateImage(data) {
 
     data.forEach(item => {
-        $(`#${item.id}`).html(`<img id="order-product-image-${item.id}" src="${item.image}" alt="..." class="img-fluid">`);
+        $(`#img-${item.id}`).attr(`src`, item.image == null?`{% static "No_Image_Available.jpg" %}`:item.image);
     });
 }
         async function authenticate(event) {
@@ -141,14 +144,16 @@
                     $("#order-item-count").text(`${data.cart.item.length} مورد سفارش `);
                     $("#order-address").text(`${data.cart.address.province}- ${data.cart.address.city}- ${data.cart.address.address} - کدپستی: ${data.cart.address.postal_code}`);
                     $("#order-shipping").text(`${data.cart.shipping_method}`);
-                    populateTable(data);
-                });
-                $.getJSON('/api/v1/user/user-order-pics/{{ pk }}/', function (data)
+                    $("#page_title").text(`جزئیات سفارش شماره ${data.pk}`);
+                    populateTable(data).then(()=>{
+                    $.getJSON('/api/v1/user/user-order-pics/{{ pk }}/', function (data)
                 {
                     populateImage(data);
                 });
-                $("#page_title").text("سفارشات من");
-                $("#current_page").text("سفارشات من");
+                    })
+                });
+
+                $("#current_page").text("جزئیات سفارش");
                 $("#order_list").attr("class", "list-group-item list-group-item-action dropright-toggle active");
             } else {
                 $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
