@@ -1,5 +1,6 @@
 import datetime
 
+from rest_framework.status import HTTP_406_NOT_ACCEPTABLE
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -79,9 +80,12 @@ class UpdateCart(APIView, BasicViewMixin):
 
     def get(self, request):
         cart = self.get_user_cart(self.request, total=False)
-        serializer_ = self.serializer_class(data=cart, many=True)
-        serializer_.is_valid(raise_exception=True)
-        return Response(serializer_.data)
+        if cart:
+            serializer_ = self.serializer_class(data=cart, many=True)
+            serializer_.is_valid(raise_exception=True)
+            return Response(serializer_.data)
+        else:
+            return Response({'cart': 'empty'})
 
     def patch(self, request):
         serializer_ = self.serializer_class(data=request.data, partial=True)
@@ -89,13 +93,16 @@ class UpdateCart(APIView, BasicViewMixin):
 
         pk = serializer_.validated_data['pk']
         count = serializer_.validated_data['count']
-        print(pk, type(pk), count, type(count))
         cart = self.get_user_cart(self.request, total=False)
         temp_str = ''
         for product in cart:
             product['image'] = ""
             if product['pk'] == pk:
-                product['count'] = count
+                c = Product.objects.get(pk=pk)
+                if c.count >= count:
+                    product['count'] = count
+                else:
+                    return Response({'error': 'count'}, status=HTTP_406_NOT_ACCEPTABLE)
             product['name'] = product['name'].encode('utf-8')
             if len(temp_str) == 0:
                 temp_str = f'{product}'
@@ -116,9 +123,12 @@ class CalculateTotal(APIView, BasicViewMixin):
 
     def get(self, request):
         totals = self.get_user_cart(self.request, total=True)
-        serializer_ = self.serializer_class(data=totals)
-        serializer_.is_valid(raise_exception=True)
-        return Response(serializer_.data)
+        if totals:
+            serializer_ = self.serializer_class(data=totals)
+            serializer_.is_valid(raise_exception=True)
+            return Response(serializer_.data)
+        else:
+            return Response({'cart': 'empty'})
 
 
 class CalculateDiscount(APIView, BasicViewMixin):
