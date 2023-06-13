@@ -94,7 +94,11 @@
 
 								<div class="woo_btn_action">
 									<div class="col-12 col-lg-auto">
+                                        {% if object.count >= 1 %}
 										<button type="submit" formmethod="post" onclick="add_to_cart(event, this)" class="btn btn-block btn-dark mb-2">افزودن به سبد خرید <i class="ti-shopping-cart-full mr-2"></i></button>
+                                        {% else %}
+                                        <button class="btn btn-block btn-dark mb-2">در انبار موجود نیست </button>
+                                        {% endif %}
 									</div>
 								</div>
 
@@ -210,6 +214,8 @@
 
             if (response.status === 200){
                 alert("کالا به سبد خرید اضافه شد.")
+            } else if (response.status === 406) {
+               alert("این کالا  موجود نیست")
             } else {
                alert("در پروسه ثبت خرید مشکلی رخ داده است.")
             }

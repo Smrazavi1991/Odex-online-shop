@@ -24,25 +24,28 @@ class AddToCartView(APIView):
         pk = serializer.validated_data.get('pk')
         name = serializer.validated_data.get('name')
         price = serializer.validated_data.get('price')
-        discounted_price = serializer.validated_data.get('discounted_price')
-        if discounted_price != "None":
-            temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': discounted_price, 'count': 1}
+        product = Product.objects.get(pk=pk)
+        if product.count > 0:
+            discounted_price = serializer.validated_data.get('discounted_price')
+            if discounted_price != "None":
+                temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': discounted_price, 'count': 1}
+            else:
+                temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': price, 'count': 1}
+
+            cart = request.COOKIES.get('cart', None)
+            if not cart:
+                cart = f'{temp_dict}'
+            else:
+                cart += f';{temp_dict}'
+
+            response = Response({'cart': 'ok'})
+            expires = datetime.datetime.now() + datetime.timedelta(weeks=999)
+            expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S")
+            response.set_cookie("cart", cart, expires=expires_string)
+
+            return response
         else:
-            temp_dict = {'pk': pk, 'name': name.encode('utf-8'), 'price': price, 'count': 1}
-
-        cart = request.COOKIES.get('cart', None)
-        if not cart:
-            cart = f'{temp_dict}'
-        else:
-            cart += f';{temp_dict}'
-
-        response = Response({'cart': 'ok'})
-        expires = datetime.datetime.now() + datetime.timedelta(weeks=999)
-        expires_string = expires.strftime("%a, %d-%b-%Y %H:%M:%S")
-        response.set_cookie("cart", cart, expires=expires_string)
-
-        return response
-
+            return Response({'product': 'not enough'}, status=HTTP_406_NOT_ACCEPTABLE)
 
 class RemoveFromCartView(APIView, BasicViewMixin):
     permission_classes = [AllowAny]
