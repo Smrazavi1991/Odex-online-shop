@@ -1,5 +1,6 @@
 from django.db.models import Q
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -115,5 +116,10 @@ class UserAddress(APIView):
         user.address.create(province=serializer_.validated_data['province'], city=serializer_.validated_data['city'], address=serializer_.validated_data['address'], postal_code=serializer_.validated_data['postal_code'])
         return Response({'status': 'ok'})
 
-    # def patch(self, request):
-    #     pass
+
+class RemoveAddress(APIView):
+    permission_classes = [IsAuthenticated]
+    def delete(self, request, **kwargs):
+        address_object = get_object_or_404(Address, pk=self.kwargs['pk'])
+        address_object.delete()
+        return Response({'status': 'ok'})
