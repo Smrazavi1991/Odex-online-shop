@@ -56,7 +56,7 @@
 								<div class="woo_pr_price">
 									<div class="woo_pr_offer_price">
 										{%  for discount in discounted_price %}
-                                            <p id="price" hidden="hidden">{{ discount.price|intcomma }}</p>
+                                            <p id="price" hidden="hidden">{{ discount.price }}</p>
                                             {% if discount.id == product.id %}
                                             {% if discount.price == None %}
                                             <h3>{{ product.price|intcomma }} تومان</h3>
