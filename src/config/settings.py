@@ -183,11 +183,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Maktab 89 Django Final project',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    # 'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny', 'rest_framework.permissions.IsAuthenticated'],
-    # 'SECURITY': [
-    #     {'jwtAuth': []}
-    # ],
-    # 'AUTHENTICATION_EXTENSIONS': [
-    #     'config.extensions.JWTAuthenticationExtension',
-    # ],
+    'EXTENSIONS': [
+        'config.extensions.JWTAuthenticationExtension.OpenApiAuthenticationExtension',
+    ],
 }
