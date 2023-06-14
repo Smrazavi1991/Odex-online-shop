@@ -22,7 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = "django-insecure-g#t0h6k(-us(r(l6tqvern#7vki8g8&@%oq&f!tf^bqm2w(=u+"
 SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -47,7 +46,7 @@ INSTALLED_APPS = [
     "user",
     "rest_framework",
     "rest_framework_simplejwt",
-    "drf_yasg"
+    "drf_spectacular"
 ]
 
 MIDDLEWARE = [
@@ -170,10 +169,25 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'user.authentication.JWTAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(weeks=999),
     'AUTH_HEADER_TYPES': ("JWT",),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Odex shop Project API',
+    'DESCRIPTION': 'Maktab 89 Django Final project',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # 'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny', 'rest_framework.permissions.IsAuthenticated'],
+    # 'SECURITY': [
+    #     {'jwtAuth': []}
+    # ],
+    # 'AUTHENTICATION_EXTENSIONS': [
+    #     'config.extensions.JWTAuthenticationExtension',
+    # ],
 }
