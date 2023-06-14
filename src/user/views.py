@@ -202,8 +202,14 @@ class UserAddress(LoginRequiredMixin, TemplateView, BasicViewMixin):
         return context
 
 
-class ChangePassword(TemplateView, BasicViewMixin):
+class ChangePassword(LoginRequiredMixin, TemplateView, BasicViewMixin):
     template_name = "user/change-password.html"
+    login_url = "/login/"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
 
 
 class Logout(View, BasicViewMixin):
