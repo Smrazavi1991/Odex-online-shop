@@ -309,10 +309,14 @@
         async function dump_data_to_local(event, el) {
             event.preventDefault()
 
-            localStorage.setItem("shipping_price", $("#shipping_price").text());
-            localStorage.setItem("total_price", $("#final_price").text());
-            localStorage.setItem("address_id", $("input[name='address']:checked").val());
-            window.location.replace("/order-confirmation/")
+            if ($("input[name='address']:checked").val() === undefined) {
+                alert("لطفا یک آدرس برای ارسال سفارش مشخص بفرمایید.")
+            } else {
+                localStorage.setItem("shipping_price", $("#shipping_price").text());
+                localStorage.setItem("total_price", $("#final_price").text());
+                localStorage.setItem("address_id", $("input[name='address']:checked").val());
+                window.location.replace(el.href)
+            }
         }
         </script>
     <!-- ============================= Fetch API ==================================== -->
