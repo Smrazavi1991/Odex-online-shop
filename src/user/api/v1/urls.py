@@ -10,6 +10,6 @@ urlpatterns = [
     path("user-orders-list/", UserOrdersList.as_view(), name="Orders List"),
     path("user-order-detail/<int:pk>/", UserOrderDetail.as_view(), name="User order detail"),
     path("user-order-pics/<int:pk>/", UserOrderPics.as_view(), name="User order pics"),
-    # path("verification/", Verification.as_view(), name="Verification"),
+    path("change-password/", ChangePassword.as_view(), name="Change password"),
     path("user-information/", UserInformation.as_view(), name="Profile-API"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
