@@ -142,5 +142,6 @@ class RemoveAddress(APIView):
 
     def delete(self, request, **kwargs):
         address_object = get_object_or_404(Address, pk=self.kwargs['pk'])
-        address_object.delete()
+        address_object.is_deleted = True
+        address_object.save()
         return Response({'status': 'ok'})
