@@ -22,6 +22,7 @@ class UserInformationSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
@@ -35,16 +36,17 @@ class UserCartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['customer', 'item', 'shipping_price', 'address', 'total_price', 'create_date', 'shipping_method', 'deliver_time']
+        fields = ['customer', 'item', 'shipping_price', 'address', 'total_price', 'create_date', 'shipping_method',
+                  'deliver_time']
 
-    def get_shipping_method(self, obj):
+    def get_shipping_method(self, obj) -> str:
         if obj.shipping_price == "18000 تومان":
             shipping_method = "ارسال اکسپرس (تحویل در 3 - 5 روز کاری)"
         else:
             shipping_method = "ارسال معمولی (تحویل در 5 - 7 روز کاری)"
         return shipping_method
 
-    def get_deliver_time(self, obj):
+    def get_deliver_time(self, obj) -> str:
         if obj.shipping_price == "18000 تومان":
             deliver_time = obj.create_date + datetime.timedelta(days=5)
             time_string = deliver_time.strftime("%Y-%m-%d")
@@ -52,7 +54,6 @@ class UserCartSerializer(serializers.ModelSerializer):
             deliver_time = obj.create_date + datetime.timedelta(days=7)
             time_string = deliver_time.strftime("%Y-%m-%d")
         return time_string
-
 
 
 class UserOrderSerializer(serializers.ModelSerializer):
@@ -67,3 +68,8 @@ class UserOrderSerializer(serializers.ModelSerializer):
 class UserOrderPicsSerializer(serializers.Serializer):
     id = serializers.CharField()
     image = serializers.ImageField()
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    oldpassword = serializers.CharField(max_length=128)
+    newpassword = serializers.CharField(max_length=128)
