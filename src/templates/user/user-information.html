@@ -117,16 +117,17 @@
                     $('input[name=last_name]').val(data.last_name);
                     $('#user_pic').attr("src", data.profile_pic);
                     $("div.id_100 select").val(data.gender).change();
-                    $("#profile_pic").val(data.profile_pic)
 
                     var datestr = data.birthday;
                     var dateArr = datestr.split("-");
                     var year = dateArr[0];
                     var month = dateArr[1];
                     var day = dateArr[2];
-                    $('input[name=year]').val(year);
-                    $('input[name=month]').val(month);
-                    $('input[name=day]').val(day);
+
+                    $('#year').val(year);
+                    $('#month').val(month);
+                    $('#day').val(day);
+                    $("#profile_pic").val(data.profile_pic);
                 });
                 $("#page_title").text("اطلاعات کاربر");
                 $("#current_page").text("اطلاعات کاربر");
@@ -167,7 +168,7 @@
                     $('input[name=last_name]').val(data.last_name);
                     $('#user_pic').attr("src", data.profile_pic);
                     $("div.id_100 select").val(data.gender).change();
-                    $("#profile_pic").val(data.profile_pic)
+                    $("#profile_pic").val(data.profile_pic);
                     var datestr = data.birthday;
                     var dateArr = datestr.split("-");
                     var year = dateArr[0];

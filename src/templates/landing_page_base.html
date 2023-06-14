@@ -89,7 +89,7 @@
 							<div class="col-lg-3 col-md-3 col-sm-5 col-5">
 								<div class="general_head_right">
 									<ul>
-										<li><a data-toggle="collapse" href="#mySearch" role="button" aria-expanded="false" aria-controls="mySearch"><i class="ti-search"></i></a></li>
+{#										<li><a data-toggle="collapse" href="#mySearch" role="button" aria-expanded="false" aria-controls="mySearch"><i class="ti-search"></i></a></li>#}
 										{% if user.is_authenticated %}
                                         <li><a href="{%  url 'Profile' %}"><i class="ti-user"></i></a></li>
                                         {% else %}
@@ -258,8 +258,8 @@
 								<div class="footer_widget">
 									<h4 class="widget_title">اودکس شاپ</h4>
 									<ul class="footer-menu">
-										<li><a href="#">درباره ما</a></li>
-										<li><a href="#">ارتباط با ما</a></li>
+										<li><a href="{% url 'About us' %}">درباره ما</a></li>
+										<li><a href="{% url 'Contact us' %}">ارتباط با ما</a></li>
 										<li><a href="#">اعتماد الکترونیکی</a></li>
 										<li><a href="#">چرا اودکس شاپ</a></li>
 									</ul>
@@ -287,7 +287,7 @@
 										<li><a href="#">شرایط</a></li>
 										<li><a href="#">حریم خصوصی</a></li>
 										<li><a href="#">وبلاگ</a></li>
-										<li><a href="#">سوالات متداول</a></li>
+										<li><a href="{% url 'Faq' %}">سوالات متداول</a></li>
 									</ul>
 								</div>
 							</div>
@@ -319,28 +319,28 @@
 			</footer>
 
     <!-- ============================= Fetch API ==================================== -->
-            <script>
-
-        async function remove_from_cart(event, el) {
-            event.preventDefault()
-
-            const response = await fetch("/api/v1/cart/remove_from_cart/", {
-                method: el.formMethod,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    pk: el.name
-                })
-            })
-
-            if (response.status === 200){
-                window.location.replace("")
-            } else {
-               alert("Invalid Input")
-            }
-        }
-        </script>
+{#            <script>#}
+{##}
+        {#async function remove_from_cart(event, el) {#}
+        {#    event.preventDefault()#}
+        {##}
+        {#    const response = await fetch("/api/v1/cart/remove_from_cart/", {#}
+        {#        method: el.formMethod,#}
+        {#        headers: {#}
+        {#            'Content-Type': 'application/json'#}
+        {#        },#}
+        {#        body: JSON.stringify({#}
+        {#            pk: el.name#}
+        {#        })#}
+        {#    })#}
+        {##}
+        {#    if (response.status === 200){#}
+        {#        window.location.replace("")#}
+        {#    } else {#}
+        {#       alert("Invalid Input")#}
+        {#    }#}
+        {#}#}
+        {#</script>#}
     <!-- ============================= Fetch API ==================================== -->
 
 		<!-- ============================================================== -->

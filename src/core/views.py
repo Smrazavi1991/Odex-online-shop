@@ -94,11 +94,12 @@ class ProductsViewMixin:
         price_after_discount = []
         _ = 0
         for product in queryset:
+            _ = 0
             temp_dict = {}
 
-            if product.discount:
+            if product.discount_is_active:
                 if product.discount.amount_of_percentage_discount:
-                    _ = product.price * (product.discount.amount_of_percentage_discount / 100)
+                    _ = int(product.price * (product.discount.amount_of_percentage_discount / 100))
                 else:
                     _ = product.discount.amount_of_non_percentage_discount
 
@@ -106,7 +107,7 @@ class ProductsViewMixin:
             for category in categories:
                 if category.discount_is_active:
                     if category.discount.amount_of_percentage_discount:
-                        _ += product.price_after_discount * (category.discount.amount_of_percentage_discount / 100)
+                        _ += int(product.price_after_discount * (category.discount.amount_of_percentage_discount / 100))
                     else:
                         _ += product.discount.amount_of_non_percentage_discount
             temp_dict.setdefault("id", product.id)

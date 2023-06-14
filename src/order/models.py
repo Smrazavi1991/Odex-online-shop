@@ -25,8 +25,7 @@ class Order(BaseModel):
     statuses = [
         ('ثبت شده', 'ثبت شده'),
         ('در حال پردازش', 'در حال پردازش'),
-        ('ارسال شده', 'ارسال شده'),
-        ('به مقصد رسیده', 'به مقصد رسیده')
+        ('آماده ارسال', 'آماده ارسال')
     ]
     cart = models.OneToOneField(Cart, on_delete=models.CASCADE, related_name='order')
     status = models.CharField('Status', choices=statuses, max_length=13)

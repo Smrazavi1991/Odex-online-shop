@@ -17,7 +17,7 @@ class UpdateCartSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=100)
     price = serializers.IntegerField()
     count = serializers.IntegerField()
-    image = serializers.ImageField()
+    image = serializers.ImageField(allow_null=True)
 
 
 class CalculateTotalSerializer(serializers.Serializer):

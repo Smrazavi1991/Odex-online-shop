@@ -1,133 +1,100 @@
 {% extends "profile_page_base.html" %}
 {% load static %}
+{% block title %}وضعیت سفارش{% endblock %}
+{% block route %}
+    <li class="breadcrumb-item"><a href="{% url 'Profile' %}">پروفایل کاربری</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'User orders list' %}">سفارشات من</a></li>
+{% endblock %}
 
-{% block title %}پروفایل{% endblock %}
-
-{% block section_title %}اطلاعات کاربر{% endblock %}
-{% block this_section_title %}اطلاعات کاربر{% endblock %}
-
-{% block sidebar-class-orders-tracking %}"list-group-item list-group-item-action dropright-toggle active"{% endblock %}
-{% block sidebar %}
-    			<!-- =========================== Account Settings =================================== -->
-
+{% block main_content %}
+    					<!-- =========================== Add To Cart =================================== -->
 						<div class="col-lg-8 col-md-9">
-							<!-- Total Items -->
-							<div class="card style-2">
-								<div class="card-header">
-									<h4 class="mb-0">اطلاعات کاربر</h4>
+							<div class="checked-shop">
+
+								<div class="row">
+									<div class="col-lg-7 col-md-4 col-sm-12">
+										<div class="ship_status_box" id="order-shipping-method"><span class="text-bold ml-2">ارسال از طریق:</span></div>
+									</div>
+									<div class="col-lg-5 col-md-4 col-sm-12">
+										<div class="ship_status_box" id="order-deliver-date"><span class="text-bold ml-2">تاریخ حدودی تحویل:</span></div>
+									</div>
 								</div>
-								<div class="card-body">
-									<form class="submit-page">
-										<div class="row">
 
-											<div class="col-12 col-md-6">
-											  <!-- Email -->
-											  <div class="form-group">
-												<label>نام *</label>
-												<input class="form-control" type="text" placeholder="نام *" value="بهمن" required="">
-											  </div>
+								<div class="row">
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<ul class="track_order_list mt-4">
 
-											</div>
-
-											<div class="col-12 col-md-6">
-											  <!-- Last Name -->
-											  <div class="form-group">
-												<label>نام خانوادگی *</label>
-												<input class="form-control" type="text" placeholder="نام خانوادگی *" value="سیدی" required="">
-											  </div>
-
-											</div>
-
-											<div class="col-12">
-												<!-- Email -->
-												<div class="form-group">
-													<label> آدرس ایمیل *</label>
-													<input class="form-control" type="email" placeholder="آدرس ایمیل *" value="demo@gmail.com" required="">
-												</div>
-											</div>
-
-											<div class="col-12 col-md-6">
-												<!-- Password -->
-												<div class="form-group">
-													<label>رمز عبور فعلی *</label>
-													<input class="form-control" type="password" placeholder="رمز عبور فعلی *" required="">
-												</div>
-											</div>
-
-											<div class="col-12 col-md-6">
-												<!-- Password -->
-												<div class="form-group">
-													<label>رمز عبور جدید *</label>
-													<input class="form-control" type="password" placeholder="رمز عبور جدید *" required="">
-												</div>
-											</div>
-
-											<div class="col-12 col-lg-6">
-												<!-- Birthday -->
-												<div class="form-group">
-
-													<label>تاریخ تولد</label>
-													<div class="row">
-														<div class="col-auto">
-															<!-- Date -->
-															<label class="sr-only">روز</label>
-															<select class="form-control">
-															  <option>10</option>
-															  <option>11</option>
-															  <option selected="">12</option>
-															</select>
-														</div>
-
-														<div class="col">
-															<!-- Date -->
-															<label class="sr-only">ماه</label>
-															<select class="form-control">
-															  <option>فروردین</option>
-															  <option>اردیبهشت</option>
-															  <option selected="">خرداد</option>
-															</select>
-														</div>
-
-														<div class="col-auto">
-															<!-- Date -->
-															<label class="sr-only">سال</label>
-															<select class="form-control">
-															  <option>1370</option>
-															  <option selected="">1369</option>
-															  <option>1368</option>
-															</select>
-														</div>
-
+											<!-- Single List -->
+											<li class="complete">
+												<div class="trach_single_list">
+													<div class="trach_icon_list"><i class="ti-write"></i></div>
+													<div class="track_list_caption">
+														<h4 class="mb-0">سفارش ثبت شد</h4>
+														<p>ما سفارش شما را دریافت کرده ایم</p>
 													</div>
 												</div>
+											</li>
 
-											</div>
-
-											<div class="col-12 col-lg-6">
-												<!-- Gender -->
-												<div class="form-group mb-8">
-													<label>جنسیت</label>
-													<div class="btn-group-toggle mt-2 d-flex bd-highlight">
-														<div class="ml-2">
-															<input id="male" class="radio-custom" name="gen" type="radio">
-															<label for="male" class="radio-custom-label">مرد</label>
-														</div>
-														<div class="mr-1">
-															<input id="female" class="radio-custom" name="gen" type="radio">
-															<label for="female" class="radio-custom-label">زن</label>
-														</div>
+											<!-- Single List -->
+											<li id="proccessing">
+												<div class="trach_single_list">
+													<div class="trach_icon_list"><i class="ti-thumb-up"></i></div>
+													<div class="track_list_caption">
+														<h4 class="mb-0">سفارش پردازش شد</h4>
+														<p>ما در حال آماده سازی سفارش شما هستیم.</p>
 													</div>
 												</div>
-											</div>
+											</li>
 
-											<div class="col-12">
-											  <button class="btn btn-dark" type="submit">ذخیره تغییرات</button>
-											</div>
+											<!-- Single List -->
+											<li id="ready-to-send">
+												<div class="trach_single_list">
+													<div class="trach_icon_list"><i class="ti-gift"></i></div>
+													<div class="track_list_caption">
+														<h4 class="mb-0">ارسال شد</h4>
+														<p>سفارش شما ارسال شد.</p>
+													</div>
+												</div>
+											</li>
 
-										</div>
-									</form>
+										</ul>
+									</div>
 								</div>
+
 							</div>
-						</div>
-                <!-- =========================== Account Settings =================================== -->
+                        </div>
+			<!-- =========================== Add To Cart =================================== -->
+{% endblock %}
+{% block scr %}
+                <!-- ============================= Fetch API ==================================== -->
+    <script>
+    $(document).ready(function () {
+        async function authenticate(event) {
+            event.preventDefault()
+            const response = await fetch("/api/v1/user/token/", {
+                method: "GET",
+            })
+            if (response.status === 200) {
+                $.getJSON('/api/v1/user/user-order-detail/{{ pk }}/', function (data)
+                {
+                    $("#order-deliver-date").html(`<span dir="rtl" class="text-bold ml-2">تاریخ حدودی تحویل:</span>${data.cart.deliver_time}`);
+                    $("#order-shipping-method").html(`<span class="text-bold ml-2">ارسال از طریق:</span>${data.cart.shipping_method}`);
+                    $("#page_title").text(`رهگیری سفارش شماره ${data.pk}`);
+                    if (`${data.status}` === "در حال پردازش") {
+                        $("#proccessing").addClass("processing");
+                    } else if (`${data.status}` === "آماده ارسال") {
+                        $("#proccessing").addClass("complete");
+                        $("#ready-to-send").addClass("complete");
+                    }
+                });
+                $("#current_page").text("رهگیری سفارش");
+                $("#order_list").attr("class", "list-group-item list-group-item-action dropright-toggle active");
+            } else {
+                $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
+            }
+}
+        authenticate(event)
+    })
+    </script>
+    <!-- ============================= Fetch API ==================================== -->
 {% endblock %}

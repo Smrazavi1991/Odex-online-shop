@@ -1,50 +1,206 @@
 {% extends "profile_page_base.html" %}
 {% load static %}
 
-{% block title %}سفارشات من{% endblock %}
+{% block title %}آدرس های کاربر{% endblock %}
 
-{% block section_title %}سفارشات من{% endblock %}
-{% block this_section_title %}سفارشات من{% endblock %}
-
-{% block sidebar-class-orders-list %}"list-group-item list-group-item-action dropright-toggle active"{% endblock %}
 {% block main_content %}
-    			<!-- =========================== My All Orders =================================== -->
-    						<div class="col-lg-8 col-md-9">
+    <!-- =========================== Account Settings =================================== -->
 
-							<!-- Order Items -->
+						<div id="page" class="col-lg-8 col-md-9">
+							<!-- Total Items -->
 							<div class="card style-2">
 								<div class="card-header">
-									<h4 class="mb-0">سفارشات من</h4>
+									<h4 class="mb-0">آدرس های کاربر</h4>
 								</div>
 								<div class="card-body">
-									<div class="table-responsive">
-										<table class="table">
-											<thead>
-												<tr>
-													<th scope="col">شماره سفارش</th>
-													<th scope="col">تاریخ ارسال</th>
-													<th scope="col">قیمت</th>
-													<th scope="col">وضعیت</th>
-													<th scope="col">پیگیری</th>
-												</tr>
-											</thead>
-											<tbody>
-                                                {% for order in orders %}
-												<tr>
-													<th scope="row"></th>
-													<td><a href="profile/order-detail/{{ order.pk }}/"></a>{{ order.pk }}</td>
-													<td>{{ order.create_date }}</td>
-													<td>{{ order.cart.get_total_price }}</td>
-													<td>{{ order.status }}</td>
-													<td><a href="profile/order_tracking/{{order.pk }}" class="btn btn-sm btn-theme">پیگیری سفارش</a></td>
-												</tr>
-                                                {% endfor %}
-											</tbody>
-										</table>
+								<form action="/api/v1/user/user-address/" method="post" onsubmit="createaddress(event, this)">
+                                {% csrf_token %}
+								<!-- Address selection -->
+								<div class="table-responsive mb-3">
+									<table id="user-addresses" class="table table-bordered table-sm table-hover mb-0">
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+
+								<!-- Address -->
+								<div class="mb-5">
+
+									<!-- Checkbox -->
+									<div class="customs-control customs-checkbox">
+										<input class="customs-control-input" id="checkoutShippingAddress" type="checkbox" />
+										<label for="checkoutShippingAddress" class="customs-control-label font-size-sm collapsed" data-toggle="collapse" data-target="#checkoutShippingAddressCollapse">اضافه کردن آدرس جدید</label>
 									</div>
+
+									<!-- Collapse -->
+									<div class="collapse" id="checkoutShippingAddressCollapse" style="">
+									  <div class="row mt-4">
+										<div class="col-6">
+
+										  <!-- Province -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressProvince">استان *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressProvince" type="text" placeholder="استان">
+										  </div>
+
+										</div>
+                                        <div class="col-6">
+
+										  <!-- Town / City -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressTown">شهر *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressTown" type="text" placeholder="شهر">
+										  </div>
+
+										</div>
+
+										<div class="col-12">
+
+										  <!-- Address Line -->
+										  <div class="form-group">
+											<label for="checkoutShippingMainAddress">آدرس *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingMainAddress" type="text" placeholder="آدرس">
+										  </div>
+
+										</div>
+
+                                        <div class="col-6">
+										  <!-- Town / City -->
+										  <div class="form-group">
+											<label for="checkoutShippingAddressZIP">کد پستی *</label>
+											<input class="form-control form-control-sm" id="checkoutShippingAddressZIP" type="text" placeholder="کد پستی">
+										  </div>
+
+										</div>
+										<div class="col-12">
+
+										  <!-- Button -->
+										  <button class="btn btn-outline-dark" type="submit">
+											ذخیره آدرس
+										  </button>
+
+										</div>
+									  </div>
+									</div>
+
+								</div>
+                                </form>
 								</div>
 							</div>
-
 						</div>
-    			<!-- =========================== My All Orders =================================== -->
+                <!-- =========================== Account Settings =================================== -->
+{% endblock %}
+{% block scr %}
+    <script>
+    $(document).ready(function () {
+        function populateTable(data) {
+            const tableBody = $("#user-addresses tbody");
+
+            data.forEach(item => {
+                const row = $("<tr></tr>");
+
+                row.append($("<td></td>").html(`<label class="custom-control-label text-body text-nowrap" for="checkoutSendingAddress-${item.pk}">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label>`));
+                row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/user/user-address/${item.pk}" id="${item.pk}" onclick="removeaddress(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div>`));
+                tableBody.append(row);
+            });
+        }
+
+        async function authenticate(event) {
+            event.preventDefault()
+            const response = await fetch("/api/v1/user/token/", {
+                method: "GET",
+            })
+            if (response.status === 200) {
+                $.getJSON('/api/v1/user/user-address/', function (data) {
+                    populateTable(data);
+                });
+                $("#page_title").text("آدرس های کاربر");
+                $("#current_page").text("آدرس های کاربر");
+                $("#user_addr").attr("class", "list-group-item list-group-item-action dropright-toggle active");
+            } else {
+                $("#page").html(`<div class="container"><div class="row"><div class="col-lg-12 col-md-12 text-center"><h2 class="error_title">4<span class="text-primary">0</span>1<i class="ti-help"></i></h2><p><span class="text-primary"></span> متأسفیم ، مشکلی در دسترسی شما به صفحه مورد نظر بوجود آمد</p><a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a></div></div></div>`);
+            }
+        }
+        authenticate(event)
+    })
+    </script>
+    <!-- ============================= Fetch API ==================================== -->
+    <script>
+
+        async function createaddress(event, el) {
+            event.preventDefault()
+
+            const response = await fetch("/api/v1/user/user-address/", {
+                method: el.method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    province: $("#checkoutShippingAddressProvince").val(),
+                    city: $("#checkoutShippingAddressTown").val(),
+                    address: $("#checkoutShippingMainAddress").val(),
+                    postal_code: $("#checkoutShippingAddressZIP").val(),
+                }),
+            })
+
+            if (response.status === 200) {
+                alert("آدرس با موفقیت ثبت شد")
+
+                function populateTable(data) {
+                    $("#user-addresses tbody").empty()
+                    const tableBody = $("#user-addresses tbody");
+
+                    data.forEach(item => {
+                        const row = $("<tr></tr>");
+
+                row.append($("<td></td>").html(`<label class="custom-control-label text-body text-nowrap" for="checkoutSendingAddress-${item.pk}">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label>`));
+                row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/user/user-address/" id="${item.pk}" onclick="removeaddress(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div>`));
+                        tableBody.append(row);
+                    });
+                }
+
+                $.getJSON('/api/v1/user/user-address/', function (data) {
+                    populateTable(data);
+                });
+            } else {
+                alert("ثبت آدرس جدید با مشکل همراه شد")
+            }
+        }
+    </script>
+    <script>
+
+        async function removeaddress(event, el) {
+            event.preventDefault()
+
+            const response = await fetch(el.href, {
+                method: "delete",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pk: el.id,
+                })
+            })
+
+            if (response.status === 200){
+                alert("آدرس با موفقیت حذف گردید.")
+                $.getJSON("/api/v1/user/user-address/", function (data)
+            {
+                $("#user-addresses tbody").empty()
+                const tableBody = $("#user-addresses tbody");
+
+    data.forEach(item => {
+        const row = $("<tr></tr>");
+
+        row.append($("<td></td>").html(`<label class="custom-control-label text-body text-nowrap" for="checkoutSendingAddress-${item.pk}">استان ${item.province}- شهر ${item.city}- ${item.address}. کدپستی: ${item.postal_code}</label>`));
+        row.append($("<td></td>").html(`<div class="tbl_pr_action"><a href="/api/v1/user/user-address/" id="${item.pk}" onclick="removeaddress(event, this)" class="tbl_remove"><i class="ti-close"></i></a></div>`));
+        tableBody.append(row);
+            });
+            });
+            } else {
+               alert("حذف آدرس با موفقیت انجام نشد.")
+            }
+        }
+        </script>
+    <!-- ============================= Fetch API ==================================== -->
 {% endblock %}

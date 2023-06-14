@@ -14,7 +14,7 @@
 								<nav aria-label="breadcrumb">
 								  <ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="{% url 'Home-page' %}"><i class="ti-home"></i></a></li>
-									<li class="breadcrumb-item"><a href="#">پروفایل کاربری</a></li>
+									{% block route %}<li class="breadcrumb-item"><a href="{% url 'Profile' %}">پروفایل کاربری</a></li>{% endblock %}
 									<li class="breadcrumb-item active" id="current_page" aria-current="page"></li>
 								  </ol>
 								</nav>

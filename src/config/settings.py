@@ -22,7 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = "django-insecure-g#t0h6k(-us(r(l6tqvern#7vki8g8&@%oq&f!tf^bqm2w(=u+"
 SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -40,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
     "django_jalali",
     "core",
     "order",
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "user",
     "rest_framework",
     "rest_framework_simplejwt",
-    "drf_yasg"
+    "drf_spectacular"
 ]
 
 MIDDLEWARE = [
@@ -84,10 +84,20 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'odexshop',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -160,10 +170,21 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'user.authentication.JWTAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(weeks=999),
     'AUTH_HEADER_TYPES': ("JWT",),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Odex shop Project API',
+    'DESCRIPTION': 'Maktab 89 Django Final project',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'EXTENSIONS': [
+        'config.extensions.JWTAuthenticationExtension.OpenApiAuthenticationExtension',
+    ],
 }

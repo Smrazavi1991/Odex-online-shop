@@ -250,3 +250,5 @@ src/media/user_profile_pic
 
 src/config/secrets.py
 
+schema.yml
+

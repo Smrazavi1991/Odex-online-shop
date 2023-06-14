@@ -1,5 +1,6 @@
 {% extends "landing_page_base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %} اودکس شاپ - {{ object.name }}{% endblock %}
 {% block content %}
@@ -58,9 +59,9 @@
                                             <p id="price" hidden="hidden">{{ discount.price }}</p>
                                             {% if discount.id == product.id %}
                                             {% if discount.price == None %}
-                                            <h3>{{ product.price }} تومان</h3>
+                                            <h3>{{ product.price|intcomma }} تومان</h3>
                                             {% else %}
-                                            <h3>{{ discount.price }}تومان  <span class="org_price">{{ product.price }}تومان</span></h3>
+                                            <h3>{{ discount.price|intcomma }}تومان  <span class="org_price">{{ product.price|intcomma }}تومان</span></h3>
                                             {% endif %}
                                             {% endif %}
                                             {% endfor %}
@@ -90,63 +91,15 @@
 											</div>
 										</div>
 									</div>
-
-									<!-- Single Option -->
-									<div class="single_search_boxed">
-										<div class="widget-boxed-header">
-											<h4><a href="#shippingoption" data-toggle="collapse" class="collapsed" aria-expanded="false" role="button"><i class="ti-truck ml-2"></i>گزینه های ارسال</a></h4>
-										</div>
-										<div class="widget-boxed-body collapse" id="shippingoption"  data-parent="#shippingoption">
-											<div class="side-list no-border">
-												<!-- Single Filter Card -->
-												<div class="single_filter_card">
-													<div class="card-body pt-0 font-size-sm">
-														<div class="d-flex justify-content-between b-b pb-2">
-														  <div>
-															<div class="font-weight-semibold text-dark">پیک</div>
-															<div class="font-size-sm text-muted">1 - 3 روزه</div>
-														  </div>
-														  <div>49000 تومان</div>
-														</div>
-														<div class="d-flex justify-content-between b-b py-2">
-														  <div>
-															<div class="font-weight-semibold text-dark">ارسال وِیژه</div>
-															<div class="font-size-sm text-muted">تا یک هفته</div>
-														  </div>
-														  <div>15000 تومان</div>
-														</div>
-														<div class="d-flex justify-content-between b-b py-2">
-														  <div>
-															<div class="font-weight-semibold text-dark">نرخ ثابت</div>
-															<div class="font-size-sm text-muted">4 - 6 روزه</div>
-														  </div>
-														  <div>40000 تومان</div>
-														</div>
-														<div class="d-flex justify-content-between b-b py-2">
-														  <div>
-															<div class="font-weight-semibold text-dark">ارسال یو پی اس</div>
-															<div class="font-size-sm text-muted">4 - 7 روزه</div>
-														  </div>
-														  <div>21000 تومان</div>
-														</div>
-														<div class="d-flex justify-content-between pt-2">
-														  <div>
-															<div class="font-weight-semibold text-dark">ارسال از فروشگاه</div>
-															<div class="font-size-sm text-muted">—</div>
-														  </div>
-														  <div>00</div>
-														</div>
-													  </div>
-												</div>
-											</div>
-										</div>
-									</div>
-
 								</div>
 
 								<div class="woo_btn_action">
 									<div class="col-12 col-lg-auto">
+                                        {% if object.count >= 1 %}
 										<button type="submit" formmethod="post" onclick="add_to_cart(event, this)" class="btn btn-block btn-dark mb-2">افزودن به سبد خرید <i class="ti-shopping-cart-full mr-2"></i></button>
+                                        {% else %}
+                                        <button class="btn btn-block btn-dark mb-2">در انبار موجود نیست </button>
+                                        {% endif %}
 									</div>
 								</div>
 
@@ -262,6 +215,8 @@
 
             if (response.status === 200){
                 alert("کالا به سبد خرید اضافه شد.")
+            } else if (response.status === 406) {
+               alert("این کالا  موجود نیست")
             } else {
                alert("در پروسه ثبت خرید مشکلی رخ داده است.")
             }

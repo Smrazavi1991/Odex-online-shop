@@ -19,8 +19,8 @@
 													<th scope="col">شماره سفارش</th>
 													<th scope="col">تاریخ ثبت سفارش</th>
 													<th scope="col">مجموع قیمت سفارش</th>
-													<th scope="col">وضعیت</th>
-													<th scope="col">پیگیری</th>
+													<th scope="col">وضعیت سفارش</th>
+													<th scope="col"></th>
 												</tr>
 											</thead>
 											<tbody>
@@ -47,7 +47,7 @@
         row.append($("<td></td>").html(`${item.create_date}`));
         row.append($("<td></td>").html(`${item.cart.total_price}`));
         row.append($("<td></td>").html(`${item.status}`));
-        row.append($("<td></td>").html(`<a href="profile/user-order-tracking/${item.pk}/" class="btn btn-sm btn-theme">پیگیری سفارش</a>`));
+        row.append($("<td></td>").html(`<a href="/profile/user-order-tracking/${item.pk}/" class="btn btn-sm btn-theme">پیگیری سفارش</a>`));
         tableBody.append(row);
     });
 }

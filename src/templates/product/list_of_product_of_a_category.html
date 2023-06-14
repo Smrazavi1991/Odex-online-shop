@@ -1,5 +1,6 @@
 {% extends "landing_page_base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %} اودکس شاپ - دسته بندی {{ category.name }}{% endblock %}
 {% block content %}
@@ -33,7 +34,6 @@
 				</div>
 			</div>
 			<!-- =========================== Breadcrumbs =================================== -->
-
 
 			<!-- =========================== Search Products =================================== -->
 			<section>
@@ -69,9 +69,9 @@
                             {% for product in object_list %}
                             <div class="col-lg-4 col-md-4 col-sm-6">
                                 <div class="woo_product_grid">
-                                    {% if category.discount_is_active == True and category.discount %}
+                                    {% if category.discount_is_active == True %}
                                     <span class="woo_pr_tag hot">ویژه</span>
-                                    {% elif product.discount_is_active == True and product.discount %}
+                                    {% elif product.discount_is_active == True %}
                                     <span class="woo_pr_tag hot">ویژه</span>
                                     {% endif %}
                                     <div class="woo_product_thumb">
@@ -96,9 +96,9 @@
                                             {%  for discount in discounted_price %}
                                             {% if discount.id == product.id %}
                                             {% if discount.price == None %}
-                                            <h6>{{ product.price }} تومان</h6>
+                                            <h6>{{ product.price|intcomma }} تومان</h6>
                                             {% else %}
-                                            <h6>{{ discount.price }}تومان  <span class="less_price">{{ product.price }}تومان</span></h6>
+                                            <h6>{{ discount.price|intcomma }}تومان  <span class="less_price">{{ product.price|intcomma }}تومان</span></h6>
                                             {% endif %}
                                             {% endif %}
                                             {% endfor %}

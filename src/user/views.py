@@ -17,6 +17,33 @@ from .models import User
 from order.models import Order, Cart
 
 
+class ContactUs(TemplateView, BasicViewMixin):
+    template_name = "contact-us.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
+
+
+class Faq(TemplateView, BasicViewMixin):
+    template_name = "faq.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
+
+
+class AboutUs(TemplateView, BasicViewMixin):
+    template_name = "about-us.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
+
+
 class Register(View, BasicViewMixin):
 
     def get(self, request):
@@ -143,36 +170,46 @@ class UserOrderDetail(LoginRequiredMixin, DetailView, BasicViewMixin):
         return context
 
 
-class UserOrderTracking(LoginRequiredMixin, TemplateView, BasicViewMixin):
+class UserOrderTracking(LoginRequiredMixin, DetailView, BasicViewMixin):
     login_url = "/login/"
     template_name = "user/user-order-tracking.html"
+
+    def get_queryset(self):
+        return Order.objects.filter(id=self.kwargs['pk'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.categories
+        order = self.get_queryset()[0]
+        context["pk"] = order.pk
         return context
 
 
 class UserInformation(LoginRequiredMixin, View, BasicViewMixin):
     login_url = "/login/"
+
     def get(self, request):
         return render(request, 'user/user-information.html', {"categories": self.categories})
 
 
-class UserAddress(TemplateView, BasicViewMixin):
+class UserAddress(LoginRequiredMixin, TemplateView, BasicViewMixin):
     template_name = "user/user_address.html"
+    login_url = "/login/"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = self.categories
-        context['cart'] = self.get_user_cart(self.request, total=False)
-        context['more_info'] = self.get_user_cart(self.request, total=True)
-        context['orders'] = Order.objects.filter(cart__customer_id=self.request.user.pk)
         return context
 
 
-class ChangePassword(TemplateView, BasicViewMixin):
+class ChangePassword(LoginRequiredMixin, TemplateView, BasicViewMixin):
     template_name = "user/change-password.html"
+    login_url = "/login/"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = self.categories
+        return context
 
 
 class Logout(View, BasicViewMixin):
