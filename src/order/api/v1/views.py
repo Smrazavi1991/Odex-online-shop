@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import NotFound
 
+from user.authentication import JWTAuthentication
 from .serializers import *
 from ...models import DiscountCoupon, Cart, Order
 from user.models import User
@@ -14,6 +15,7 @@ from product.models import Product
 
 
 class AddToCartView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = AddToCartViewSerializer
 
@@ -47,7 +49,9 @@ class AddToCartView(APIView):
         else:
             return Response({'product': 'not enough'}, status=HTTP_406_NOT_ACCEPTABLE)
 
+
 class RemoveFromCartView(APIView, BasicViewMixin):
+    authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = RemoveFromCartViewSerializer
 
@@ -78,6 +82,7 @@ class RemoveFromCartView(APIView, BasicViewMixin):
 
 
 class UpdateCart(APIView, BasicViewMixin):
+    authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = UpdateCartSerializer
 
@@ -121,6 +126,7 @@ class UpdateCart(APIView, BasicViewMixin):
 
 
 class CalculateTotal(APIView, BasicViewMixin):
+    authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = CalculateTotalSerializer
 
@@ -136,6 +142,7 @@ class CalculateTotal(APIView, BasicViewMixin):
 
 class CalculateDiscount(APIView, BasicViewMixin):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication,]
     serializer_class = CalculateDiscountSerializer
     discount_amount = 0
     shipping_price = 0
@@ -173,8 +180,9 @@ class CalculateDiscount(APIView, BasicViewMixin):
             final_price = (total_price + shipping_price) * (1-discount/100)
             discount = (total_price + shipping_price) * (discount/100)
         else:
-            final_price = (total_price + shipping_price) - (discount)
-        return Response({'total_price': total_price, 'discount': discount, 'shipping_price': shipping_price, 'final_price': final_price})
+            final_price = (total_price + shipping_price) - discount
+        return Response({'total_price': total_price, 'discount': discount, 'shipping_price': shipping_price,
+                         'final_price': final_price})
 
 
 class SubmitOrder(APIView, BasicViewMixin):
@@ -198,7 +206,8 @@ class SubmitOrder(APIView, BasicViewMixin):
         address_id = serializer_.validated_data['address_id']
         total_price = serializer_.validated_data['total_price']
 
-        cart = Cart(customer=user, item=item, shipping_price=shipping_price, address_id=address_id, total_price=total_price)
+        cart = Cart(customer=user, item=item, shipping_price=shipping_price, address_id=address_id,
+                    total_price=total_price)
         cart.save()
 
         status = 'ثبت شده'
@@ -209,5 +218,3 @@ class SubmitOrder(APIView, BasicViewMixin):
         response = Response({'order_id': order.pk})
         response.set_cookie("cart", '')
         return response
-
-
