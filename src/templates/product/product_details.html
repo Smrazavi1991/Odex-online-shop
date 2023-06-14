@@ -1,5 +1,6 @@
 {% extends "landing_page_base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %} اودکس شاپ - {{ object.name }}{% endblock %}
 {% block content %}
@@ -55,12 +56,12 @@
 								<div class="woo_pr_price">
 									<div class="woo_pr_offer_price">
 										{%  for discount in discounted_price %}
-                                            <p id="price" hidden="hidden">{{ discount.price }}</p>
+                                            <p id="price" hidden="hidden">{{ discount.price|intcomma }}</p>
                                             {% if discount.id == product.id %}
                                             {% if discount.price == None %}
-                                            <h3>{{ product.price }} تومان</h3>
+                                            <h3>{{ product.price|intcomma }} تومان</h3>
                                             {% else %}
-                                            <h3>{{ discount.price }}تومان  <span class="org_price">{{ product.price }}تومان</span></h3>
+                                            <h3>{{ discount.price|intcomma }}تومان  <span class="org_price">{{ product.price|intcomma }}تومان</span></h3>
                                             {% endif %}
                                             {% endif %}
                                             {% endfor %}

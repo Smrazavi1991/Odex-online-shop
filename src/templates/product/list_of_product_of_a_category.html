@@ -1,5 +1,6 @@
 {% extends "landing_page_base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %} اودکس شاپ - دسته بندی {{ category.name }}{% endblock %}
 {% block content %}
@@ -95,9 +96,9 @@
                                             {%  for discount in discounted_price %}
                                             {% if discount.id == product.id %}
                                             {% if discount.price == None %}
-                                            <h6>{{ product.price }} تومان</h6>
+                                            <h6>{{ product.price|intcomma }} تومان</h6>
                                             {% else %}
-                                            <h6>{{ discount.price }}تومان  <span class="less_price">{{ product.price }}تومان</span></h6>
+                                            <h6>{{ discount.price|intcomma }}تومان  <span class="less_price">{{ product.price|intcomma }}تومان</span></h6>
                                             {% endif %}
                                             {% endif %}
                                             {% endfor %}

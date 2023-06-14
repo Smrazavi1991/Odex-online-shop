@@ -1,5 +1,6 @@
 {% extends "landing_page_base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
     <!-- ======================== Top category ==================== -->
@@ -112,7 +113,7 @@
 														<h4 class="woo_pro_title">{{ discount_product.name }}</h4>
 													</div>
 													<div class="woo_price">
-														<h6>{% for discount in discounted_price %}{% if discount.id == discount_product.id %}{{ discount.price }}تومان  {% endif %}{% endfor %}<span class="less_price">{{ discount_product.price }}تومان</span></h6>
+														<h6>{% for discount in discounted_price %}{% if discount.id == discount_product.id %}{{ discount.price|intcomma }}تومان  {% endif %}{% endfor %}<span class="less_price">{{ discount_product.price|intcomma }}تومان</span></h6>
 													</div>
 												</div>
 												<div class="woo_product_cart hover">
