@@ -1,11 +1,12 @@
+from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Q
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import get_object_or_404
+from rest_framework.status import HTTP_406_NOT_ACCEPTABLE
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from user.authentication import JWTAuthentication
-import datetime
 
 from .serializers import *
 from user.models import User, Address
@@ -13,8 +14,11 @@ from order.models import Order
 from product.models import Product
 from core.views import ProductsViewMixin
 
+
 class ObtainTokenView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
+    serializer_class = None
 
     def get(self, request):
         user = self.request.session.get('username', None)
@@ -92,7 +96,20 @@ class UserOrderPics(APIView):
 
 
 class ChangePassword(APIView):
-    pass
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    def post(self, request):
+        serializer_ = self.serializer_class(data=request.data)
+        serializer_.is_valid(raise_exception=True)
+        username = self.request.session.get('username', None)
+        user = User.objects.get(username=username)
+        if check_password(serializer_.validated_data['oldpassword'], user.password):
+            user.password = make_password(serializer_.validated_data['newpassword'])
+            user.save()
+            return Response({'status': 'ok'})
+        else:
+            return Response({'status': 'failed'}, status=HTTP_406_NOT_ACCEPTABLE)
 
 
 class UserAddress(APIView):
@@ -113,12 +130,16 @@ class UserAddress(APIView):
         serializer_.is_valid(raise_exception=True)
         username = self.request.session.get('username', None)
         user = User.objects.get(username=username)
-        user.address.create(province=serializer_.validated_data['province'], city=serializer_.validated_data['city'], address=serializer_.validated_data['address'], postal_code=serializer_.validated_data['postal_code'])
+        user.address.create(province=serializer_.validated_data['province'], city=serializer_.validated_data['city'],
+                            address=serializer_.validated_data['address'],
+                            postal_code=serializer_.validated_data['postal_code'])
         return Response({'status': 'ok'})
 
 
 class RemoveAddress(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = None
+
     def delete(self, request, **kwargs):
         address_object = get_object_or_404(Address, pk=self.kwargs['pk'])
         address_object.delete()
