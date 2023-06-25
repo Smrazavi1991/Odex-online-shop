@@ -1,6 +1,6 @@
-# Maktab-89-Django-Final-Project
+# Django-online-shop-Project
 
-> this project is about an online shop.
+> this project is about a simple online shop.
 <!-- > Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
 
 ## Table of Contents
