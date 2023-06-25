@@ -11,7 +11,6 @@
 * [Setup](#setup)
 * [Project Status](#project-status)
 * [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
 <!-- * [License](#license) -->
 
@@ -49,7 +48,7 @@ To start work with project:
 
 1- clone the project repo with `git clone`.  
 
-![clone](https://github.com/Smrazavi1991/Django-online-shop-Project/assets/121284960/2da286fd-b182-49f4-871a-7638a3a97e90)
+![clone](https://github.com/Smrazavi1991/Django-online-shop-Project/assets/121284960/ed50d644-8dba-46ca-9137-aa7c3bd28d72)
 
 2- cd to project root directory "src" and create a virtual environment.
 
@@ -61,14 +60,15 @@ To start work with project:
 
 6- create a secrets.py file in src/config directory and place your own SECRET_KEY, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD and DATABASE_PASSWORD parameters in it.
 
-7- create migration files with
+![secrets](https://github.com/Smrazavi1991/Django-online-shop-Project/assets/121284960/bc9b1a52-0b64-44a3-8a04-dd433fe8ad1c)
 
-8- migrate with
+7- create migration files with `python manage.py makemigrations`
 
-9- create a superuser account with
+8- migrate with `python manage.py migrate`
 
-10- run it with
-Proceed to describe how to install / setup one's local environment / get started with the project.
+9- create a superuser account with `python manage.py createsuperuser` and enter the requested items.
+
+10- run it with `python manage.py runserver`
 
 
 ## Project Status
@@ -87,15 +87,8 @@ To do:
 - Feature to be added 2
 
 
-## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
-
-
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Created by [@Sayyed Mohammad Razavi](https://www.github.com/Smrazavi1991) - feel free to contact me!
 
 
 <!-- Optional -->
