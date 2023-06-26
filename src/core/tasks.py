@@ -3,8 +3,8 @@ from kavenegar import *
 import random
 import redis
 from celery import shared_task
-import requests
-API_KEY = '7A51505630436F50615247437A64326E3564524439413262354E6A6246344E39412B573530764863327A6F3D'
+from config.secrets import API_KEY
+
 
 
 @shared_task
